@@ -140,7 +140,7 @@
         .filter-item label {
             display: block;
             font-size: 13px;
-            color: #00d4ff;
+            color: #ffffff;
             text-transform: uppercase;
             letter-spacing: 0.8px;
             margin-bottom: 8px;
@@ -348,7 +348,7 @@
         }
         
         .data-info h4 {
-            color: #00d4ff;
+            color: #ffffff;
             font-size: 18px;
             margin-bottom: 15px;
             text-transform: uppercase;
@@ -637,7 +637,7 @@
         }
         
         .win-rate-box h4 {
-            color: #00d4ff;
+            color: #ffffff;
             font-size: 18px;
             margin-bottom: 20px;
             font-weight: 700;
@@ -751,7 +751,7 @@
         }
         
         .modal-title {
-            color: #00d4ff;
+            color: #ffffff;
             font-size: 20px;
             font-weight: 600;
         }
@@ -897,10 +897,10 @@
                 </div>
                 <div class="file-input-wrapper">
                     <input type="file" id="fileInput" accept=".html,.htm" />
-                    <label for="fileInput">📊 取引履歴をアップロード</label>
+                    <label for="fileInput">取引履歴をアップロード</label>
                 </div>
                 <button onclick="loadDemoData()" class="demo-button">
-                    ⚡ デモデータで試す
+                    デモデータで試す
                 </button>
             </div>
             
@@ -1225,7 +1225,7 @@
                     </div>
                     <div class="chart-grid">
                         <div style="background: rgba(0, 212, 255, 0.05); padding: 24px; border-radius: 10px; border: 1px solid rgba(0, 212, 255, 0.2);">
-                            <h4 style="color: #00d4ff; margin-bottom: 20px; font-size: 20px; font-weight: 700;">勝ちトレード統計</h4>
+                            <h4 style="color: #ffffff; margin-bottom: 20px; font-size: 20px; font-weight: 700;">勝ちトレード統計</h4>
                             <div class="stat-row">
                                 <span class="stat-label">取引回数</span>
                                 <span class="stat-value" style="color: #00d4ff; font-size: 24px; font-weight: 800;">${stats.winTrades}回</span>
@@ -1249,7 +1249,7 @@
                         </div>
                         
                         <div style="background: rgba(255, 68, 68, 0.05); padding: 24px; border-radius: 10px; border: 1px solid rgba(255, 68, 68, 0.2);">
-                            <h4 style="color: #ff4444; margin-bottom: 20px; font-size: 20px; font-weight: 700;">負けトレード統計</h4>
+                            <h4 style="color: #ffffff; margin-bottom: 20px; font-size: 20px; font-weight: 700;">負けトレード統計</h4>
                             <div class="stat-row">
                                 <span class="stat-label">取引回数</span>
                                 <span class="stat-value" style="color: #ff4444; font-size: 24px; font-weight: 800;">${stats.lossTrades}回</span>
@@ -1748,7 +1748,7 @@
             
             content.innerHTML = `
                 <div class="modal-header">
-                    <h2 class="modal-title">損益範囲: ${data.label}</h2>
+                    <h2 class="modal-title" style="color: #ffffff;">損益範囲: ${data.label}</h2>
                     <button class="modal-close" onclick="this.closest('.modal').remove()">×</button>
                 </div>
                 
@@ -1772,7 +1772,7 @@
                 </div>
                 
                 <div style="margin-bottom: 30px;">
-                    <h3 style="color: #00d4ff; margin-bottom: 18px; font-size: 17px;">通貨ペア別内訳</h3>
+                    <h3 style="color: #ffffff; margin-bottom: 18px; font-size: 17px;">通貨ペア別内訳</h3>
                     <div style="background: #1a1a2e; padding: 20px; border-radius: 8px; max-height: 200px; overflow-y: auto;">
                         ${Object.entries(symbolStats)
                             .sort((a, b) => b[1].count - a[1].count)
