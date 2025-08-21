@@ -613,9 +613,93 @@
                             <div class="metric-subtitle">負けトレードの平均</div>
                         </div>
                         <div class="metric-card">
-                            <h3>期待値</h3>
-                            <div class="metric-value ${stats.expectedValue >= 0 ? 'positive' : 'negative'}">¥${Math.round(stats.expectedValue).toLocaleString()}</div>
-                            <div class="metric-subtitle">1取引あたりの期待損益</div>
+                            <h3>期待値（Expected Value）</h3>
+                            <div class="metric-value ${stats.expectedValue >= 0 ? 'positive' : 'negative'}">¥${Math.round(stats.expectedValue).toLocaleString()}/件</div>
+                            <div class="metric-subtitle">1取引あたりの平均期待損益<br>計算式: 総損益 ÷ 総取引数</div>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-container">
+                        <h3>勝ち負け詳細分布</h3>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                            <div style="background: #f0fdf4; padding: 20px; border-radius: 10px; border-left: 4px solid #10b981;">
+                                <h4 style="color: #10b981; margin-bottom: 15px; font-size: 1.1em;">勝ちトレード統計</h4>
+                                <div style="line-height: 1.8;">
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                        <span style="color: #666;">取引回数:</span>
+                                        <span style="font-weight: 600;">${stats.winTrades}回</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                        <span style="color: #666;">総利益額:</span>
+                                        <span style="font-weight: 600; color: #10b981;">¥${Math.round(stats.totalWinAmount).toLocaleString()}</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                        <span style="color: #666;">平均利益:</span>
+                                        <span style="font-weight: 600;">¥${Math.round(stats.avgProfit).toLocaleString()}</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                        <span style="color: #666;">最大利益:</span>
+                                        <span style="font-weight: 600; color: #10b981;">¥${Math.round(stats.maxWin).toLocaleString()}</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between;">
+                                        <span style="color: #666;">最小利益:</span>
+                                        <span style="font-weight: 600;">¥${Math.round(stats.minWin).toLocaleString()}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="background: #fef2f2; padding: 20px; border-radius: 10px; border-left: 4px solid #ef4444;">
+                                <h4 style="color: #ef4444; margin-bottom: 15px; font-size: 1.1em;">負けトレード統計</h4>
+                                <div style="line-height: 1.8;">
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                        <span style="color: #666;">取引回数:</span>
+                                        <span style="font-weight: 600;">${stats.lossTrades}回</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                        <span style="color: #666;">総損失額:</span>
+                                        <span style="font-weight: 600; color: #ef4444;">¥${Math.round(stats.totalLossAmount).toLocaleString()}</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                        <span style="color: #666;">平均損失:</span>
+                                        <span style="font-weight: 600;">¥${Math.round(stats.avgLoss).toLocaleString()}</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                        <span style="color: #666;">最大損失:</span>
+                                        <span style="font-weight: 600; color: #ef4444;">¥${Math.round(stats.maxLoss).toLocaleString()}</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between;">
+                                        <span style="color: #666;">最小損失:</span>
+                                        <span style="font-weight: 600;">¥${Math.round(stats.minLoss).toLocaleString()}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-container">
+                        <h3>勝率別の内訳</h3>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 20px;">
+                            <div>
+                                <h4 style="color: #667eea; margin-bottom: 15px; font-size: 1.1em;">ポジション別勝率</h4>
+                                <div id="positionWinRates" style="background: #f8f9fa; padding: 20px; border-radius: 10px; min-height: 100px;"></div>
+                            </div>
+                            <div>
+                                <h4 style="color: #667eea; margin-bottom: 15px; font-size: 1.1em;">通貨ペア別勝率</h4>
+                                <div id="symbolWinRates" style="background: #f8f9fa; padding: 20px; border-radius: 10px; max-height: 200px; overflow-y: auto; min-height: 100px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-container">
+                        <h3>勝率別の内訳</h3>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 20px;">
+                            <div>
+                                <h4 style="color: #667eea; margin-bottom: 15px;">ポジション別勝率</h4>
+                                <div id="positionWinRates" style="background: #f8f9fa; padding: 20px; border-radius: 10px;"></div>
+                            </div>
+                            <div>
+                                <h4 style="color: #667eea; margin-bottom: 15px;">通貨ペア別勝率</h4>
+                                <div id="symbolWinRates" style="background: #f8f9fa; padding: 20px; border-radius: 10px; max-height: 200px; overflow-y: auto;"></div>
+                            </div>
                         </div>
                     </div>
                     
@@ -625,8 +709,8 @@
                     </div>
                     
                     <div class="chart-container">
-                        <h3>勝敗分布</h3>
-                        <canvas id="winLossChart"></canvas>
+                        <h3>損益分布ヒストグラム</h3>
+                        <canvas id="profitDistributionChart"></canvas>
                     </div>
                 </div>
             `;
@@ -634,7 +718,8 @@
             // チャート描画
             setTimeout(() => {
                 createProfitChart(trades);
-                createWinLossChart(stats);
+                createProfitDistributionChart(trades);
+                displayWinRateBreakdown(trades);
             }, 100);
         }
 
@@ -648,6 +733,19 @@
                 Math.abs(lossTrades.reduce((sum, t) => sum + t.profit, 0) / lossTrades.length) : 0;
             const expectedValue = trades.length > 0 ? totalProfit / trades.length : 0;
             
+            // 最大・最小利益/損失
+            const winProfits = winTrades.map(t => t.profit);
+            const lossProfits = lossTrades.map(t => Math.abs(t.profit));
+            
+            const maxWin = winProfits.length > 0 ? Math.max(...winProfits) : 0;
+            const minWin = winProfits.length > 0 ? Math.min(...winProfits) : 0;
+            const maxLoss = lossProfits.length > 0 ? Math.max(...lossProfits) : 0;
+            const minLoss = lossProfits.length > 0 ? Math.min(...lossProfits) : 0;
+            
+            // 総利益額・総損失額
+            const totalWinAmount = winTrades.reduce((sum, t) => sum + t.profit, 0);
+            const totalLossAmount = Math.abs(lossTrades.reduce((sum, t) => sum + t.profit, 0));
+            
             return {
                 totalTrades: trades.length,
                 winTrades: winTrades.length,
@@ -656,7 +754,13 @@
                 totalProfit: totalProfit,
                 avgProfit: avgProfit,
                 avgLoss: avgLoss,
-                expectedValue: expectedValue
+                expectedValue: expectedValue,
+                maxWin: maxWin,
+                minWin: minWin,
+                maxLoss: maxLoss,
+                minLoss: minLoss,
+                totalWinAmount: totalWinAmount,
+                totalLossAmount: totalLossAmount
             };
         }
 
@@ -747,6 +851,668 @@
             });
             
             activeCharts.push(chart);
+        }
+
+        function displayWinRateBreakdown(trades) {
+            // ポジション別勝率の計算
+            const longTrades = trades.filter(t => t.type === 'buy');
+            const shortTrades = trades.filter(t => t.type === 'sell');
+            const longWins = longTrades.filter(t => t.isWin).length;
+            const shortWins = shortTrades.filter(t => t.isWin).length;
+            const longWinRate = longTrades.length > 0 ? (longWins / longTrades.length * 100).toFixed(1) : 0;
+            const shortWinRate = shortTrades.length > 0 ? (shortWins / shortTrades.length * 100).toFixed(1) : 0;
+            
+            const positionHTML = `
+                <div style="margin-bottom: 15px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <span style="font-weight: 600; color: #1976d2;">ロング（買い）</span>
+                        <span style="font-weight: bold; color: ${longWinRate >= 50 ? '#10b981' : '#ef4444'};">${longWinRate}%</span>
+                    </div>
+                    <div style="font-size: 0.85em; color: #666;">
+                        ${longWins}勝 / ${longTrades.length - longWins}負（全${longTrades.length}回）
+                    </div>
+                </div>
+                <div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <span style="font-weight: 600; color: #c2185b;">ショート（売り）</span>
+                        <span style="font-weight: bold; color: ${shortWinRate >= 50 ? '#10b981' : '#ef4444'};">${shortWinRate}%</span>
+                    </div>
+                    <div style="font-size: 0.85em; color: #666;">
+                        ${shortWins}勝 / ${shortTrades.length - shortWins}負（全${shortTrades.length}回）
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('positionWinRates').innerHTML = positionHTML;
+            
+            // 通貨ペア別勝率の計算
+            const symbolStats = {};
+            trades.forEach(trade => {
+                if (!symbolStats[trade.symbol]) {
+                    symbolStats[trade.symbol] = { total: 0, wins: 0 };
+                }
+                symbolStats[trade.symbol].total++;
+                if (trade.isWin) symbolStats[trade.symbol].wins++;
+            });
+            
+            const symbolArray = Object.entries(symbolStats)
+                .map(([symbol, stats]) => ({
+                    symbol,
+                    winRate: (stats.wins / stats.total * 100).toFixed(1),
+                    wins: stats.wins,
+                    total: stats.total
+                }))
+                .sort((a, b) => parseFloat(b.winRate) - parseFloat(a.winRate));
+            
+            let symbolHTML = '';
+            symbolArray.forEach(item => {
+                symbolHTML += `
+                    <div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #e0e0e0;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span style="font-weight: 600;">${item.symbol}</span>
+                            <span style="font-weight: bold; color: ${item.winRate >= 50 ? '#10b981' : '#ef4444'};">${item.winRate}%</span>
+                        </div>
+                        <div style="font-size: 0.85em; color: #666;">
+                            ${item.wins}勝 / ${item.total - item.wins}負（全${item.total}回）
+                        </div>
+                    </div>
+                `;
+            });
+            
+            document.getElementById('symbolWinRates').innerHTML = symbolHTML;
+        }
+
+        function createProfitDistributionChart(trades) {
+            const ctx = document.getElementById('profitDistributionChart').getContext('2d');
+            
+            // 損益を範囲別に分類
+            const ranges = [
+                { min: -Infinity, max: -50000, label: '-5万円以下' },
+                { min: -50000, max: -30000, label: '-5万〜-3万円' },
+                { min: -30000, max: -20000, label: '-3万〜-2万円' },
+                { min: -20000, max: -10000, label: '-2万〜-1万円' },
+                { min: -10000, max: -5000, label: '-1万〜-5千円' },
+                { min: -5000, max: 0, label: '-5千円〜0円' },
+                { min: 0, max: 5000, label: '0〜5千円' },
+                { min: 5000, max: 10000, label: '5千〜1万円' },
+                { min: 10000, max: 20000, label: '1万〜2万円' },
+                { min: 20000, max: 30000, label: '2万〜3万円' },
+                { min: 30000, max: 50000, label: '3万〜5万円' },
+                { min: 50000, max: Infinity, label: '5万円以上' }
+            ];
+            
+            const distribution = ranges.map(range => ({
+                label: range.label,
+                count: trades.filter(t => t.profit > range.min && t.profit <= range.max).length,
+                trades: trades.filter(t => t.profit > range.min && t.profit <= range.max),
+                range: range
+            }));
+            
+            // データがある範囲のみ表示
+            const filteredDistribution = distribution.filter(d => d.count > 0);
+            
+            const chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: filteredDistribution.map(d => d.label),
+                    datasets: [{
+                        label: '取引回数',
+                        data: filteredDistribution.map(d => d.count),
+                        backgroundColor: filteredDistribution.map(d => {
+                            // 損失は赤系、利益は緑系のグラデーション
+                            if (d.label.startsWith('-')) {
+                                return 'rgba(239, 68, 68, 0.7)';
+                            } else if (d.label.includes('0〜')) {
+                                return 'rgba(107, 114, 128, 0.7)';
+                            } else {
+                                return 'rgba(16, 185, 129, 0.7)';
+                            }
+                        }),
+                        borderColor: filteredDistribution.map(d => {
+                            if (d.label.startsWith('-')) {
+                                return 'rgba(239, 68, 68, 1)';
+                            } else if (d.label.includes('0〜')) {
+                                return 'rgba(107, 114, 128, 1)';
+                            } else {
+                                return 'rgba(16, 185, 129, 1)';
+                            }
+                        }),
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    onClick: (event, elements) => {
+                        if (elements.length > 0) {
+                            const index = elements[0].index;
+                            const selectedData = filteredDistribution[index];
+                            showProfitRangeDrilldown(selectedData);
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const count = context.parsed.y;
+                                    const total = trades.length;
+                                    const percentage = ((count / total) * 100).toFixed(1);
+                                    return `取引回数: ${count}回 (${percentage}%)`;
+                                },
+                                afterLabel: function(context) {
+                                    const selectedData = filteredDistribution[context.dataIndex];
+                                    if (selectedData.trades.length > 0) {
+                                        const avgProfit = selectedData.trades.reduce((sum, t) => sum + t.profit, 0) / selectedData.trades.length;
+                                        const symbols = [...new Set(selectedData.trades.map(t => t.symbol))];
+                                        return [
+                                            `平均損益: ¥${Math.round(avgProfit).toLocaleString()}`,
+                                            `通貨ペア: ${symbols.slice(0, 3).join(', ')}${symbols.length > 3 ? '...' : ''}`
+                                        ];
+                                    }
+                                    return [];
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: '損益範囲'
+                            },
+                            ticks: {
+                                autoSkip: false,
+                                maxRotation: 45,
+                                minRotation: 45
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: '取引回数'
+                            },
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    }
+                }
+            });
+            
+            activeCharts.push(chart);
+        }
+
+        function showProfitRangeDrilldown(data) {
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.5);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 1000;
+            `;
+            
+            const isProfit = !data.label.startsWith('-');
+            const trades = data.trades.sort((a, b) => b.profit - a.profit);
+            
+            // 統計計算
+            const avgProfit = trades.reduce((sum, t) => sum + t.profit, 0) / trades.length;
+            const symbolStats = {};
+            trades.forEach(t => {
+                if (!symbolStats[t.symbol]) {
+                    symbolStats[t.symbol] = { count: 0, profit: 0 };
+                }
+                symbolStats[t.symbol].count++;
+                symbolStats[t.symbol].profit += t.profit;
+            });
+            
+            // 時間帯別分析
+            const hourStats = Array(24).fill(0);
+            trades.forEach(t => {
+                const hour = t.openTime.getHours();
+                hourStats[hour]++;
+            });
+            
+            // 曜日別分析
+            const weekdayStats = Array(7).fill(0);
+            const weekdayNames = ['日', '月', '火', '水', '木', '金', '土'];
+            trades.forEach(t => {
+                const weekday = t.openTime.getDay();
+                weekdayStats[weekday]++;
+            });
+            
+            // パターン分析
+            const patterns = analyzePatterns(trades, isProfit);
+            
+            // 通貨ペア別データをソート
+            const sortedSymbols = Object.entries(symbolStats)
+                .sort((a, b) => b[1].count - a[1].count);
+            
+            const content = document.createElement('div');
+            content.style.cssText = `
+                background: white;
+                border-radius: 15px;
+                padding: 30px;
+                max-width: 900px;
+                max-height: 90vh;
+                overflow-y: auto;
+                margin: 20px;
+            `;
+            
+            // チャート用のキャンバスID
+            const pieChartId = 'pieChart_' + Date.now();
+            const timeChartId = 'timeChart_' + Date.now();
+            const weekdayChartId = 'weekdayChart_' + Date.now();
+            
+            content.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2 style="color: #667eea; margin: 0;">損益範囲: ${data.label}</h2>
+                    <button onclick="this.closest('[style*=\"position: fixed\"]').remove()" 
+                            style="background: none; border: none; font-size: 24px; cursor: pointer; color: #999;">×</button>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 25px;">
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; text-align: center;">
+                        <div style="color: #666; font-size: 0.9em; margin-bottom: 5px;">取引回数</div>
+                        <div style="font-size: 1.5em; font-weight: bold;">${data.count}回</div>
+                    </div>
+                    <div style="background: ${isProfit ? '#f0fdf4' : '#fef2f2'}; padding: 15px; border-radius: 8px; text-align: center;">
+                        <div style="color: #666; font-size: 0.9em; margin-bottom: 5px;">平均損益</div>
+                        <div style="font-size: 1.5em; font-weight: bold; color: ${isProfit ? '#10b981' : '#ef4444'};">
+                            ¥${Math.round(avgProfit).toLocaleString()}
+                        </div>
+                    </div>
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; text-align: center;">
+                        <div style="color: #666; font-size: 0.9em; margin-bottom: 5px;">全体比率</div>
+                        <div style="font-size: 1.5em; font-weight: bold;">
+                            ${((data.count / allTrades.length) * 100).toFixed(1)}%
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-bottom: 25px;">
+                    <h3 style="color: #667eea; margin-bottom: 15px; font-size: 1.1em;">通貨ペア別内訳</h3>
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 8px;">
+                        ${sortedSymbols.map(([symbol, stats]) => `
+                            <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #e0e0e0;">
+                                <span style="font-weight: 600;">${symbol}</span>
+                                <span>${stats.count}回 (¥${Math.round(stats.profit / stats.count).toLocaleString()}/回)</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                
+                <div style="margin-bottom: 25px;">
+                    <h3 style="color: #667eea; margin-bottom: 15px; font-size: 1.1em;">時間帯別分布（日本時間）</h3>
+                    <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; height: 300px;">
+                        <canvas id="${timeChartId}"></canvas>
+                    </div>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px;">
+                    <div>
+                        <h3 style="color: #667eea; margin-bottom: 10px; font-size: 1.1em;">通貨ペア別分布</h3>
+                        <div style="margin-bottom: 10px; text-align: center;">
+                            <button id="pieToggleCount" style="padding: 6px 12px; margin: 0 3px; border: 1px solid #667eea; background: #667eea; color: white; border-radius: 5px; cursor: pointer; font-size: 0.85em;">
+                                回数
+                            </button>
+                            <button id="pieToggleAmount" style="padding: 6px 12px; margin: 0 3px; border: 1px solid #667eea; background: white; color: #667eea; border-radius: 5px; cursor: pointer; font-size: 0.85em;">
+                                総損益
+                            </button>
+                            <button id="pieToggleAvg" style="padding: 6px 12px; margin: 0 3px; border: 1px solid #667eea; background: white; color: #667eea; border-radius: 5px; cursor: pointer; font-size: 0.85em;">
+                                平均損益
+                            </button>
+                        </div>
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; height: 220px;">
+                            <canvas id="${pieChartId}"></canvas>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 style="color: #667eea; margin-bottom: 15px; font-size: 1.1em;">曜日別分布</h3>
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; height: 250px;">
+                            <canvas id="${weekdayChartId}"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-bottom: 25px;">
+                    <h3 style="color: ${isProfit ? '#10b981' : '#ef4444'}; margin-bottom: 15px; font-size: 1.1em;">
+                        ${isProfit ? '成功パターン分析' : '失敗パターン分析'}
+                    </h3>
+                    <div style="background: ${isProfit ? '#f0fdf4' : '#fef2f2'}; padding: 20px; border-radius: 8px; border-left: 4px solid ${isProfit ? '#10b981' : '#ef4444'};">
+                        <h4 style="color: #333; margin-bottom: 12px; font-size: 1em;">主な特徴</h4>
+                        <ul style="margin: 0 0 20px 20px; line-height: 1.8; color: #555;">
+                            ${patterns.features.map(f => `<li>${f}</li>`).join('')}
+                        </ul>
+                        
+                        <h4 style="color: #333; margin-bottom: 12px; font-size: 1em;">
+                            ${isProfit ? '再現のためのコツ' : '改善提案'}
+                        </h4>
+                        <ul style="margin: 0 0 0 20px; line-height: 1.8; color: #555;">
+                            ${patterns.suggestions.map(s => `<li>${s}</li>`).join('')}
+                        </ul>
+                    </div>
+                </div>
+            `;
+            
+            modal.appendChild(content);
+            document.body.appendChild(modal);
+            
+            // チャートを描画
+            setTimeout(() => {
+                // 通貨ペア別円グラフ（初期は回数表示）
+                const pieCtx = document.getElementById(pieChartId).getContext('2d');
+                const symbolData = sortedSymbols.slice(0, 5);
+                
+                let currentPieChart = null;
+                
+                const createPieChart = (mode) => {
+                    if (currentPieChart) currentPieChart.destroy();
+                    
+                    let chartData, chartLabel;
+                    
+                    switch(mode) {
+                        case 'count':
+                            chartData = symbolData.map(([, stats]) => stats.count);
+                            chartLabel = '取引回数';
+                            break;
+                        case 'amount':
+                            chartData = symbolData.map(([, stats]) => Math.abs(stats.profit));
+                            chartLabel = '総損益額';
+                            break;
+                        case 'avg':
+                            chartData = symbolData.map(([, stats]) => Math.abs(stats.profit / stats.count));
+                            chartLabel = '平均損益';
+                            break;
+                    }
+                    
+                    currentPieChart = new Chart(pieCtx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: symbolData.map(([symbol]) => symbol),
+                            datasets: [{
+                                data: chartData,
+                                backgroundColor: [
+                                    'rgba(102, 126, 234, 0.8)',
+                                    'rgba(239, 68, 68, 0.8)',
+                                    'rgba(16, 185, 129, 0.8)',
+                                    'rgba(245, 158, 11, 0.8)',
+                                    'rgba(139, 92, 246, 0.8)'
+                                ]
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'bottom',
+                                    labels: {
+                                        padding: 8,
+                                        font: { size: 10 }
+                                    }
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(context) {
+                                            const symbol = context.label;
+                                            const stats = symbolStats[symbol];
+                                            if (mode === 'count') {
+                                                return `${symbol}: ${stats.count}回`;
+                                            } else if (mode === 'amount') {
+                                                return `${symbol}: ¥${Math.round(stats.profit).toLocaleString()}`;
+                                            } else {
+                                                return `${symbol}: ¥${Math.round(stats.profit / stats.count).toLocaleString()}/回`;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                };
+                
+                // 初期表示（回数）
+                createPieChart('count');
+                
+                // ボタンイベントリスナー
+                document.getElementById('pieToggleCount').addEventListener('click', function() {
+                    document.querySelectorAll('[id^="pieToggle"]').forEach(btn => {
+                        btn.style.background = 'white';
+                        btn.style.color = '#667eea';
+                    });
+                    this.style.background = '#667eea';
+                    this.style.color = 'white';
+                    createPieChart('count');
+                });
+                
+                document.getElementById('pieToggleAmount').addEventListener('click', function() {
+                    document.querySelectorAll('[id^="pieToggle"]').forEach(btn => {
+                        btn.style.background = 'white';
+                        btn.style.color = '#667eea';
+                    });
+                    this.style.background = '#667eea';
+                    this.style.color = 'white';
+                    createPieChart('amount');
+                });
+                
+                document.getElementById('pieToggleAvg').addEventListener('click', function() {
+                    document.querySelectorAll('[id^="pieToggle"]').forEach(btn => {
+                        btn.style.background = 'white';
+                        btn.style.color = '#667eea';
+                    });
+                    this.style.background = '#667eea';
+                    this.style.color = 'white';
+                    createPieChart('avg');
+                });
+                
+                // 時間帯別棒グラフ（大きく表示）
+                const timeCtx = document.getElementById(timeChartId).getContext('2d');
+                new Chart(timeCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: Array.from({length: 24}, (_, i) => `${i}時`),
+                        datasets: [{
+                            label: '取引回数',
+                            data: hourStats,
+                            backgroundColor: hourStats.map((count, hour) => {
+                                // 市場時間で色分け
+                                if (hour >= 9 && hour <= 15) { // 東京市場
+                                    return 'rgba(102, 126, 234, 0.7)';
+                                } else if (hour >= 16 && hour <= 24) { // ロンドン・NY市場
+                                    return 'rgba(245, 158, 11, 0.7)';
+                                } else { // その他
+                                    return 'rgba(107, 114, 128, 0.5)';
+                                }
+                            }),
+                            borderColor: hourStats.map((count, hour) => {
+                                if (hour >= 9 && hour <= 15) {
+                                    return 'rgba(102, 126, 234, 1)';
+                                } else if (hour >= 16 && hour <= 24) {
+                                    return 'rgba(245, 158, 11, 1)';
+                                } else {
+                                    return 'rgba(107, 114, 128, 0.8)';
+                                }
+                            }),
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    afterLabel: function(context) {
+                                        const hour = context.dataIndex;
+                                        let market = '';
+                                        if (hour >= 9 && hour <= 15) market = '東京市場';
+                                        else if (hour >= 16 && hour <= 18) market = 'ロンドン市場';
+                                        else if (hour >= 22 || hour <= 1) market = 'NY市場';
+                                        return market;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                grid: { display: false },
+                                ticks: {
+                                    font: { size: 11 }
+                                }
+                            },
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    stepSize: 1,
+                                    font: { size: 11 }
+                                }
+                            }
+                        }
+                    }
+                });
+                
+                // 曜日別棒グラフ
+                const weekdayCtx = document.getElementById(weekdayChartId).getContext('2d');
+                new Chart(weekdayCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: weekdayNames,
+                        datasets: [{
+                            label: '取引回数',
+                            data: weekdayStats,
+                            backgroundColor: weekdayStats.map((count, i) => {
+                                // 土日は薄い色
+                                if (i === 0 || i === 6) {
+                                    return 'rgba(107, 114, 128, 0.4)';
+                                }
+                                return isProfit ? 'rgba(16, 185, 129, 0.7)' : 'rgba(239, 68, 68, 0.7)';
+                            }),
+                            borderColor: weekdayStats.map((count, i) => {
+                                if (i === 0 || i === 6) {
+                                    return 'rgba(107, 114, 128, 0.6)';
+                                }
+                                return isProfit ? 'rgba(16, 185, 129, 1)' : 'rgba(239, 68, 68, 1)';
+                            }),
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        scales: {
+                            x: {
+                                grid: { display: false },
+                                ticks: { font: { size: 11 } }
+                            },
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    stepSize: 1,
+                                    font: { size: 10 }
+                                }
+                            }
+                        }
+                    }
+                });
+            }, 100);
+            
+            // モーダル外クリックで閉じる
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.remove();
+                }
+            });
+        }
+
+        function analyzePatterns(trades, isProfit) {
+            const features = [];
+            const suggestions = [];
+            
+            // 通貨ペア分析
+            const symbolStats = {};
+            trades.forEach(t => {
+                if (!symbolStats[t.symbol]) {
+                    symbolStats[t.symbol] = { count: 0, profit: 0 };
+                }
+                symbolStats[t.symbol].count++;
+                symbolStats[t.symbol].profit += t.profit;
+            });
+            
+            const topSymbol = Object.entries(symbolStats)
+                .sort((a, b) => b[1].count - a[1].count)[0];
+            
+            // 時間帯分析
+            const hourStats = Array(24).fill(0);
+            trades.forEach(t => {
+                hourStats[t.openTime.getHours()]++;
+            });
+            
+            let maxHour = 0;
+            let maxCount = 0;
+            hourStats.forEach((count, hour) => {
+                if (count > maxCount) {
+                    maxCount = count;
+                    maxHour = hour;
+                }
+            });
+            
+            // ポジション分析
+            const longTrades = trades.filter(t => t.type === 'buy');
+            const shortTrades = trades.filter(t => t.type === 'sell');
+            const dominantPosition = longTrades.length > shortTrades.length ? 'ロング' : 'ショート';
+            
+            // 平均保有時間
+            const avgDuration = trades.reduce((sum, t) => sum + t.duration, 0) / trades.length;
+            const avgMinutes = Math.round(avgDuration / 60000);
+            
+            if (isProfit) {
+                // 成功パターンの特徴
+                features.push(
+                    `${topSymbol[0]}での取引が${((topSymbol[1].count / trades.length) * 100).toFixed(0)}%を占める`,
+                    `${maxHour}時台の取引が最も多い（${maxCount}回）`,
+                    `${dominantPosition}ポジションが優勢（${Math.max(longTrades.length, shortTrades.length)}回）`,
+                    `平均保有時間は${avgMinutes}分`
+                );
+                
+                // 再現のためのコツ
+                suggestions.push(
+                    `${topSymbol[0]}に集中して取引機会を探る`,
+                    `${maxHour}時台のエントリーを重点的に狙う`,
+                    `${dominantPosition}ポジションでの戦略を強化する`,
+                    `${avgMinutes}分前後での利確タイミングを意識する`
+                );
+            } else {
+                // 失敗パターンの特徴
+                features.push(
+                    `${topSymbol[0]}での損失が${((topSymbol[1].count / trades.length) * 100).toFixed(0)}%を占める`,
+                    `${maxHour}時台に損失が集中（${maxCount}回）`,
+                    `${dominantPosition}ポジションでの失敗が多い（${Math.max(longTrades.length, shortTrades.length)}回）`,
+                    `平均保有時間${avgMinutes}分で損切り`
+                );
+                
+                // 改善提案
+                suggestions.push(
+                    `${topSymbol[0]}の取引戦略を見直す、または取引を控える`,
+                    `${maxHour}時台のエントリーは慎重に判断する`,
+                    `${dominantPosition}ポジションのエントリー条件を厳格化する`,
+                    `損切りラインを明確に設定し、${Math.round(avgMinutes * 0.7)}分以内に判断する`
+                );
+            }
+            
+            return { features, suggestions };
         }
     </script>
 </body>
