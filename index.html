@@ -5,465 +5,122 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FX取引分析ツール - カテゴリー1: 基礎指標</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         
-        * { 
-            margin: 0; 
-            padding: 0; 
-            box-sizing: border-box; 
+        /* カラーパレット定義 */
+        :root {
+            /* ダークモード色 */
+            --dark-bg-1: #000000;
+            --dark-bg-2: #181818;
+            --dark-bg-3: #232323;
+            --dark-bg-4: #373737;
+            --dark-profit: #00c8ff;
+            --dark-loss: #ff3200;
+            
+            /* ライトモード色 */
+            --light-bg-1: #ffffff;
+            --light-bg-2: #fafafa;
+            --light-bg-3: #f5f5f5;
+            --light-bg-4: #ebebeb;
+            --light-profit: #007eff;
+            --light-loss: #ff2800;
         }
         
-        body { 
-            font-family: 'Inter', 'Noto Sans JP', -apple-system, BlinkMacSystemFont, sans-serif; 
-            background: #0a0a0f; 
-            color: #ffffff;
-            min-height: 100vh; 
-            overflow-x: hidden;
-            font-size: 18px;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
+        /* ライトモード（デフォルト） */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, var(--light-bg-3) 0%, var(--light-bg-4) 100%);
+            min-height: 100vh;
+            color: #333;
         }
         
-        /* ヘッダー */
-        .header {
-            background: linear-gradient(180deg, #1a1a2e 0%, #0f0f1e 100%);
-            border-bottom: 1px solid #2a2a3e;
-            padding: 15px 25px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        body.dark-mode {
+            background: linear-gradient(135deg, var(--dark-bg-1) 0%, var(--dark-bg-2) 100%);
+            color: #e0e0e0;
         }
         
-        .header-left {
-            display: flex;
-            align-items: center;
-        }
-        
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-        
-        .logo-container {
-            display: flex;
-            align-items: center;
-            height: 40px;
-        }
-        
-        .logo-img {
-            height: 100%;
-            width: auto;
-            object-fit: contain;
-        }
-        
-        /* テーマ切り替えボタン */
-        .theme-toggle {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 8px;
-            padding: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 44px;
-            height: 44px;
-        }
-        
-        .theme-toggle:hover {
-            background: rgba(0, 212, 255, 0.2);
-            border-color: #00d4ff;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 212, 255, 0.3);
-        }
-        
-        .theme-icon {
-            color: #ffffff;
-            transition: all 0.3s ease;
-        }
-        
-        /* ライトモード - 可読性改善 */
-        body.light-mode {
-            background: #f8f9fa;
-            color: #212529;
-        }
-        
-        body.light-mode .header {
-            background: #ffffff;
-            border-bottom: 1px solid #dee2e6;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-        }
-        
-        body.light-mode .theme-toggle {
-            background: rgba(0, 0, 0, 0.06);
-            border: 1px solid rgba(0, 0, 0, 0.12);
-        }
-        
-        body.light-mode .theme-toggle:hover {
-            background: rgba(0, 153, 255, 0.12);
-            border-color: #0099ff;
-            box-shadow: 0 4px 12px rgba(0, 153, 255, 0.2);
-        }
-        
-        body.light-mode .theme-icon {
-            color: #212529;
-        }
-        
-        body.light-mode .filter-bar {
-            background: #ffffff;
-            border-bottom: 1px solid #dee2e6;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
-        }
-        
-        body.light-mode .filter-item label {
-            color: #495057;
-            font-weight: 600;
-        }
-        
-        body.light-mode .filter-item select {
-            background: #ffffff;
-            border: 1px solid #ced4da;
-            color: #212529;
-        }
-        
-        body.light-mode .filter-item select:hover {
-            border-color: #0099ff;
-            background: #f8f9fa;
-            box-shadow: 0 0 0 3px rgba(0, 153, 255, 0.1);
-        }
-        
-        body.light-mode .filter-item select:focus {
-            border-color: #0099ff;
-            box-shadow: 0 0 0 3px rgba(0, 153, 255, 0.15);
-        }
-        
-        body.light-mode .sidebar {
-            background: #ffffff;
-            border-right: 1px solid #dee2e6;
-        }
-        
-        body.light-mode .section-title {
-            color: #212529;
-        }
-        
-        body.light-mode .file-input-wrapper {
-            background: linear-gradient(135deg, #0099ff 0%, #00d4ff 100%);
-            box-shadow: 0 4px 12px rgba(0, 153, 255, 0.2);
-        }
-        
-        body.light-mode .demo-button {
-            background: linear-gradient(135deg, #ff6b00 0%, #ff8c00 100%);
-            box-shadow: 0 4px 12px rgba(255, 140, 0, 0.2);
-        }
-        
-        body.light-mode .content {
-            background: #f8f9fa;
-        }
-        
-        body.light-mode .metric-card {
-            background: #ffffff;
-            border: 1px solid #dee2e6;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-        }
-        
-        body.light-mode .metric-label {
-            color: #495057;
-            font-weight: 700;
-        }
-        
-        body.light-mode .metric-subtitle {
-            color: #6c757d;
-            font-weight: 500;
-        }
-        
-        body.light-mode .metric-value {
-            color: #212529;
-        }
-        
-        body.light-mode .positive {
-            color: #0099ff;
-            text-shadow: 0 0 20px rgba(0, 153, 255, 0.3);
-        }
-        
-        body.light-mode .negative {
-            color: #dc3545;
-            text-shadow: 0 0 20px rgba(220, 53, 69, 0.3);
-        }
-        
-        body.light-mode .chart-container {
-            background: #ffffff;
-            border: 1px solid #dee2e6;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-            background-image: 
-                linear-gradient(rgba(0, 0, 0, 0.02) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 0, 0, 0.02) 1px, transparent 1px);
-        }
-        
-        body.light-mode .chart-title {
-            color: #212529;
-        }
-        
-        body.light-mode .chart-title::before {
-            background: linear-gradient(180deg, #0099ff 0%, #00d4ff 100%);
-            box-shadow: 0 0 8px rgba(0, 153, 255, 0.4);
-        }
-        
-        body.light-mode .data-info {
-            background: #ffffff;
-            border: 1px solid #dee2e6;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
-        }
-        
-        body.light-mode .data-info h4 {
-            display: none;
-        }
-        
-        body.light-mode .data-info-label {
-            color: #495057;
-            font-weight: 600;
-        }
-        
-        body.light-mode .data-info-value {
-            color: #0099ff;
-            font-weight: 700;
-        }
-        
-        body.light-mode .data-info-item {
-            border-bottom: 1px solid #e9ecef;
-        }
-        
-        body.light-mode .win-rate-box {
-            background: #ffffff;
-            border: 1px solid #dee2e6;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
-        }
-        
-        body.light-mode .win-rate-box h4 {
-            color: #212529;
-        }
-        
-        body.light-mode .win-rate-name {
-            color: #212529;
-        }
-        
-        body.light-mode .win-rate-stats {
-            color: #495057;
-            font-weight: 500;
-        }
-        
-        body.light-mode .win-rate-item {
-            border-bottom: 1px solid #e9ecef;
-        }
-        
-        body.light-mode .stat-label {
-            color: #495057;
-            font-weight: 600;
-        }
-        
-        body.light-mode .stat-value {
-            color: #212529;
-            font-weight: 700;
-        }
-        
-        body.light-mode .stat-row {
-            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-        }
-        
-        body.light-mode .stats-box {
-            background: rgba(0, 153, 255, 0.06);
-            border: 1px solid rgba(0, 153, 255, 0.15);
-        }
-        
-        body.light-mode .stats-box.loss {
-            background: rgba(220, 53, 69, 0.06);
-            border: 1px solid rgba(220, 53, 69, 0.15);
-        }
-        
-        body.light-mode .stats-box h4 {
-            color: #212529;
-        }
-        
-        body.light-mode .modal {
-            background: rgba(0, 0, 0, 0.6);
-        }
-        
-        body.light-mode .modal-content {
-            background: #ffffff;
-            border: 1px solid #dee2e6;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-        }
-        
-        body.light-mode .modal-title {
-            color: #212529;
-        }
-        
-        body.light-mode .modal-close {
-            color: #6c757d;
-        }
-        
-        body.light-mode .modal-close:hover {
-            color: #0099ff;
-        }
-        
-        body.light-mode .error-message {
-            background: rgba(220, 53, 69, 0.1);
-            border: 1px solid rgba(220, 53, 69, 0.2);
-            color: #dc3545;
-        }
-        
-        body.light-mode .loading p {
-            color: #495057;
-        }
-        
-        body.light-mode .spinner {
-            border-color: #e9ecef;
-            border-top-color: #0099ff;
-        }
-        
-        /* Chart.js ライトモード設定 */
-        body.light-mode .chart-canvas {
-            filter: none;
-        }
-        
-        /* フィルターバー */
-        .filter-bar {
-            background: linear-gradient(180deg, #15152a 0%, #1a1a2e 100%);
-            border-bottom: 1px solid #2a2a3e;
-            padding: 20px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-        }
-        
-        .filter-container {
+        .container {
             max-width: 1400px;
             margin: 0 auto;
-            display: flex;
-            gap: 20px;
-            align-items: flex-end;
-            flex-wrap: wrap;
+            padding: 20px;
         }
         
-        .filter-item {
-            flex: 1;
-            min-width: 150px;
+        header {
+            text-align: center;
+            margin-bottom: 30px;
         }
         
-        .filter-item label {
-            display: block;
-            font-size: 13px;
-            color: #ffffff;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            margin-bottom: 8px;
-            font-weight: 600;
-            font-family: 'Inter', sans-serif;
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #333;
         }
         
-        .filter-item select {
-            width: 100%;
-            padding: 12px 15px;
-            background: #0f0f1e;
-            border: 1px solid #3a3a4e;
-            border-radius: 8px;
-            color: #ffffff;
-            font-size: 15px;
+        body.dark-mode h1 {
+            color: #e0e0e0;
+        }
+        
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.85;
+        }
+        
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--light-bg-1);
+            border: 2px solid var(--light-bg-4);
+            border-radius: 25px;
+            padding: 10px 20px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 500;
-            font-family: 'Inter', sans-serif;
+            font-size: 1em;
+            transition: all 0.3s;
+            z-index: 100;
         }
         
-        .filter-item select:hover {
-            border-color: #00d4ff;
-            background: #1a1a2e;
-            box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
-        }
-        
-        .filter-item select:focus {
-            outline: none;
-            border-color: #00d4ff;
-            box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.2);
-        }
-        
-        /* メインコンテナ */
-        .main-container {
-            display: flex;
-            height: calc(100vh - 70px - 100px); /* ヘッダー + フィルターバーの高さを引く */
-        }
-        
-        /* サイドバー */
-        .sidebar {
-            width: 280px;
-            background: #0f0f1e;
-            border-right: 1px solid #2a2a3e;
-            padding: 25px;
-            padding-right: 20px; /* スクロールバー分の余白 */
-            overflow-y: auto;
-        }
-        
-        .sidebar::-webkit-scrollbar {
-            width: 8px;
-        }
-        
-        .sidebar::-webkit-scrollbar-track {
-            background: #1a1a2e;
-        }
-        
-        .sidebar::-webkit-scrollbar-thumb {
-            background: #3a3a4e;
-            border-radius: 4px;
+        body.dark-mode .theme-toggle {
+            background: var(--dark-bg-3);
+            border-color: var(--dark-bg-4);
+            color: #e0e0e0;
         }
         
         .upload-section {
-            margin-bottom: 35px;
+            background: var(--light-bg-1);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
         }
         
-        .section-title {
-            font-size: 18px;
-            color: #ffffff;
-            text-transform: uppercase;
-            letter-spacing: 1.2px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: 700;
+        body.dark-mode .upload-section {
+            background: var(--dark-bg-2);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
         
         .file-input-wrapper {
             position: relative;
             overflow: hidden;
-            display: block;
+            display: inline-block;
             cursor: pointer;
-            background: linear-gradient(135deg, #00d4ff 0%, #0099ff 100%);
+            background: var(--light-profit);
             color: white;
-            padding: 18px;
-            border-radius: 10px;
-            text-align: center;
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 12px;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-            font-family: 'Inter', sans-serif;
+            padding: 12px 30px;
+            border-radius: 25px;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
         
-        .file-input-wrapper:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 24px rgba(0, 153, 255, 0.4);
-            border-color: rgba(255, 255, 255, 0.3);
-        }
-        
-        .file-input-wrapper:active {
-            transform: translateY(-1px);
+        body.dark-mode .file-input-wrapper {
+            background: var(--dark-profit);
         }
         
         .file-input-wrapper:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0, 153, 255, 0.3);
+            box-shadow: 0 5px 15px rgba(0, 126, 255, 0.4);
+        }
+        
+        body.dark-mode .file-input-wrapper:hover {
+            box-shadow: 0 5px 15px rgba(0, 200, 255, 0.4);
         }
         
         #fileInput {
@@ -472,423 +129,209 @@
         }
         
         .demo-button {
-            background: linear-gradient(135deg, #ff6b00 0%, #ff8c00 100%);
+            background: var(--light-profit);
             color: white;
-            padding: 18px;
-            border: 2px solid transparent;
-            border-radius: 10px;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
             cursor: pointer;
-            font-size: 18px;
-            font-weight: 600;
-            width: 100%;
-            transition: all 0.3s ease;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-            font-family: 'Inter', sans-serif;
+            font-size: 1em;
+            font-weight: 500;
+            transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
         }
         
-        .demo-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 24px rgba(255, 140, 0, 0.4);
-            border-color: rgba(255, 255, 255, 0.3);
-        }
-        
-        .demo-button:active {
-            transform: translateY(-1px);
+        body.dark-mode .demo-button {
+            background: var(--dark-profit);
         }
         
         .demo-button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(255, 140, 0, 0.3);
+            opacity: 0.9;
         }
         
-        /* フィルターセクション */
         .filter-section {
-            margin-bottom: 35px;
+            background: var(--light-bg-1);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            display: none;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        body.dark-mode .filter-section {
+            background: var(--dark-bg-2);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        
+        .filter-section.active {
+            display: block;
+        }
+        
+        .filter-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light-bg-4);
+        }
+        
+        body.dark-mode .filter-section h2 {
+            color: #e0e0e0;
+            border-bottom-color: var(--dark-bg-4);
+        }
+        
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
         }
         
         .filter-group {
-            margin-bottom: 24px;
+            display: flex;
+            flex-direction: column;
         }
         
         .filter-group label {
-            display: block;
-            font-size: 16px;
-            color: #ffffff;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            margin-bottom: 10px;
-            font-weight: 700;
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        body.dark-mode .filter-group label {
+            color: #aaa;
         }
         
         .filter-group select {
-            width: 100%;
-            padding: 15px;
-            background: #1a1a2e;
-            border: 1px solid #3a3a4e;
+            padding: 10px;
+            border: 2px solid var(--light-bg-4);
             border-radius: 8px;
-            color: #ffffff;
-            font-size: 17px;
+            background-color: var(--light-bg-1);
+            font-size: 1rem;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-weight: 500;
-            font-family: 'Inter', sans-serif;
+        }
+        
+        body.dark-mode .filter-group select {
+            border-color: var(--dark-bg-4);
+            background-color: var(--dark-bg-3);
+            color: #e0e0e0;
         }
         
         .filter-group select:hover {
-            border-color: #00d4ff;
-            background: #1f1f33;
-            box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
+            border-color: var(--light-profit);
+        }
+        
+        body.dark-mode .filter-group select:hover {
+            border-color: var(--dark-profit);
         }
         
         .filter-group select:focus {
             outline: none;
-            border-color: #00d4ff;
-            box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.2);
+            border-color: var(--light-profit);
+            box-shadow: 0 0 0 3px rgba(0, 126, 255, 0.1);
         }
         
-        /* データ情報 */
-        .data-info {
-            background: #1a1a2e;
-            border: 1px solid #2a2a3e;
-            border-radius: 8px;
-            padding: 18px;
-            margin-top: 25px;
-            display: none;
+        body.dark-mode .filter-group select:focus {
+            border-color: var(--dark-profit);
+            box-shadow: 0 0 0 3px rgba(0, 200, 255, 0.1);
         }
         
-        .data-info.active {
-            display: block;
-        }
-        
-        .data-info-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 14px 0;
-            border-bottom: 1px solid #3a3a4e;
-            font-size: 17px;
-        }
-        
-        .data-info-item:last-child {
-            border-bottom: none;
-        }
-        
-        .data-info-label {
-            color: #ffffff;
-            font-weight: 500;
-        }
-        
-        .data-info-value {
-            color: #00d4ff;
-            font-weight: 700;
-        }
-        
-        /* メインコンテンツ */
-        .content {
-            flex: 1;
-            padding: 25px;
-            padding-right: 35px; /* スクロールバー分の余白を追加 */
-            overflow-y: auto;
-            background: #0a0a0f;
-        }
-        
-        .content::-webkit-scrollbar {
-            width: 10px;
-        }
-        
-        .content::-webkit-scrollbar-track {
-            background: #1a1a2e;
-            border-radius: 5px;
-        }
-        
-        .content::-webkit-scrollbar-thumb {
-            background: linear-gradient(180deg, #3a3a4e 0%, #4a4a5e 100%);
-            border-radius: 5px;
-        }
-        
-        .content::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(180deg, #4a4a5e 0%, #5a5a6e 100%);
-        }
-        
-        /* メトリクスグリッド */
-        .metrics-grid {
+        .analysis-section {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 18px;
-            margin-bottom: 30px;
+            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
         }
         
         .metric-card {
-            background: linear-gradient(135deg, #1a1a2e 0%, #15152a 100%);
-            border: 1px solid #2a2a3e;
-            border-radius: 10px;
-            padding: 24px;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
+            background: var(--light-bg-1);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
         }
         
-        .metric-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, transparent, #00d4ff, transparent);
-            animation: scan 3s linear infinite;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        
-        .metric-card:hover::before {
-            opacity: 1;
-        }
-        
-        @keyframes scan {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
+        body.dark-mode .metric-card {
+            background: var(--dark-bg-2);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
         }
         
         .metric-card:hover {
-            border-color: #00d4ff;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0, 212, 255, 0.1);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
         }
         
-        .metric-label {
-            font-size: 17px;
-            color: #ffffff;
-            text-transform: uppercase;
-            letter-spacing: 1.2px;
-            margin-bottom: 14px;
-            font-weight: 700;
+        body.dark-mode .metric-card:hover {
+            box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+        }
+        
+        .metric-card h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+        
+        body.dark-mode .metric-card h3 {
+            color: #e0e0e0;
         }
         
         .metric-value {
-            font-size: 48px;
-            font-weight: 800;
-            margin-bottom: 14px;
-            font-family: 'JetBrains Mono', 'Inter', monospace;
-            letter-spacing: -1px;
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 10px;
         }
         
         .metric-subtitle {
-            font-size: 17px;
-            color: #ffffff;
-            font-weight: 500;
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
         }
         
-        .positive { 
-            color: #00d4ff;
-            text-shadow: 0 0 30px rgba(0, 212, 255, 0.8);
+        body.dark-mode .metric-subtitle {
+            color: #aaa;
         }
         
-        .negative { 
-            color: #ff4444;
-            text-shadow: 0 0 30px rgba(255, 68, 68, 0.8);
-        }
+        .positive { color: var(--light-profit); }
+        .negative { color: var(--light-loss); }
+        body.dark-mode .positive { color: var(--dark-profit); }
+        body.dark-mode .negative { color: var(--dark-loss); }
+        .neutral { color: #6b7280; }
         
-        .neutral { 
-            color: #fff;
-        }
-        
-        /* チャートコンテナ */
         .chart-container {
-            background: linear-gradient(135deg, #1a1a2e 0%, #15152a 100%);
-            border: 1px solid #2a2a3e;
-            border-radius: 10px;
-            padding: 24px;
-            margin-bottom: 24px;
-            position: relative;
-            /* グリッド背景パターン */
-            background-image: 
-                linear-gradient(135deg, #1a1a2e 0%, #15152a 100%),
-                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-            background-size: 100% 100%, 20px 20px, 20px 20px;
-            background-position: 0 0, 0 0, 0 0;
-        }
-        
-        .chart-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-        }
-        
-        .chart-title {
-            font-size: 22px;
-            color: #ffffff;
-            font-weight: 800;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-family: 'Inter', sans-serif;
-            position: relative;
-            padding-left: 20px;
-        }
-        
-        .chart-title::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 4px;
-            height: 28px;
-            background: linear-gradient(180deg, #00d4ff 0%, #0099ff 100%);
-            border-radius: 2px;
-            box-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
-        }
-        
-        .chart-controls {
-            display: flex;
-            gap: 12px;
-        }
-        
-        .chart-button {
-            padding: 12px 20px;
-            background: #1a1a2e;
-            border: 1px solid #3a3a4e;
-            border-radius: 6px;
-            color: #ffffff;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 600;
-        }
-        
-        .chart-button:hover {
-            border-color: #00d4ff;
-            color: #00d4ff;
-            background: #1f1f33;
-        }
-        
-        .chart-button.active {
-            background: #00d4ff;
-            color: #000;
-            border-color: #00d4ff;
-        }
-        
-        /* グリッドレイアウト */
-        .chart-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 24px;
-            margin-bottom: 24px;
-        }
-        
-        .chart-grid.full-width {
-            grid-template-columns: 1fr;
-        }
-        
-        /* 統計ボックス */
-        .stats-box {
-            background: rgba(0, 212, 255, 0.05);
-            border: 1px solid rgba(0, 212, 255, 0.2);
-            border-radius: 8px;
-            padding: 24px;
-            margin-bottom: 18px;
-        }
-        
-        .stats-box.loss {
-            background: rgba(255, 68, 68, 0.05);
-            border-color: rgba(255, 68, 68, 0.2);
-        }
-        
-        .stats-box h4 {
-            font-size: 19px;
-            margin-bottom: 22px;
-            font-weight: 700;
-            color: #ffffff;
-        }
-        
-        .stat-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 16px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            font-size: 18px;
-        }
-        
-        .stat-row:last-child {
-            border-bottom: none;
-        }
-        
-        .stat-label {
-            color: #ffffff;
-            font-weight: 500;
-        }
-        
-        .stat-value {
-            color: #ffffff;
-            font-weight: 700;
-            font-family: 'JetBrains Mono', 'Inter', monospace;
-        }
-        
-        /* 勝率詳細 */
-        .win-rate-details {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 24px;
+            background: var(--light-bg-1);
+            border-radius: 15px;
+            padding: 25px;
             margin-top: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
         }
         
-        .win-rate-box {
-            background: #1a1a2e;
-            border: 1px solid #2a2a3e;
-            border-radius: 8px;
-            padding: 20px;
+        body.dark-mode .chart-container {
+            background: var(--dark-bg-2);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
         }
         
-        .win-rate-box h4 {
-            color: #ffffff;
-            font-size: 18px;
+        .chart-container h3 {
+            color: #333;
             margin-bottom: 20px;
-            font-weight: 700;
+            font-size: 1.2em;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light-bg-4);
         }
         
-        .win-rate-item {
-            margin-bottom: 15px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #2a2a3e;
+        body.dark-mode .chart-container h3 {
+            color: #e0e0e0;
+            border-bottom-color: var(--dark-bg-4);
         }
         
-        .win-rate-item:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-            padding-bottom: 0;
-        }
-        
-        .win-rate-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-        
-        .win-rate-name {
-            font-weight: 700;
-            color: #ffffff;
-            font-size: 17px;
-        }
-        
-        .win-rate-percent {
-            font-weight: 800;
-            font-size: 18px;
-        }
-        
-        .win-rate-stats {
-            font-size: 16px;
-            color: #ffffff;
-            font-weight: 500;
-        }
-        
-        /* ローディング */
         .loading {
             display: none;
             text-align: center;
-            padding: 60px;
+            padding: 20px;
+            color: var(--light-profit);
+        }
+        
+        body.dark-mode .loading {
+            color: var(--dark-profit);
         }
         
         .loading.active {
@@ -896,13 +339,18 @@
         }
         
         .spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid #2a2a3e;
-            border-top: 4px solid #00d4ff;
+            border: 3px solid var(--light-bg-3);
+            border-top: 3px solid var(--light-profit);
             border-radius: 50%;
+            width: 40px;
+            height: 40px;
             animation: spin 1s linear infinite;
-            margin: 0 auto 25px;
+            margin: 0 auto 20px;
+        }
+        
+        body.dark-mode .spinner {
+            border: 3px solid var(--dark-bg-3);
+            border-top: 3px solid var(--dark-profit);
         }
         
         @keyframes spin {
@@ -910,324 +358,203 @@
             100% { transform: rotate(360deg); }
         }
         
-        /* エラーメッセージ */
         .error-message {
-            background: rgba(255, 68, 68, 0.1);
-            border: 1px solid rgba(255, 68, 68, 0.3);
-            color: #ff4444;
-            padding: 24px;
+            background: #fee;
+            color: var(--light-loss);
+            padding: 15px;
             border-radius: 8px;
-            margin-top: 24px;
+            margin-top: 20px;
             display: none;
-            font-size: 18px;
-            font-weight: 600;
         }
         
-        /* モーダル */
-        .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
+        body.dark-mode .error-message {
+            background: rgba(255, 50, 0, 0.1);
+            color: var(--dark-loss);
         }
         
-        .modal-content {
-            background: #1a1a2e;
-            border-radius: 15px;
-            padding: 30px;
-            max-width: 900px;
-            max-height: 90vh;
-            overflow-y: auto;
-            margin: 20px;
-            border: 1px solid #2a2a3e;
+        .file-info {
+            margin-top: 15px;
+            padding: 15px;
+            background: var(--light-bg-3);
+            border-radius: 8px;
+            border-left: 4px solid var(--light-bg-4);
+            display: none;
         }
         
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
+        body.dark-mode .file-info {
+            background: var(--dark-bg-3);
+            border-left-color: var(--dark-bg-4);
         }
         
-        .modal-title {
-            color: #ffffff;
-            font-size: 20px;
-            font-weight: 600;
+        .file-info h4 {
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 1em;
         }
         
-        .modal-close {
-            background: none;
-            border: none;
-            font-size: 28px;
-            cursor: pointer;
-            color: #fff;
-            transition: color 0.3s;
+        body.dark-mode .file-info h4 {
+            color: #e0e0e0;
         }
         
-        .modal-close:hover {
-            color: #00d4ff;
+        .stats-box-positive {
+            background: rgba(0, 126, 255, 0.05);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid var(--light-profit);
         }
         
-        /* レスポンシブ */
-        @media (max-width: 1200px) {
-            .filter-container {
-                flex-wrap: wrap;
-            }
-            
-            .filter-item {
-                min-width: calc(33.333% - 14px);
-            }
+        body.dark-mode .stats-box-positive {
+            background: rgba(0, 200, 255, 0.05);
+            border-left-color: var(--dark-profit);
+        }
+        
+        .stats-box-negative {
+            background: rgba(255, 40, 0, 0.05);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid var(--light-loss);
+        }
+        
+        body.dark-mode .stats-box-negative {
+            background: rgba(255, 50, 0, 0.05);
+            border-left-color: var(--dark-loss);
         }
         
         @media (max-width: 768px) {
-            .main-container {
-                flex-direction: column;
-            }
-            
-            .sidebar {
-                width: 100%;
-                border-right: none;
-                border-bottom: 1px solid #2a2a3e;
-            }
-            
-            .filter-item {
-                min-width: calc(50% - 10px);
-            }
-            
-            .chart-grid {
+            .filter-grid {
                 grid-template-columns: 1fr;
             }
             
-            .metrics-grid {
+            .analysis-section {
                 grid-template-columns: 1fr;
             }
             
-            .win-rate-details {
-                grid-template-columns: 1fr;
+            h1 {
+                font-size: 1.8em;
             }
-        }
-        
-        @media (max-width: 480px) {
-            .filter-item {
-                min-width: 100%;
+            
+            .theme-toggle {
+                top: 10px;
+                right: 10px;
+                padding: 8px 15px;
+                font-size: 0.9em;
             }
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <div class="header-left">
-            <div class="logo-container">
-                <img class="logo-img dark-logo" 
-                     src="https://raw.githubusercontent.com/LENS1208/my-images/main/algo-logo-web-b.png" 
-                     alt="Algo Stream" 
-                     onerror="this.style.display='none';" />
-                <img class="logo-img light-logo" 
-                     src="https://raw.githubusercontent.com/LENS1208/my-images/main/algo-logo-web-w.png" 
-                     alt="Algo Stream" 
-                     style="display: none;" 
-                     onerror="this.style.display='none';" />
-                <span class="logo-fallback" style="display: none; color: #00d4ff; font-size: 24px; font-weight: 800;">Algo Stream</span>
-            </div>
-        </div>
-        <div class="header-right">
-            <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">
-                <svg class="theme-icon sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"/>
-                    <path d="M12 1v6m0 6v6m11-7h-6m-6 0H1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                </svg>
-                <svg class="theme-icon moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="display: none;">
-                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </button>
-        </div>
-    </div>
+    <button class="theme-toggle" onclick="toggleTheme()">🌙 ダークモード</button>
     
-    <div class="filter-bar" id="filterBar" style="display: none;">
-        <div class="filter-container">
-            <div class="filter-item">
-                <label>通貨ペア</label>
-                <select id="symbolFilter">
-                    <option value="all">すべて</option>
-                </select>
-            </div>
-            
-            <div class="filter-item">
-                <label>ポジション</label>
-                <select id="positionFilter">
-                    <option value="all">すべて</option>
-                    <option value="buy">ロング</option>
-                    <option value="sell">ショート</option>
-                </select>
-            </div>
-            
-            <div class="filter-item">
-                <label>曜日</label>
-                <select id="weekdayFilter">
-                    <option value="all">すべて</option>
-                    <option value="1">月曜日</option>
-                    <option value="2">火曜日</option>
-                    <option value="3">水曜日</option>
-                    <option value="4">木曜日</option>
-                    <option value="5">金曜日</option>
-                    <option value="6">土曜日</option>
-                    <option value="0">日曜日</option>
-                </select>
-            </div>
-            
-            <div class="filter-item">
-                <label>時間帯</label>
-                <select id="hourFilter">
-                    <option value="all">すべて</option>
-                    <option value="5-8">早朝</option>
-                    <option value="9-11">午前</option>
-                    <option value="12-15">午後</option>
-                    <option value="16-18">夕方</option>
-                    <option value="19-21">夜間</option>
-                    <option value="22-1">深夜</option>
-                    <option value="2-4">未明</option>
-                </select>
-            </div>
-            
-            <div class="filter-item">
-                <label>取引結果</label>
-                <select id="resultFilter">
-                    <option value="all">すべて</option>
-                    <option value="win">勝ち</option>
-                    <option value="loss">負け</option>
-                </select>
-            </div>
-        </div>
-    </div>
+    <div class="container">
+        <header>
+            <h1>📊 FX取引分析ツール</h1>
+            <p class="subtitle">カテゴリー1: 基礎指標分析</p>
+        </header>
 
-    <div class="main-container">
-        <div class="sidebar">
-            <div class="upload-section">
+        <div class="upload-section">
+            <h2>取引履歴ファイルをアップロード</h2>
+            <div style="display: flex; gap: 15px; flex-wrap: wrap; align-items: center;">
                 <div class="file-input-wrapper">
                     <input type="file" id="fileInput" accept=".html,.htm" />
-                    <label for="fileInput">取引履歴をアップロード</label>
+                    <label for="fileInput">ファイルを選択</label>
                 </div>
                 <button onclick="loadDemoData()" class="demo-button">
-                    デモデータで試す
+                    🎮 デモデータで試す
                 </button>
             </div>
             
-            <div class="data-info" id="dataInfo">
-                <div id="dataInfoContent"></div>
+            <div id="fileInfo" class="file-info">
+                <h4>データ情報</h4>
+                <div id="dataInfo"></div>
             </div>
-        </div>
-
-        <div class="content">
+            
             <div class="loading" id="loading">
                 <div class="spinner"></div>
-                <p style="color: #ffffff; font-size: 19px; font-weight: 600;">データを分析中...</p>
+                <p>分析中...</p>
             </div>
             <div class="error-message" id="errorMessage"></div>
-            <div id="analysisRoot"></div>
         </div>
+        
+        <div class="filter-section" id="filterSection">
+            <h2>フィルター設定</h2>
+            <div class="filter-grid">
+                <div class="filter-group">
+                    <label for="symbolFilter">通貨ペア</label>
+                    <select id="symbolFilter">
+                        <option value="all">すべての通貨ペア</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="positionFilter">ロング／ショート</label>
+                    <select id="positionFilter">
+                        <option value="all">すべてのポジション</option>
+                        <option value="buy">ロング（買い）</option>
+                        <option value="sell">ショート（売り）</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="weekdayFilter">曜日</label>
+                    <select id="weekdayFilter">
+                        <option value="all">すべての曜日</option>
+                        <option value="1">月曜日</option>
+                        <option value="2">火曜日</option>
+                        <option value="3">水曜日</option>
+                        <option value="4">木曜日</option>
+                        <option value="5">金曜日</option>
+                        <option value="6">土曜日</option>
+                        <option value="0">日曜日</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="hourFilter">時間帯（日本時間）</label>
+                    <select id="hourFilter">
+                        <option value="all">すべての時間</option>
+                        <option value="5-8">早朝 (5:00-8:59)</option>
+                        <option value="9-11">午前 (9:00-11:59)</option>
+                        <option value="12-15">午後 (12:00-15:59)</option>
+                        <option value="16-18">夕方 (16:00-18:59)</option>
+                        <option value="19-21">夜間 (19:00-21:59)</option>
+                        <option value="22-1">深夜 (22:00-1:59)</option>
+                        <option value="2-4">未明 (2:00-4:59)</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="resultFilter">勝敗</label>
+                    <select id="resultFilter">
+                        <option value="all">すべての取引</option>
+                        <option value="win">勝ちトレードのみ</option>
+                        <option value="loss">負けトレードのみ</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div id="analysisRoot"></div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <script>
-        // グローバル変数
         let allTrades = [];
         let activeCharts = [];
-        
-        // ロゴ画像のエラー処理
-        window.addEventListener('DOMContentLoaded', function() {
-            const darkLogo = document.querySelector('.dark-logo');
-            const lightLogo = document.querySelector('.light-logo');
-            const fallback = document.querySelector('.logo-fallback');
-            
-            // ダークロゴのエラー処理
-            if (darkLogo) {
-                darkLogo.onerror = function() {
-                    this.style.display = 'none';
-                    if (fallback) fallback.style.display = 'block';
-                };
-            }
-            
-            // ライトロゴのエラー処理
-            if (lightLogo) {
-                lightLogo.onerror = function() {
-                    this.style.display = 'none';
-                    if (fallback && document.body.classList.contains('light-mode')) {
-                        fallback.style.display = 'block';
-                    }
-                };
-            }
-        });
-        
-        // テーマ切り替え機能
+        let isDarkMode = false;
+
+        // テーマ切り替え
         function toggleTheme() {
-            const body = document.body;
-            const sunIcon = document.querySelector('.sun-icon');
-            const moonIcon = document.querySelector('.moon-icon');
-            const darkLogo = document.querySelector('.dark-logo');
-            const lightLogo = document.querySelector('.light-logo');
+            isDarkMode = !isDarkMode;
+            document.body.classList.toggle('dark-mode');
+            const btn = document.querySelector('.theme-toggle');
+            btn.textContent = isDarkMode ? '☀️ ライトモード' : '🌙 ダークモード';
             
-            if (body.classList.contains('light-mode')) {
-                body.classList.remove('light-mode');
-                sunIcon.style.display = 'block';
-                moonIcon.style.display = 'none';
-                darkLogo.style.display = 'block';
-                lightLogo.style.display = 'none';
-                localStorage.setItem('theme', 'dark');
-                
-                // Chart.jsの色をダークモードに
-                Chart.defaults.color = '#ffffff';
-                Chart.defaults.borderColor = '#3a3a4e';
-            } else {
-                body.classList.add('light-mode');
-                sunIcon.style.display = 'none';
-                moonIcon.style.display = 'block';
-                darkLogo.style.display = 'none';
-                lightLogo.style.display = 'block';
-                localStorage.setItem('theme', 'light');
-                
-                // Chart.jsの色をライトモードに
-                Chart.defaults.color = '#495057';
-                Chart.defaults.borderColor = '#dee2e6';
-            }
-            
-            // 既存のチャートを再描画
-            if (typeof applyFiltersAndRender === 'function' && allTrades.length > 0) {
+            // チャートの再描画
+            if (allTrades.length > 0) {
                 applyFiltersAndRender();
             }
         }
-        
-        // ページ読み込み時にテーマを復元
-        document.addEventListener('DOMContentLoaded', function() {
-            const savedTheme = localStorage.getItem('theme');
-            const sunIcon = document.querySelector('.sun-icon');
-            const moonIcon = document.querySelector('.moon-icon');
-            const darkLogo = document.querySelector('.dark-logo');
-            const lightLogo = document.querySelector('.light-logo');
-            
-            if (savedTheme === 'light') {
-                document.body.classList.add('light-mode');
-                sunIcon.style.display = 'none';
-                moonIcon.style.display = 'block';
-                darkLogo.style.display = 'none';
-                lightLogo.style.display = 'block';
-                Chart.defaults.color = '#495057';
-                Chart.defaults.borderColor = '#dee2e6';
-            }
-        });
-        
-        // Chart.jsのデフォルト設定
-        Chart.defaults.color = '#ffffff';
-        Chart.defaults.borderColor = '#3a3a4e';
-        Chart.defaults.font.family = "'Inter', 'Noto Sans JP', sans-serif";
-        Chart.defaults.font.size = 15;
-        Chart.defaults.font.weight = 500;
-        
+
         // イベントリスナー
         document.getElementById('fileInput').addEventListener('change', handleFileUpload);
         document.getElementById('symbolFilter').addEventListener('change', applyFiltersAndRender);
@@ -1235,7 +562,7 @@
         document.getElementById('weekdayFilter').addEventListener('change', applyFiltersAndRender);
         document.getElementById('hourFilter').addEventListener('change', applyFiltersAndRender);
         document.getElementById('resultFilter').addEventListener('change', applyFiltersAndRender);
-        
+
         // デモデータ生成
         function loadDemoData() {
             document.getElementById('loading').classList.add('active');
@@ -1271,14 +598,14 @@
                 showFileInfo('デモデータ', demoTrades.length);
             }, 500);
         }
-        
+
         function handleFileUpload(event) {
             const file = event.target.files[0];
             if (!file) return;
-            
+
             document.getElementById('loading').classList.add('active');
             document.getElementById('errorMessage').style.display = 'none';
-            
+
             const reader = new FileReader();
             reader.onload = (e) => {
                 try {
@@ -1299,7 +626,7 @@
             };
             reader.readAsText(file);
         }
-        
+
         function parseMT4History(html) {
             const parser = new DOMParser();
             const doc = parser.parseFromString(html, 'text/html');
@@ -1334,7 +661,7 @@
             
             return trades;
         }
-        
+
         function parseDateTime(dateStr) {
             if (!dateStr) return null;
             const match = dateStr.match(/(\d{4})[./](\d{2})[./](\d{2})\s+(\d{2}):(\d{2})/);
@@ -1344,63 +671,50 @@
             }
             return null;
         }
-        
+
         function showFileInfo(fileName, tradeCount) {
+            const fileInfo = document.getElementById('fileInfo');
             const dataInfo = document.getElementById('dataInfo');
-            const content = document.getElementById('dataInfoContent');
             
             if (allTrades.length > 0) {
                 const startDate = new Date(Math.min(...allTrades.map(t => t.openTime.getTime())));
                 const endDate = new Date(Math.max(...allTrades.map(t => t.closeTime.getTime())));
                 
-                content.innerHTML = `
-                    <div class="data-info-item">
-                        <span class="data-info-label">ファイル名</span>
-                        <span class="data-info-value">${fileName.substring(0, 20)}${fileName.length > 20 ? '...' : ''}</span>
-                    </div>
-                    <div class="data-info-item">
-                        <span class="data-info-label">総取引数</span>
-                        <span class="data-info-value">${tradeCount}件</span>
-                    </div>
-                    <div class="data-info-item">
-                        <span class="data-info-label">開始日</span>
-                        <span class="data-info-value">${formatDate(startDate)}</span>
-                    </div>
-                    <div class="data-info-item">
-                        <span class="data-info-label">終了日</span>
-                        <span class="data-info-value">${formatDate(endDate)}</span>
-                    </div>
+                dataInfo.innerHTML = `
+                    <div><strong>ファイル:</strong> ${fileName}</div>
+                    <div><strong>取引数:</strong> ${tradeCount}件</div>
+                    <div><strong>期間:</strong> ${formatDate(startDate)} 〜 ${formatDate(endDate)}</div>
                 `;
-                dataInfo.classList.add('active');
+                fileInfo.style.display = 'block';
             }
         }
-        
+
         function formatDate(date) {
-            return `${date.getFullYear()}年${String(date.getMonth() + 1).padStart(2, '0')}月${String(date.getDate()).padStart(2, '0')}日`;
+            return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
         }
-        
+
         function showError(message) {
             const errorEl = document.getElementById('errorMessage');
             errorEl.textContent = message;
             errorEl.style.display = 'block';
         }
-        
+
         function onFileParsed(trades) {
             allTrades = trades.sort((a, b) => a.openTime.getTime() - b.openTime.getTime());
             populateFilters();
-            document.getElementById('filterBar').style.display = 'block';
+            document.getElementById('filterSection').classList.add('active');
             applyFiltersAndRender();
         }
-        
+
         function populateFilters() {
             const symbols = [...new Set(allTrades.map(t => t.symbol))];
             const symbolFilter = document.getElementById('symbolFilter');
-            symbolFilter.innerHTML = '<option value="all">すべて</option>';
+            symbolFilter.innerHTML = '<option value="all">すべての通貨ペア</option>';
             symbols.sort().forEach(s => {
                 symbolFilter.innerHTML += `<option value="${s}">${s}</option>`;
             });
         }
-        
+
         function applyFiltersAndRender() {
             let filteredTrades = [...allTrades];
             
@@ -1447,21 +761,16 @@
             
             renderAnalysis(filteredTrades);
         }
-        
+
         function renderAnalysis(trades) {
-            // 既存のチャートを破棄
-            activeCharts.forEach(c => {
-                if (c && typeof c.destroy === 'function') {
-                    c.destroy();
-                }
-            });
+            activeCharts.forEach(c => c.destroy());
             activeCharts = [];
             
             const root = document.getElementById('analysisRoot');
             root.innerHTML = '';
             
             if (trades.length === 0) {
-                root.innerHTML = '<div style="text-align: center; padding: 60px; color: #ffffff; font-size: 20px; font-weight: 600;">条件に一致する取引データがありません</div>';
+                root.innerHTML = '<div style="text-align: center; padding: 40px; color: #666;">条件に一致する取引データがありません</div>';
                 return;
             }
             
@@ -1469,140 +778,115 @@
             
             // カテゴリー1: 基礎指標のみ表示
             root.innerHTML = `
-                <div class="metrics-grid">
-                    <div class="metric-card">
-                        <div class="metric-label">総取引数</div>
-                        <div class="metric-value" style="font-size: 52px;">${stats.totalTrades}<span style="font-size: 28px; margin-left: 5px;">回</span></div>
-                        <div class="metric-subtitle">分析対象取引数</div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-label">勝率</div>
-                        <div class="metric-value ${stats.winRate >= 50 ? 'positive' : 'negative'}" style="font-size: 52px;">${stats.winRate.toFixed(1)}<span style="font-size: 32px;">%</span></div>
-                        <div class="metric-subtitle" style="font-size: 18px; font-weight: 700;">
-                            <span style="color: #00d4ff;">${stats.winTrades}勝</span> / 
-                            <span style="color: #ff4444;">${stats.lossTrades}敗</span>
+                <div style="margin-top: 30px;">
+                    <div class="analysis-section">
+                        <div class="metric-card">
+                            <h3>総取引数</h3>
+                            <div class="metric-value">${stats.totalTrades}回</div>
+                            <div class="metric-subtitle">分析対象取引数</div>
+                        </div>
+                        <div class="metric-card">
+                            <h3>勝率</h3>
+                            <div class="metric-value ${stats.winRate >= 50 ? 'positive' : 'negative'}">${stats.winRate.toFixed(1)}%</div>
+                            <div class="metric-subtitle">勝ち: ${stats.winTrades}回 / 負け: ${stats.lossTrades}回</div>
+                        </div>
+                        <div class="metric-card">
+                            <h3>総損益</h3>
+                            <div class="metric-value ${stats.totalProfit >= 0 ? 'positive' : 'negative'}">¥${Math.round(stats.totalProfit).toLocaleString()}</div>
+                            <div class="metric-subtitle">全取引の合計損益</div>
+                        </div>
+                        <div class="metric-card">
+                            <h3>平均利益</h3>
+                            <div class="metric-value positive">¥${Math.round(stats.avgProfit).toLocaleString()}</div>
+                            <div class="metric-subtitle">勝ちトレードの平均</div>
+                        </div>
+                        <div class="metric-card">
+                            <h3>平均損失</h3>
+                            <div class="metric-value negative">¥${Math.round(stats.avgLoss).toLocaleString()}</div>
+                            <div class="metric-subtitle">負けトレードの平均</div>
+                        </div>
+                        <div class="metric-card">
+                            <h3>期待値（Expected Value）</h3>
+                            <div class="metric-value ${stats.expectedValue >= 0 ? 'positive' : 'negative'}">¥${Math.round(stats.expectedValue).toLocaleString()}/件</div>
+                            <div class="metric-subtitle">1取引あたりの平均期待損益<br>計算式: 総損益 ÷ 総取引数</div>
                         </div>
                     </div>
-                    <div class="metric-card">
-                        <div class="metric-label">総損益</div>
-                        <div class="metric-value ${stats.totalProfit >= 0 ? 'positive' : 'negative'}" style="font-size: 40px;">¥${Math.round(stats.totalProfit).toLocaleString()}</div>
-                        <div class="metric-subtitle">全取引の合計損益</div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-label">平均利益</div>
-                        <div class="metric-value positive" style="font-size: 36px;">¥${Math.round(stats.avgProfit).toLocaleString()}</div>
-                        <div class="metric-subtitle">勝ちトレードの平均</div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-label">平均損失</div>
-                        <div class="metric-value negative" style="font-size: 36px;">¥${Math.round(stats.avgLoss).toLocaleString()}</div>
-                        <div class="metric-subtitle">負けトレードの平均</div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-label">期待値（Expected Value）</div>
-                        <div class="metric-value ${stats.expectedValue >= 0 ? 'positive' : 'negative'}" style="font-size: 40px;">¥${Math.round(stats.expectedValue).toLocaleString()}<span style="font-size: 24px;">/件</span></div>
-                        <div class="metric-subtitle">1取引あたりの平均期待損益</div>
-                    </div>
-                </div>
-                
-                <div class="chart-container">
-                    <div class="chart-header">
-                        <div class="chart-title">勝ち負け詳細分布</div>
-                    </div>
-                    <div class="chart-grid">
-                        <div style="background: rgba(0, 212, 255, 0.05); padding: 24px; border-radius: 10px; border: 1px solid rgba(0, 212, 255, 0.2);">
-                            <h4 style="color: #ffffff; margin-bottom: 20px; font-size: 20px; font-weight: 700;">勝ちトレード統計</h4>
-                            <div class="stat-row">
-                                <span class="stat-label">取引回数</span>
-                                <span class="stat-value" style="color: #00d4ff; font-size: 24px; font-weight: 800;">${stats.winTrades}回</span>
+                    
+                    <div class="chart-container">
+                        <h3>勝ち負け詳細分布</h3>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                            <div class="stats-box-positive">
+                                <h4 style="margin-bottom: 15px; font-size: 1.1em;" class="positive">勝ちトレード統計</h4>
+                                <div style="line-height: 1.8;">
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                        <span style="opacity: 0.8;">取引回数:</span>
+                                        <span style="font-weight: 600;">${stats.winTrades}回</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                        <span style="opacity: 0.8;">総利益額:</span>
+                                        <span style="font-weight: 600;" class="positive">¥${Math.round(stats.totalWinAmount).toLocaleString()}</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                        <span style="opacity: 0.8;">平均利益:</span>
+                                        <span style="font-weight: 600;">¥${Math.round(stats.avgProfit).toLocaleString()}</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                        <span style="opacity: 0.8;">最大利益:</span>
+                                        <span style="font-weight: 600;" class="positive">¥${Math.round(stats.maxWin).toLocaleString()}</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between;">
+                                        <span style="opacity: 0.8;">最小利益:</span>
+                                        <span style="font-weight: 600;">¥${Math.round(stats.minWin).toLocaleString()}</span>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="stat-row">
-                                <span class="stat-label">総利益額</span>
-                                <span class="stat-value" style="color: #00d4ff; font-size: 26px; font-weight: 800;">¥${Math.round(stats.totalWinAmount).toLocaleString()}</span>
-                            </div>
-                            <div class="stat-row">
-                                <span class="stat-label">平均利益</span>
-                                <span class="stat-value" style="font-size: 20px;">¥${Math.round(stats.avgProfit).toLocaleString()}</span>
-                            </div>
-                            <div class="stat-row">
-                                <span class="stat-label">最大利益</span>
-                                <span class="stat-value" style="color: #00d4ff; font-size: 20px;">¥${Math.round(stats.maxWin).toLocaleString()}</span>
-                            </div>
-                            <div class="stat-row">
-                                <span class="stat-label">最小利益</span>
-                                <span class="stat-value">¥${Math.round(stats.minWin).toLocaleString()}</span>
-                            </div>
-                        </div>
-                        
-                        <div style="background: rgba(255, 68, 68, 0.05); padding: 24px; border-radius: 10px; border: 1px solid rgba(255, 68, 68, 0.2);">
-                            <h4 style="color: #ffffff; margin-bottom: 20px; font-size: 20px; font-weight: 700;">負けトレード統計</h4>
-                            <div class="stat-row">
-                                <span class="stat-label">取引回数</span>
-                                <span class="stat-value" style="color: #ff4444; font-size: 24px; font-weight: 800;">${stats.lossTrades}回</span>
-                            </div>
-                            <div class="stat-row">
-                                <span class="stat-label">総損失額</span>
-                                <span class="stat-value" style="color: #ff4444; font-size: 26px; font-weight: 800;">¥${Math.round(stats.totalLossAmount).toLocaleString()}</span>
-                            </div>
-                            <div class="stat-row">
-                                <span class="stat-label">平均損失</span>
-                                <span class="stat-value" style="font-size: 20px;">¥${Math.round(stats.avgLoss).toLocaleString()}</span>
-                            </div>
-                            <div class="stat-row">
-                                <span class="stat-label">最大損失</span>
-                                <span class="stat-value" style="color: #ff4444; font-size: 20px;">¥${Math.round(stats.maxLoss).toLocaleString()}</span>
-                            </div>
-                            <div class="stat-row">
-                                <span class="stat-label">最小損失</span>
-                                <span class="stat-value">¥${Math.round(stats.minLoss).toLocaleString()}</span>
+                            <div class="stats-box-negative">
+                                <h4 style="margin-bottom: 15px; font-size: 1.1em;" class="negative">負けトレード統計</h4>
+                                <div style="line-height: 1.8;">
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                        <span style="opacity: 0.8;">取引回数:</span>
+                                        <span style="font-weight: 600;">${stats.lossTrades}回</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                        <span style="opacity: 0.8;">総損失額:</span>
+                                        <span style="font-weight: 600;" class="negative">¥${Math.round(stats.totalLossAmount).toLocaleString()}</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                        <span style="opacity: 0.8;">平均損失:</span>
+                                        <span style="font-weight: 600;">¥${Math.round(stats.avgLoss).toLocaleString()}</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                        <span style="opacity: 0.8;">最大損失:</span>
+                                        <span style="font-weight: 600;" class="negative">¥${Math.round(stats.maxLoss).toLocaleString()}</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between;">
+                                        <span style="opacity: 0.8;">最小損失:</span>
+                                        <span style="font-weight: 600;">¥${Math.round(stats.minLoss).toLocaleString()}</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                
-                <div class="chart-container">
-                    <div class="chart-header">
-                        <div class="chart-title">勝率別の内訳</div>
+                    
+                    <div class="chart-container">
+                        <h3>累積損益推移</h3>
+                        <canvas id="profitChart"></canvas>
                     </div>
-                    <div class="win-rate-details">
-                        <div class="win-rate-box">
-                            <h4>ポジション別勝率</h4>
-                            <div id="positionWinRates"></div>
-                        </div>
-                        <div class="win-rate-box">
-                            <h4>通貨ペア別勝率</h4>
-                            <div id="symbolWinRates" style="max-height: 300px; overflow-y: auto; padding-right: 10px;"></div>
-                        </div>
+                    
+                    <div class="chart-container">
+                        <h3>損益分布ヒストグラム</h3>
+                        <canvas id="profitDistributionChart"></canvas>
                     </div>
-                </div>
-                
-                <div class="chart-container">
-                    <div class="chart-header">
-                        <div class="chart-title">累積損益推移</div>
-                    </div>
-                    <canvas id="profitChart" style="max-height: 250px; height: 250px;"></canvas>
-                </div>
-                
-                <div class="chart-container">
-                    <div class="chart-header">
-                        <div class="chart-title">損益分布ヒストグラム</div>
-                    </div>
-                    <div style="margin-bottom: 10px; padding: 12px; background: rgba(0, 212, 255, 0.1); border-radius: 8px; border: 1px solid rgba(0, 212, 255, 0.2);">
-                        <span style="font-size: 14px; color: #00d4ff; font-weight: 600;">💡 ヒント: </span>
-                        <span style="font-size: 14px; color: #ffffff;">各バーをクリックすると詳細分析が表示されます</span>
-                    </div>
-                    <canvas id="profitDistributionChart" style="max-height: 220px; height: 220px;"></canvas>
                 </div>
             `;
             
-            // チャート作成を少し遅延させる
+            // チャート描画
             setTimeout(() => {
-                displayWinRateBreakdown(trades);
                 createProfitChart(trades);
                 createProfitDistributionChart(trades);
             }, 100);
         }
-        
+
         function calculateStatistics(trades) {
             const winTrades = trades.filter(t => t.isWin);
             const lossTrades = trades.filter(t => !t.isWin);
@@ -1613,6 +897,7 @@
                 Math.abs(lossTrades.reduce((sum, t) => sum + t.profit, 0) / lossTrades.length) : 0;
             const expectedValue = trades.length > 0 ? totalProfit / trades.length : 0;
             
+            // 最大・最小利益/損失
             const winProfits = winTrades.map(t => t.profit);
             const lossProfits = lossTrades.map(t => Math.abs(t.profit));
             
@@ -1621,6 +906,7 @@
             const maxLoss = lossProfits.length > 0 ? Math.max(...lossProfits) : 0;
             const minLoss = lossProfits.length > 0 ? Math.min(...lossProfits) : 0;
             
+            // 総利益額・総損失額
             const totalWinAmount = winTrades.reduce((sum, t) => sum + t.profit, 0);
             const totalLossAmount = Math.abs(lossTrades.reduce((sum, t) => sum + t.profit, 0));
             
@@ -1641,193 +927,61 @@
                 totalLossAmount: totalLossAmount
             };
         }
-        
-        function displayWinRateBreakdown(trades) {
-            // ポジション別勝率の計算
-            const longTrades = trades.filter(t => t.type === 'buy');
-            const shortTrades = trades.filter(t => t.type === 'sell');
-            const longWins = longTrades.filter(t => t.isWin).length;
-            const shortWins = shortTrades.filter(t => t.isWin).length;
-            const longWinRate = longTrades.length > 0 ? (longWins / longTrades.length * 100).toFixed(1) : 0;
-            const shortWinRate = shortTrades.length > 0 ? (shortWins / shortTrades.length * 100).toFixed(1) : 0;
-            
-            const positionHTML = `
-                <div class="win-rate-item">
-                    <div class="win-rate-header">
-                        <span class="win-rate-name" style="color: #1976d2; font-size: 17px;">ロング（買い）</span>
-                        <span class="win-rate-percent ${longWinRate >= 50 ? 'positive' : 'negative'}" style="font-size: 24px; font-weight: 700;">${longWinRate}%</span>
-                    </div>
-                    <div class="win-rate-stats">
-                        <span style="font-weight: 600; color: #00d4ff; font-size: 16px;">${longWins}勝</span> / 
-                        <span style="font-weight: 600; color: #ff4444; font-size: 16px;">${longTrades.length - longWins}負</span>
-                        <span style="color: #ccc;">（全${longTrades.length}回）</span>
-                    </div>
-                </div>
-                <div class="win-rate-item">
-                    <div class="win-rate-header">
-                        <span class="win-rate-name" style="color: #c2185b; font-size: 17px;">ショート（売り）</span>
-                        <span class="win-rate-percent ${shortWinRate >= 50 ? 'positive' : 'negative'}" style="font-size: 24px; font-weight: 700;">${shortWinRate}%</span>
-                    </div>
-                    <div class="win-rate-stats">
-                        <span style="font-weight: 600; color: #00d4ff; font-size: 16px;">${shortWins}勝</span> / 
-                        <span style="font-weight: 600; color: #ff4444; font-size: 16px;">${shortTrades.length - shortWins}負</span>
-                        <span style="color: #ccc;">（全${shortTrades.length}回）</span>
-                    </div>
-                </div>
-            `;
-            
-            document.getElementById('positionWinRates').innerHTML = positionHTML;
-            
-            // 通貨ペア別勝率の計算
-            const symbolStats = {};
-            trades.forEach(trade => {
-                if (!symbolStats[trade.symbol]) {
-                    symbolStats[trade.symbol] = { total: 0, wins: 0 };
-                }
-                symbolStats[trade.symbol].total++;
-                if (trade.isWin) symbolStats[trade.symbol].wins++;
-            });
-            
-            const symbolArray = Object.entries(symbolStats)
-                .map(([symbol, stats]) => ({
-                    symbol,
-                    winRate: (stats.wins / stats.total * 100).toFixed(1),
-                    wins: stats.wins,
-                    total: stats.total
-                }))
-                .sort((a, b) => parseFloat(b.winRate) - parseFloat(a.winRate));
-            
-            let symbolHTML = '';
-            symbolArray.forEach(item => {
-                symbolHTML += `
-                    <div class="win-rate-item">
-                        <div class="win-rate-header">
-                            <span class="win-rate-name" style="font-size: 16px;">${item.symbol}</span>
-                            <span class="win-rate-percent ${item.winRate >= 50 ? 'positive' : 'negative'}" style="font-size: 22px; font-weight: 700;">${item.winRate}%</span>
-                        </div>
-                        <div class="win-rate-stats">
-                            <span style="font-weight: 600; color: #00d4ff; font-size: 15px;">${item.wins}勝</span> / 
-                            <span style="font-weight: 600; color: #ff4444; font-size: 15px;">${item.total - item.wins}負</span>
-                            <span style="color: #ccc;">（全${item.total}回）</span>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            document.getElementById('symbolWinRates').innerHTML = symbolHTML;
-        }
-        
+
         function createProfitChart(trades) {
-            const canvas = document.getElementById('profitChart');
-            if (!canvas) return;
-            
-            const ctx = canvas.getContext('2d');
+            const ctx = document.getElementById('profitChart').getContext('2d');
             let cumulative = 0;
-            const data = trades.map(t => {
-                cumulative += t.profit;
-                return cumulative;
-            });
+            const data = trades.map(t => cumulative += t.profit);
+            
+            const profitColor = isDarkMode ? '#00c8ff' : '#007eff';
+            const gridColor = isDarkMode ? '#373737' : '#ebebeb';
+            const textColor = isDarkMode ? '#e0e0e0' : '#333';
             
             const chart = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: trades.map((_, i) => `${i + 1}`),
+                    labels: trades.map((_, i) => i + 1),
                     datasets: [{
                         label: '累積損益',
                         data: data,
-                        borderColor: '#00d4ff',
-                        backgroundColor: 'rgba(0, 212, 255, 0.1)',
-                        borderWidth: 2,
+                        borderColor: profitColor,
+                        backgroundColor: profitColor + '20',
                         tension: 0.1,
-                        pointRadius: 0,
-                        pointHoverRadius: 5,
-                        pointHoverBackgroundColor: '#00d4ff',
-                        fill: true
+                        pointRadius: 0
                     }]
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: false,
-                    interaction: {
-                        intersect: false,
-                        mode: 'index'
-                    },
                     plugins: {
                         legend: {
                             display: false
-                        },
-                        tooltip: {
-                            backgroundColor: 'rgba(0, 0, 0, 0.9)',
-                            titleColor: '#fff',
-                            bodyColor: '#fff',
-                            borderColor: '#00d4ff',
-                            borderWidth: 1,
-                            displayColors: false,
-                            titleFont: {
-                                size: 14
-                            },
-                            bodyFont: {
-                                size: 13
-                            },
-                            callbacks: {
-                                title: function(context) {
-                                    return `取引 #${context[0].label}`;
-                                },
-                                label: function(context) {
-                                    return `累積損益: ¥${Math.round(context.parsed.y).toLocaleString()}`;
-                                }
-                            }
                         }
                     },
                     scales: {
                         x: {
-                            grid: {
-                                color: 'rgba(255, 255, 255, 0.05)',
-                                drawBorder: false
-                            },
-                            ticks: {
-                                color: '#ffffff',
-                                maxTicksLimit: 10,
-                                font: {
-                                    size: 12,
-                                    family: "'Inter', sans-serif"
-                                }
-                            },
                             title: {
                                 display: true,
                                 text: '取引番号',
-                                color: '#ffffff',
-                                font: {
-                                    size: 13,
-                                    family: "'Inter', sans-serif",
-                                    weight: 600
-                                }
+                                color: textColor
+                            },
+                            ticks: {
+                                color: textColor
+                            },
+                            grid: {
+                                color: gridColor
                             }
                         },
                         y: {
-                            grid: {
-                                color: 'rgba(255, 255, 255, 0.05)',
-                                drawBorder: false
-                            },
-                            ticks: {
-                                color: '#ffffff',
-                                font: {
-                                    size: 12,
-                                    family: "'JetBrains Mono', monospace"
-                                },
-                                callback: function(value) {
-                                    return '¥' + (value / 1000).toFixed(0) + 'k';
-                                }
-                            },
                             title: {
                                 display: true,
-                                text: '累積損益',
-                                color: '#ffffff',
-                                font: {
-                                    size: 13,
-                                    family: "'Inter', sans-serif",
-                                    weight: 600
-                                }
+                                text: '累積損益 (¥)',
+                                color: textColor
+                            },
+                            ticks: {
+                                color: textColor
+                            },
+                            grid: {
+                                color: gridColor
                             }
                         }
                     }
@@ -1837,11 +991,116 @@
             activeCharts.push(chart);
         }
         
-        function createProfitDistributionChart(trades) {
-            const canvas = document.getElementById('profitDistributionChart');
-            if (!canvas) return;
+        function analyzePatterns(trades, isProfit) {
+            const features = [];
+            const suggestions = [];
             
-            const ctx = canvas.getContext('2d');
+            // 通貨ペア分析
+            const symbolStats = {};
+            trades.forEach(t => {
+                if (!symbolStats[t.symbol]) {
+                    symbolStats[t.symbol] = { count: 0, profit: 0, wins: 0 };
+                }
+                symbolStats[t.symbol].count++;
+                symbolStats[t.symbol].profit += t.profit;
+                if (t.isWin) symbolStats[t.symbol].wins++;
+            });
+            
+            const topSymbol = Object.entries(symbolStats)
+                .sort((a, b) => b[1].count - a[1].count)[0];
+            
+            // 時間帯分析
+            const hourStats = Array(24).fill(0);
+            trades.forEach(t => {
+                hourStats[t.openTime.getHours()]++;
+            });
+            
+            let maxHour = 0;
+            let maxCount = 0;
+            hourStats.forEach((count, hour) => {
+                if (count > maxCount) {
+                    maxCount = count;
+                    maxHour = hour;
+                }
+            });
+            
+            // 曜日分析
+            const weekdayStats = Array(7).fill(0);
+            const weekdayNames = ['日', '月', '火', '水', '木', '金', '土'];
+            trades.forEach(t => {
+                weekdayStats[t.openTime.getDay()]++;
+            });
+            let maxWeekday = 0;
+            let maxWeekdayCount = 0;
+            weekdayStats.forEach((count, day) => {
+                if (count > maxWeekdayCount) {
+                    maxWeekdayCount = count;
+                    maxWeekday = day;
+                }
+            });
+            
+            // ポジション分析
+            const longTrades = trades.filter(t => t.type === 'buy');
+            const shortTrades = trades.filter(t => t.type === 'sell');
+            const dominantPosition = longTrades.length > shortTrades.length ? 'ロング' : 'ショート';
+            const positionRatio = Math.round(Math.max(longTrades.length, shortTrades.length) / trades.length * 100);
+            
+            // 平均保有時間
+            const avgDuration = trades.reduce((sum, t) => sum + t.duration, 0) / trades.length;
+            const avgMinutes = Math.round(avgDuration / 60000);
+            
+            if (isProfit) {
+                // 成功パターンの特徴
+                features.push(
+                    `${topSymbol[0]}での取引が${((topSymbol[1].count / trades.length) * 100).toFixed(0)}%を占める`,
+                    `${maxHour}時台に損失が集中（${maxCount}回）`,
+                    `${dominantPosition}ポジションが優勢（${positionRatio}%）`,
+                    `平均保有時間は${avgMinutes}分`,
+                    `${weekdayNames[maxWeekday]}曜日の取引が多い（${maxWeekdayCount}回）`
+                );
+                
+                // 成功を再現するためのポイント
+                if (topSymbol[1].wins / topSymbol[1].count > 0.6) {
+                    suggestions.push(`${topSymbol[0]}に集中して取引機会を探る`);
+                }
+                suggestions.push(
+                    `${maxHour}時台のエントリーを重点的に狙う`,
+                    `${dominantPosition}ポジションでの戦略を強化する`,
+                    `${avgMinutes}分前後での利確タイミングを意識する`,
+                    `損切りラインを明確に設定し、${Math.round(avgMinutes * 1.5)}分以内に判断する`,
+                    `${weekdayNames[maxWeekday]}曜日の取引に注力する`
+                );
+            } else {
+                // 失敗パターンの特徴
+                features.push(
+                    `${topSymbol[0]}での損失が${((topSymbol[1].count / trades.length) * 100).toFixed(0)}%を占める`,
+                    `${maxHour}時台に損失が集中（${maxCount}回）`,
+                    `${dominantPosition}ポジションでの失敗が多い（${positionRatio}%）`,
+                    `平均${avgMinutes}分で損切り`,
+                    `${weekdayNames[maxWeekday]}曜日の損失が多い（${maxWeekdayCount}回）`
+                );
+                
+                // 改善提案
+                suggestions.push(
+                    `${topSymbol[0]}の取引戦略を見直す、または取引を控える`,
+                    `${maxHour}時台のエントリーは慎重に判断する`,
+                    `${dominantPosition}ポジションのエントリー条件を厳格化する`,
+                    `損切りラインを明確に設定し、${Math.round(avgMinutes * 0.7)}分以内に判断する`,
+                    `${weekdayNames[maxWeekday]}曜日の取引を避けるか、ロットを下げる`
+                );
+            }
+            
+            return { features, suggestions };
+        }
+
+        function createProfitDistributionChart(trades) {
+            const ctx = document.getElementById('profitDistributionChart').getContext('2d');
+            
+            const profitColor = isDarkMode ? '#00c8ff' : '#007eff';
+            const lossColor = isDarkMode ? '#ff3200' : '#ff2800';
+            const neutralColor = '#6b7280';
+            const gridColor = isDarkMode ? '#373737' : '#ebebeb';
+            const textColor = isDarkMode ? '#e0e0e0' : '#333';
             
             // 損益を範囲別に分類
             const ranges = [
@@ -1878,20 +1137,20 @@
                         data: filteredDistribution.map(d => d.count),
                         backgroundColor: filteredDistribution.map(d => {
                             if (d.label.startsWith('-')) {
-                                return 'rgba(255, 68, 68, 0.7)';
+                                return lossColor + 'B0';
                             } else if (d.label.includes('0〜')) {
-                                return 'rgba(107, 114, 128, 0.7)';
+                                return neutralColor + 'B0';
                             } else {
-                                return 'rgba(0, 255, 136, 0.7)';
+                                return profitColor + 'B0';
                             }
                         }),
                         borderColor: filteredDistribution.map(d => {
                             if (d.label.startsWith('-')) {
-                                return 'rgba(255, 68, 68, 1)';
+                                return lossColor;
                             } else if (d.label.includes('0〜')) {
-                                return 'rgba(107, 114, 128, 1)';
+                                return neutralColor;
                             } else {
-                                return 'rgba(0, 255, 136, 1)';
+                                return profitColor;
                             }
                         }),
                         borderWidth: 1
@@ -1899,7 +1158,6 @@
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: false,
                     onClick: (event, elements) => {
                         if (elements.length > 0) {
                             const index = elements[0].index;
@@ -1907,27 +1165,11 @@
                             showProfitRangeDrilldown(selectedData);
                         }
                     },
-                    onHover: (event, elements) => {
-                        event.native.target.style.cursor = elements.length > 0 ? 'pointer' : 'default';
-                    },
                     plugins: {
                         legend: {
                             display: false
                         },
                         tooltip: {
-                            backgroundColor: 'rgba(0, 0, 0, 0.95)',
-                            titleColor: '#fff',
-                            bodyColor: '#fff',
-                            borderColor: '#00d4ff',
-                            borderWidth: 1,
-                            titleFont: {
-                                size: 15,
-                                weight: 'bold'
-                            },
-                            bodyFont: {
-                                size: 14
-                            },
-                            padding: 12,
                             callbacks: {
                                 label: function(context) {
                                     const count = context.parsed.y;
@@ -1942,9 +1184,7 @@
                                         const symbols = [...new Set(selectedData.trades.map(t => t.symbol))];
                                         return [
                                             `平均損益: ¥${Math.round(avgProfit).toLocaleString()}`,
-                                            `通貨ペア: ${symbols.slice(0, 3).join(', ')}${symbols.length > 3 ? '...' : ''}`,
-                                            '',
-                                            '📊 クリックして詳細を表示'
+                                            `通貨ペア: ${symbols.slice(0, 3).join(', ')}${symbols.length > 3 ? '...' : ''}`
                                         ];
                                     }
                                     return [];
@@ -1954,52 +1194,35 @@
                     },
                     scales: {
                         x: {
-                            grid: {
-                                display: false
-                            },
-                            ticks: {
-                                color: '#ffffff',
-                                font: {
-                                    size: 12,
-                                    family: "'Inter', sans-serif"
-                                },
-                                maxRotation: 45,
-                                minRotation: 45
-                            },
                             title: {
                                 display: true,
                                 text: '損益範囲',
-                                color: '#ffffff',
-                                font: {
-                                    size: 13,
-                                    family: "'Inter', sans-serif",
-                                    weight: 600
-                                }
+                                color: textColor
+                            },
+                            ticks: {
+                                autoSkip: false,
+                                maxRotation: 45,
+                                minRotation: 45,
+                                color: textColor
+                            },
+                            grid: {
+                                color: gridColor
                             }
                         },
                         y: {
-                            grid: {
-                                color: 'rgba(255, 255, 255, 0.05)'
-                            },
-                            ticks: {
-                                color: '#ffffff',
-                                stepSize: 5,
-                                font: {
-                                    size: 12,
-                                    family: "'JetBrains Mono', monospace"
-                                }
-                            },
                             title: {
                                 display: true,
                                 text: '取引回数',
-                                color: '#ffffff',
-                                font: {
-                                    size: 13,
-                                    family: "'Inter', sans-serif",
-                                    weight: 600
-                                }
+                                color: textColor
                             },
-                            beginAtZero: true
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1,
+                                color: textColor
+                            },
+                            grid: {
+                                color: gridColor
+                            }
                         }
                     }
                 }
@@ -2010,7 +1233,18 @@
         
         function showProfitRangeDrilldown(data) {
             const modal = document.createElement('div');
-            modal.className = 'modal';
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.5);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 1000;
+            `;
             
             const isProfit = !data.label.startsWith('-');
             const trades = data.trades.sort((a, b) => b.profit - a.profit);
@@ -2026,65 +1260,110 @@
                 symbolStats[t.symbol].profit += t.profit;
             });
             
-            // パターン分析
+            // 時間帯別分析
+            const hourStats = Array(24).fill(0);
+            trades.forEach(t => {
+                const hour = t.openTime.getHours();
+                hourStats[hour]++;
+            });
+            
+            // パターン分析を生成
             const patterns = analyzePatterns(trades, isProfit);
             
+            const bgColor = isDarkMode ? '#181818' : '#ffffff';
+            const bgColor2 = isDarkMode ? '#232323' : '#fafafa';
+            const bgColor3 = isDarkMode ? '#373737' : '#f5f5f5';
+            const borderColor = isDarkMode ? '#373737' : '#ebebeb';
+            const textColor = isDarkMode ? '#e0e0e0' : '#333';
+            const subTextColor = isDarkMode ? '#aaa' : '#666';
+            const profitColor = isDarkMode ? '#00c8ff' : '#007eff';
+            const lossColor = isDarkMode ? '#ff3200' : '#ff2800';
+            
             const content = document.createElement('div');
-            content.className = 'modal-content';
+            content.style.cssText = `
+                background: ${bgColor};
+                border-radius: 15px;
+                padding: 30px;
+                max-width: 900px;
+                max-height: 90vh;
+                overflow-y: auto;
+                margin: 20px;
+                color: ${textColor};
+            `;
+            
+            const pieChartId = 'pieChart_' + Date.now();
+            const timeChartId = 'timeChart_' + Date.now();
             
             content.innerHTML = `
-                <div class="modal-header">
-                    <h2 class="modal-title" style="color: #ffffff;">損益範囲: ${data.label}</h2>
-                    <button class="modal-close" onclick="this.closest('.modal').remove()">×</button>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2 style="color: ${textColor}; margin: 0;">損益範囲: ${data.label}</h2>
+                    <button onclick="this.closest('[style*=\"position: fixed\"]').remove()" 
+                            style="background: none; border: none; font-size: 24px; cursor: pointer; color: ${subTextColor};">×</button>
                 </div>
                 
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 18px; margin-bottom: 30px;">
-                    <div style="background: #1a1a2e; padding: 18px; border-radius: 8px; text-align: center;">
-                        <div style="color: #999; font-size: 14px; margin-bottom: 8px;">取引回数</div>
-                        <div style="font-size: 24px; font-weight: bold; color: #fff;">${data.count}回</div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 25px;">
+                    <div style="background: ${bgColor3}; padding: 15px; border-radius: 8px; text-align: center;">
+                        <div style="color: ${subTextColor}; font-size: 0.9em; margin-bottom: 5px;">取引回数</div>
+                        <div style="font-size: 1.5em; font-weight: bold;">${data.count}回</div>
                     </div>
-                    <div style="background: ${isProfit ? 'rgba(0, 255, 136, 0.1)' : 'rgba(255, 68, 68, 0.1)'}; padding: 18px; border-radius: 8px; text-align: center;">
-                        <div style="color: #999; font-size: 14px; margin-bottom: 8px;">平均損益</div>
-                        <div style="font-size: 24px; font-weight: bold; color: ${isProfit ? '#00ff88' : '#ff4444'};">
+                    <div style="background: ${isProfit ? 'rgba(0, 126, 255, 0.05)' : 'rgba(255, 40, 0, 0.05)'}; padding: 15px; border-radius: 8px; text-align: center;">
+                        <div style="color: ${subTextColor}; font-size: 0.9em; margin-bottom: 5px;">平均損益</div>
+                        <div style="font-size: 1.5em; font-weight: bold; color: ${isProfit ? profitColor : lossColor};">
                             ¥${Math.round(avgProfit).toLocaleString()}
                         </div>
                     </div>
-                    <div style="background: #1a1a2e; padding: 18px; border-radius: 8px; text-align: center;">
-                        <div style="color: #999; font-size: 14px; margin-bottom: 8px;">全体比率</div>
-                        <div style="font-size: 24px; font-weight: bold; color: #fff;">
+                    <div style="background: ${bgColor3}; padding: 15px; border-radius: 8px; text-align: center;">
+                        <div style="color: ${subTextColor}; font-size: 0.9em; margin-bottom: 5px;">全体比率</div>
+                        <div style="font-size: 1.5em; font-weight: bold;">
                             ${((data.count / allTrades.length) * 100).toFixed(1)}%
                         </div>
                     </div>
                 </div>
                 
-                <div style="margin-bottom: 30px;">
-                    <h3 style="color: #ffffff; margin-bottom: 18px; font-size: 17px;">通貨ペア別内訳</h3>
-                    <div style="background: #1a1a2e; padding: 20px; border-radius: 8px; max-height: 200px; overflow-y: auto;">
-                        ${Object.entries(symbolStats)
-                            .sort((a, b) => b[1].count - a[1].count)
-                            .map(([symbol, stats]) => `
-                                <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #2a2a3e;">
-                                    <span style="font-weight: 600; color: #fff;">${symbol}</span>
-                                    <span style="color: #ccc;">${stats.count}回 (¥${Math.round(stats.profit / stats.count).toLocaleString()}/回)</span>
-                                </div>
-                            `).join('')}
+                <div style="margin-bottom: 25px;">
+                    <h3 style="color: ${textColor}; margin-bottom: 15px; font-size: 1.1em;">通貨ペア別内訳</h3>
+                    <div style="background: ${bgColor3}; padding: 15px; border-radius: 8px;">
+                        ${Object.entries(symbolStats).sort((a, b) => b[1].count - a[1].count).map(([symbol, stats]) => `
+                            <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid ${borderColor};">
+                                <span style="font-weight: 600;">${symbol}</span>
+                                <span>${stats.count}回 (¥${Math.round(stats.profit / stats.count).toLocaleString()}/回)</span>
+                            </div>
+                        `).join('')}
                     </div>
                 </div>
                 
-                <div style="margin-bottom: 30px;">
-                    <h3 style="color: ${isProfit ? '#00ff88' : '#ff4444'}; margin-bottom: 18px; font-size: 17px;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px;">
+                    <div>
+                        <h3 style="color: ${textColor}; margin-bottom: 15px; font-size: 1.1em;">通貨ペア別分布</h3>
+                        <div style="background: ${bgColor3}; padding: 15px; border-radius: 8px; height: 250px;">
+                            <canvas id="${pieChartId}"></canvas>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 style="color: ${textColor}; margin-bottom: 15px; font-size: 1.1em;">時間帯別分布（日本時間）</h3>
+                        <div style="background: ${bgColor3}; padding: 15px; border-radius: 8px; height: 250px;">
+                            <canvas id="${timeChartId}"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-bottom: 25px;">
+                    <h3 style="color: ${isProfit ? profitColor : lossColor}; margin-bottom: 15px; font-size: 1.1em;">
                         ${isProfit ? '成功パターン分析' : '失敗パターン分析'}
                     </h3>
-                    <div style="background: ${isProfit ? 'rgba(0, 255, 136, 0.1)' : 'rgba(255, 68, 68, 0.1)'}; padding: 24px; border-radius: 8px; border-left: 4px solid ${isProfit ? '#00ff88' : '#ff4444'};">
-                        <h4 style="color: #fff; margin-bottom: 15px; font-size: 16px;">主な特徴</h4>
-                        <ul style="margin: 0 0 20px 20px; line-height: 2; color: #ccc; font-size: 15px;">
+                    <div style="background: ${isProfit ? 'rgba(0, 126, 255, 0.05)' : 'rgba(255, 40, 0, 0.05)'}; 
+                                padding: 20px; 
+                                border-radius: 8px; 
+                                border-left: 4px solid ${isProfit ? profitColor : lossColor};">
+                        <h4 style="color: ${textColor}; margin-bottom: 12px; font-size: 1em;">主な特徴</h4>
+                        <ul style="margin: 0 0 20px 20px; line-height: 1.8; color: ${textColor};">
                             ${patterns.features.map(f => `<li>${f}</li>`).join('')}
                         </ul>
                         
-                        <h4 style="color: #fff; margin-bottom: 15px; font-size: 16px;">
+                        <h4 style="color: ${textColor}; margin-bottom: 12px; font-size: 1em;">
                             ${isProfit ? '再現のためのポイント' : '改善提案'}
                         </h4>
-                        <ul style="margin: 0 0 0 20px; line-height: 2; color: #ccc; font-size: 15px;">
+                        <ul style="margin: 0 0 0 20px; line-height: 1.8; color: ${textColor};">
                             ${patterns.suggestions.map(s => `<li>${s}</li>`).join('')}
                         </ul>
                     </div>
@@ -2094,110 +1373,91 @@
             modal.appendChild(content);
             document.body.appendChild(modal);
             
+            // チャートを描画
+            setTimeout(() => {
+                // 円グラフ
+                const pieCtx = document.getElementById(pieChartId).getContext('2d');
+                const symbolData = Object.entries(symbolStats).sort((a, b) => b[1].count - a[1].count).slice(0, 5);
+                
+                new Chart(pieCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: symbolData.map(([symbol]) => symbol),
+                        datasets: [{
+                            data: symbolData.map(([, stats]) => stats.count),
+                            backgroundColor: [
+                                profitColor + 'CC',
+                                lossColor + 'CC',
+                                '#6b7280CC',
+                                profitColor + '80',
+                                lossColor + '80'
+                            ]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    padding: 8,
+                                    font: { size: 10 },
+                                    color: textColor
+                                }
+                            }
+                        }
+                    }
+                });
+                
+                // 時間帯別棒グラフ
+                const timeCtx = document.getElementById(timeChartId).getContext('2d');
+                new Chart(timeCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: Array.from({length: 24}, (_, i) => `${i}時`),
+                        datasets: [{
+                            label: '取引回数',
+                            data: hourStats,
+                            backgroundColor: isProfit ? profitColor + 'B0' : lossColor + 'B0',
+                            borderColor: isProfit ? profitColor : lossColor,
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        scales: {
+                            x: {
+                                grid: { color: borderColor },
+                                ticks: { 
+                                    font: { size: 9 },
+                                    color: textColor
+                                }
+                            },
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    stepSize: 1,
+                                    font: { size: 10 },
+                                    color: textColor
+                                },
+                                grid: { color: borderColor }
+                            }
+                        }
+                    }
+                });
+            }, 100);
+            
             // モーダル外クリックで閉じる
             modal.addEventListener('click', (e) => {
                 if (e.target === modal) {
                     modal.remove();
                 }
             });
-        }
-        
-        function analyzePatterns(trades, isProfit) {
-            const features = [];
-            const suggestions = [];
-            
-            // 通貨ペア分析
-            const symbolStats = {};
-            trades.forEach(t => {
-                if (!symbolStats[t.symbol]) {
-                    symbolStats[t.symbol] = { count: 0, profit: 0 };
-                }
-                symbolStats[t.symbol].count++;
-                symbolStats[t.symbol].profit += t.profit;
-            });
-            
-            const topSymbol = Object.entries(symbolStats)
-                .sort((a, b) => b[1].count - a[1].count)[0];
-            
-            // 時間帯分析
-            const hourStats = Array(24).fill(0);
-            trades.forEach(t => {
-                hourStats[t.openTime.getHours()]++;
-            });
-            
-            let maxHour = 0;
-            let maxCount = 0;
-            hourStats.forEach((count, hour) => {
-                if (count > maxCount) {
-                    maxCount = count;
-                    maxHour = hour;
-                }
-            });
-            
-            // ポジション分析
-            const longTrades = trades.filter(t => t.type === 'buy');
-            const shortTrades = trades.filter(t => t.type === 'sell');
-            const dominantPosition = longTrades.length > shortTrades.length ? 'ロング' : 'ショート';
-            
-            // 平均保有時間
-            const avgDuration = trades.reduce((sum, t) => sum + t.duration, 0) / trades.length;
-            const avgMinutes = Math.round(avgDuration / 60000);
-            
-            // 曜日分析
-            const weekdayStats = Array(7).fill(0);
-            const weekdayNames = ['日', '月', '火', '水', '木', '金', '土'];
-            trades.forEach(t => {
-                weekdayStats[t.openTime.getDay()]++;
-            });
-            
-            let maxWeekday = 0;
-            let maxWeekdayCount = 0;
-            weekdayStats.forEach((count, day) => {
-                if (count > maxWeekdayCount) {
-                    maxWeekdayCount = count;
-                    maxWeekday = day;
-                }
-            });
-            
-            if (isProfit) {
-                // 成功パターンの特徴
-                features.push(
-                    `${topSymbol[0]}での取引が${((topSymbol[1].count / trades.length) * 100).toFixed(0)}%を占める`,
-                    `${maxHour}時台の取引が最も多い（${maxCount}回）`,
-                    `${dominantPosition}ポジションが優勢（${Math.max(longTrades.length, shortTrades.length)}回）`,
-                    `平均保有時間は${avgMinutes}分`,
-                    `${weekdayNames[maxWeekday]}曜日の取引が多い（${maxWeekdayCount}回）`
-                );
-                
-                // 再現のためのポイント
-                suggestions.push(
-                    `${topSymbol[0]}に集中して取引機会を探る`,
-                    `${maxHour}時台のエントリーを重点的に狙う`,
-                    `${dominantPosition}ポジションでの戦略を強化する`,
-                    `${avgMinutes}分前後での利確タイミングを意識する`,
-                    `${weekdayNames[maxWeekday]}曜日の取引に注力する`
-                );
-            } else {
-                // 失敗パターンの特徴
-                features.push(
-                    `${topSymbol[0]}での損失が${((topSymbol[1].count / trades.length) * 100).toFixed(0)}%を占める`,
-                    `${maxHour}時台に損失が集中（${maxCount}回）`,
-                    `${dominantPosition}ポジションでの失敗が多い（${Math.max(longTrades.length, shortTrades.length)}回）`,
-                    `平均${avgMinutes}分で損切り`,
-                    `${weekdayNames[maxWeekday]}曜日の損失が多い（${maxWeekdayCount}回）`
-                );
-                
-                // 改善提案
-                suggestions.push(
-                    `${topSymbol[0]}の取引戦略を見直す、または取引を控える`,
-                    `${maxHour}時台のエントリーは慎重に判断する`,
-                    `${dominantPosition}ポジションのエントリー条件を厳格化する`,
-                    `損切りラインを明確に設定し、${Math.round(avgMinutes * 0.7)}分以内に判断する`,
-                    `${weekdayNames[maxWeekday]}曜日の取引を避けるか、ロットを下げる`
-                );
-            }
-            
-            return { features, suggestions };
         }
     </script>
 </body>
