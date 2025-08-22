@@ -442,8 +442,8 @@
         }
     </style>
 </head>
-<body>
-    <button class="theme-toggle" onclick="toggleTheme()">🌙 ダークモード</button>
+<body class="dark-mode">
+    <button class="theme-toggle" onclick="toggleTheme()">☀️ ライトモード</button>
     
     <div class="container">
         <header>
@@ -540,7 +540,14 @@
     <script>
         let allTrades = [];
         let activeCharts = [];
-        let isDarkMode = false;
+        let isDarkMode = true;
+        
+        // 初期設定でダークモードを適用
+        document.addEventListener('DOMContentLoaded', function() {
+            document.body.classList.add('dark-mode');
+            const btn = document.querySelector('.theme-toggle');
+            btn.textContent = '☀️ ライトモード';
+        });
 
         // テーマ切り替え
         function toggleTheme() {
