@@ -1,18 +1,4 @@
-/* クリック可能な要素の共通スタイル */
-        .clickable {
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .clickable:hover {
-            transform: translateY(-2px);
-            filter: brightness(1.1);
-        }
-        
-        /* 損益分布チャートのバー（クリック可能）のホバーエフェクト */
-        canvas {
-            cursor: crosshair;
-        }<!DOCTYPE html>
+/* フィルターセクション削除（上部に移動済み） */<!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
@@ -42,77 +28,304 @@
         .header {
             background: linear-gradient(180deg, #1a1a2e 0%, #0f0f1e 100%);
             border-bottom: 1px solid #2a2a3e;
-            padding: 15px 20px;
+            padding: 15px 25px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
         }
         
-        .header h1 {
-            font-size: 26px;
-            font-weight: 800;
-            color: #ffffff;
+        .header-left {
             display: flex;
             align-items: center;
-            gap: 14px;
-            font-family: 'Inter', sans-serif;
-            letter-spacing: -0.5px;
-            background: linear-gradient(135deg, #ffffff 0%, #00d4ff 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
         
-        .header .logo {
-            width: 40px;
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
             height: 40px;
-            background: linear-gradient(135deg, #00d4ff 0%, #0099ff 100%);
+        }
+        
+        .logo-img {
+            height: 100%;
+            width: auto;
+            object-fit: contain;
+        }
+        
+        /* テーマ切り替えボタン */
+        .theme-toggle {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 8px;
+            padding: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 900;
-            font-size: 20px;
-            color: white;
+            width: 44px;
+            height: 44px;
+        }
+        
+        .theme-toggle:hover {
+            background: rgba(0, 212, 255, 0.2);
+            border-color: #00d4ff;
+            transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(0, 212, 255, 0.3);
-            -webkit-text-fill-color: white;
         }
         
-        .market-status {
-            display: flex;
-            gap: 20px;
-            align-items: center;
+        .theme-icon {
+            color: #ffffff;
+            transition: all 0.3s ease;
         }
         
-        .market-indicator {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px 18px;
-            background: rgba(0, 200, 255, 0.1);
-            border-radius: 6px;
-            border: 1px solid rgba(0, 200, 255, 0.2);
-            font-size: 16px;
+        /* ライトモード - 可読性改善 */
+        body.light-mode {
+            background: #f8f9fa;
+            color: #212529;
         }
         
-        .market-indicator.active {
-            background: rgba(0, 212, 255, 0.1);
-            border-color: rgba(0, 212, 255, 0.3);
+        body.light-mode .header {
+            background: #ffffff;
+            border-bottom: 1px solid #dee2e6;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
         }
         
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #00d4ff;
-            box-shadow: 0 0 8px rgba(0, 212, 255, 0.6);
-            animation: pulse 2s infinite;
+        body.light-mode .theme-toggle {
+            background: rgba(0, 0, 0, 0.06);
+            border: 1px solid rgba(0, 0, 0, 0.12);
         }
         
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
+        body.light-mode .theme-toggle:hover {
+            background: rgba(0, 153, 255, 0.12);
+            border-color: #0099ff;
+            box-shadow: 0 4px 12px rgba(0, 153, 255, 0.2);
+        }
+        
+        body.light-mode .theme-icon {
+            color: #212529;
+        }
+        
+        body.light-mode .filter-bar {
+            background: #ffffff;
+            border-bottom: 1px solid #dee2e6;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+        }
+        
+        body.light-mode .filter-item label {
+            color: #495057;
+            font-weight: 600;
+        }
+        
+        body.light-mode .filter-item select {
+            background: #ffffff;
+            border: 1px solid #ced4da;
+            color: #212529;
+        }
+        
+        body.light-mode .filter-item select:hover {
+            border-color: #0099ff;
+            background: #f8f9fa;
+            box-shadow: 0 0 0 3px rgba(0, 153, 255, 0.1);
+        }
+        
+        body.light-mode .filter-item select:focus {
+            border-color: #0099ff;
+            box-shadow: 0 0 0 3px rgba(0, 153, 255, 0.15);
+        }
+        
+        body.light-mode .sidebar {
+            background: #ffffff;
+            border-right: 1px solid #dee2e6;
+        }
+        
+        body.light-mode .section-title {
+            color: #212529;
+        }
+        
+        body.light-mode .file-input-wrapper {
+            background: linear-gradient(135deg, #0099ff 0%, #00d4ff 100%);
+            box-shadow: 0 4px 12px rgba(0, 153, 255, 0.2);
+        }
+        
+        body.light-mode .demo-button {
+            background: linear-gradient(135deg, #ff6b00 0%, #ff8c00 100%);
+            box-shadow: 0 4px 12px rgba(255, 140, 0, 0.2);
+        }
+        
+        body.light-mode .content {
+            background: #f8f9fa;
+        }
+        
+        body.light-mode .metric-card {
+            background: #ffffff;
+            border: 1px solid #dee2e6;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+        
+        body.light-mode .metric-label {
+            color: #495057;
+            font-weight: 700;
+        }
+        
+        body.light-mode .metric-subtitle {
+            color: #6c757d;
+            font-weight: 500;
+        }
+        
+        body.light-mode .metric-value {
+            color: #212529;
+        }
+        
+        body.light-mode .positive {
+            color: #0099ff;
+            text-shadow: 0 0 20px rgba(0, 153, 255, 0.3);
+        }
+        
+        body.light-mode .negative {
+            color: #dc3545;
+            text-shadow: 0 0 20px rgba(220, 53, 69, 0.3);
+        }
+        
+        body.light-mode .chart-container {
+            background: #ffffff;
+            border: 1px solid #dee2e6;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            background-image: 
+                linear-gradient(rgba(0, 0, 0, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 0, 0, 0.02) 1px, transparent 1px);
+        }
+        
+        body.light-mode .chart-title {
+            color: #212529;
+        }
+        
+        body.light-mode .chart-title::before {
+            background: linear-gradient(180deg, #0099ff 0%, #00d4ff 100%);
+            box-shadow: 0 0 8px rgba(0, 153, 255, 0.4);
+        }
+        
+        body.light-mode .data-info {
+            background: #ffffff;
+            border: 1px solid #dee2e6;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+        }
+        
+        body.light-mode .data-info h4 {
+            display: none;
+        }
+        
+        body.light-mode .data-info-label {
+            color: #495057;
+            font-weight: 600;
+        }
+        
+        body.light-mode .data-info-value {
+            color: #0099ff;
+            font-weight: 700;
+        }
+        
+        body.light-mode .data-info-item {
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        body.light-mode .win-rate-box {
+            background: #ffffff;
+            border: 1px solid #dee2e6;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+        }
+        
+        body.light-mode .win-rate-box h4 {
+            color: #212529;
+        }
+        
+        body.light-mode .win-rate-name {
+            color: #212529;
+        }
+        
+        body.light-mode .win-rate-stats {
+            color: #495057;
+            font-weight: 500;
+        }
+        
+        body.light-mode .win-rate-item {
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        body.light-mode .stat-label {
+            color: #495057;
+            font-weight: 600;
+        }
+        
+        body.light-mode .stat-value {
+            color: #212529;
+            font-weight: 700;
+        }
+        
+        body.light-mode .stat-row {
+            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+        }
+        
+        body.light-mode .stats-box {
+            background: rgba(0, 153, 255, 0.06);
+            border: 1px solid rgba(0, 153, 255, 0.15);
+        }
+        
+        body.light-mode .stats-box.loss {
+            background: rgba(220, 53, 69, 0.06);
+            border: 1px solid rgba(220, 53, 69, 0.15);
+        }
+        
+        body.light-mode .stats-box h4 {
+            color: #212529;
+        }
+        
+        body.light-mode .modal {
+            background: rgba(0, 0, 0, 0.6);
+        }
+        
+        body.light-mode .modal-content {
+            background: #ffffff;
+            border: 1px solid #dee2e6;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+        
+        body.light-mode .modal-title {
+            color: #212529;
+        }
+        
+        body.light-mode .modal-close {
+            color: #6c757d;
+        }
+        
+        body.light-mode .modal-close:hover {
+            color: #0099ff;
+        }
+        
+        body.light-mode .error-message {
+            background: rgba(220, 53, 69, 0.1);
+            border: 1px solid rgba(220, 53, 69, 0.2);
+            color: #dc3545;
+        }
+        
+        body.light-mode .loading p {
+            color: #495057;
+        }
+        
+        body.light-mode .spinner {
+            border-color: #e9ecef;
+            border-top-color: #0099ff;
+        }
+        
+        /* Chart.js ライトモード設定 */
+        body.light-mode .chart-canvas {
+            filter: none;
         }
         
         /* フィルターバー */
@@ -345,14 +558,6 @@
         
         .data-info.active {
             display: block;
-        }
-        
-        .data-info h4 {
-            color: #ffffff;
-            font-size: 18px;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-            font-weight: 700;
         }
         
         .data-info-item {
@@ -817,18 +1022,30 @@
 </head>
 <body>
     <div class="header">
-        <h1>
-            <div class="logo">FX</div>
-            取引分析ツール - カテゴリー1: 基礎指標
-        </h1>
-        <div class="market-status">
-            <div class="market-indicator active">
-                <div class="status-dot"></div>
-                <span>東京市場</span>
+        <div class="header-left">
+            <div class="logo-container">
+                <img class="logo-img dark-logo" 
+                     src="https://raw.githubusercontent.com/LENS1208/my-images/main/algo-logo-web-b.png" 
+                     alt="Algo Stream" 
+                     onerror="this.style.display='none';" />
+                <img class="logo-img light-logo" 
+                     src="https://raw.githubusercontent.com/LENS1208/my-images/main/algo-logo-web-w.png" 
+                     alt="Algo Stream" 
+                     style="display: none;" 
+                     onerror="this.style.display='none';" />
+                <span class="logo-fallback" style="display: none; color: #00d4ff; font-size: 24px; font-weight: 800;">Algo Stream</span>
             </div>
-            <div class="market-indicator">
-                <span id="currentTime" style="font-family: 'Segoe UI', monospace; font-size: 17px;">00:00:00</span>
-            </div>
+        </div>
+        <div class="header-right">
+            <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">
+                <svg class="theme-icon sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"/>
+                    <path d="M12 1v6m0 6v6m11-7h-6m-6 0H1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                <svg class="theme-icon moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
         </div>
     </div>
     
@@ -892,9 +1109,6 @@
     <div class="main-container">
         <div class="sidebar">
             <div class="upload-section">
-                <div class="section-title">
-                    <span>📁</span> データソース
-                </div>
                 <div class="file-input-wrapper">
                     <input type="file" id="fileInput" accept=".html,.htm" />
                     <label for="fileInput">取引履歴をアップロード</label>
@@ -905,7 +1119,6 @@
             </div>
             
             <div class="data-info" id="dataInfo">
-                <h4>データ概要</h4>
                 <div id="dataInfoContent"></div>
             </div>
         </div>
@@ -926,14 +1139,87 @@
         let allTrades = [];
         let activeCharts = [];
         
-        // 時計の更新
-        function updateClock() {
-            const now = new Date();
-            const timeString = now.toLocaleTimeString('ja-JP', { hour12: false });
-            document.getElementById('currentTime').textContent = timeString;
+        // ロゴ画像のエラー処理
+        window.addEventListener('DOMContentLoaded', function() {
+            const darkLogo = document.querySelector('.dark-logo');
+            const lightLogo = document.querySelector('.light-logo');
+            const fallback = document.querySelector('.logo-fallback');
+            
+            // ダークロゴのエラー処理
+            if (darkLogo) {
+                darkLogo.onerror = function() {
+                    this.style.display = 'none';
+                    if (fallback) fallback.style.display = 'block';
+                };
+            }
+            
+            // ライトロゴのエラー処理
+            if (lightLogo) {
+                lightLogo.onerror = function() {
+                    this.style.display = 'none';
+                    if (fallback && document.body.classList.contains('light-mode')) {
+                        fallback.style.display = 'block';
+                    }
+                };
+            }
+        });
+        
+        // テーマ切り替え機能
+        function toggleTheme() {
+            const body = document.body;
+            const sunIcon = document.querySelector('.sun-icon');
+            const moonIcon = document.querySelector('.moon-icon');
+            const darkLogo = document.querySelector('.dark-logo');
+            const lightLogo = document.querySelector('.light-logo');
+            
+            if (body.classList.contains('light-mode')) {
+                body.classList.remove('light-mode');
+                sunIcon.style.display = 'block';
+                moonIcon.style.display = 'none';
+                darkLogo.style.display = 'block';
+                lightLogo.style.display = 'none';
+                localStorage.setItem('theme', 'dark');
+                
+                // Chart.jsの色をダークモードに
+                Chart.defaults.color = '#ffffff';
+                Chart.defaults.borderColor = '#3a3a4e';
+            } else {
+                body.classList.add('light-mode');
+                sunIcon.style.display = 'none';
+                moonIcon.style.display = 'block';
+                darkLogo.style.display = 'none';
+                lightLogo.style.display = 'block';
+                localStorage.setItem('theme', 'light');
+                
+                // Chart.jsの色をライトモードに
+                Chart.defaults.color = '#495057';
+                Chart.defaults.borderColor = '#dee2e6';
+            }
+            
+            // 既存のチャートを再描画
+            if (typeof applyFiltersAndRender === 'function' && allTrades.length > 0) {
+                applyFiltersAndRender();
+            }
         }
-        setInterval(updateClock, 1000);
-        updateClock();
+        
+        // ページ読み込み時にテーマを復元
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('theme');
+            const sunIcon = document.querySelector('.sun-icon');
+            const moonIcon = document.querySelector('.moon-icon');
+            const darkLogo = document.querySelector('.dark-logo');
+            const lightLogo = document.querySelector('.light-logo');
+            
+            if (savedTheme === 'light') {
+                document.body.classList.add('light-mode');
+                sunIcon.style.display = 'none';
+                moonIcon.style.display = 'block';
+                darkLogo.style.display = 'none';
+                lightLogo.style.display = 'block';
+                Chart.defaults.color = '#495057';
+                Chart.defaults.borderColor = '#dee2e6';
+            }
+        });
         
         // Chart.jsのデフォルト設定
         Chart.defaults.color = '#ffffff';
@@ -1285,7 +1571,7 @@
                         </div>
                         <div class="win-rate-box">
                             <h4>通貨ペア別勝率</h4>
-                            <div id="symbolWinRates" style="max-height: 300px; overflow-y: auto;"></div>
+                            <div id="symbolWinRates" style="max-height: 300px; overflow-y: auto; padding-right: 10px;"></div>
                         </div>
                     </div>
                 </div>
