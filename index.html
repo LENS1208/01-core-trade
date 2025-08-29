@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FX取引分析ツール - カテゴリー1: 基礎指標</title>
+    <title>FX取引分析ツール - カテゴリー①: 基礎指標</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
@@ -129,24 +129,18 @@
         }
         
 .demo-controls {
-    margin-top: 20px;
+    background: white;
+    border-radius: 15px;
     padding: 20px;
-    background: #f8f9fa;
-    border-radius: 12px;
-    border: 1px solid #e5e7eb;
+    margin-top: 20px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    border-top: 1px solid #e5e7eb;
 }
 
 .demo-controls h3 {
     color: #667eea;
     margin-bottom: 15px;
     font-size: 1.1em;
-    font-weight: 600;
-}
-
-.demo-buttons {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
 }
 
 .demo-controls button {
@@ -156,24 +150,14 @@
     padding: 10px 20px;
     border-radius: 25px;
     cursor: pointer;
+    margin: 5px;
+    transition: transform 0.2s;
     font-size: 0.9em;
-    font-weight: 500;
-    transition: all 0.2s ease;
 }
 
 .demo-controls button:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-}
-
-@media (max-width: 768px) {
-    .demo-buttons {
-        flex-direction: column;
-    }
-    
-    .demo-controls button {
-        width: 100%;
-    }
 }
         
         .filter-section {
@@ -480,20 +464,16 @@
 
         <div class="upload-section">
             <h2>取引履歴ファイルをアップロード</h2>
-<div style="display: flex; gap: 15px; flex-wrap: wrap; align-items: center;">
-    <div class="file-input-wrapper">
-        <input type="file" id="fileInput" accept=".html,.htm" />
-        <label for="fileInput">ファイルを選択</label>
-    </div>
-</div>
-
+            <div style="display: flex; gap: 15px; flex-wrap: wrap; align-items: center;">
+                <div class="file-input-wrapper">
+                    <input type="file" id="fileInput" accept=".html,.htm" />
+                    <label for="fileInput">ファイルを選択</label>
+                </div>
 <div class="demo-controls">
     <h3>デモデータでテスト</h3>
-    <div class="demo-buttons">
-        <button onclick="generateGoodPerformanceData()">優秀なトレーダーデータ</button>
-        <button onclick="generateAveragePerformanceData()">平均的なトレーダーデータ</button>
-        <button onclick="generatePoorPerformanceData()">改善が必要なトレーダーデータ</button>
-    </div>
+    <button onclick="generateGoodPerformanceData()">優秀なトレーダーデータ</button>
+    <button onclick="generateAveragePerformanceData()">平均的なトレーダーデータ</button>
+    <button onclick="generatePoorPerformanceData()">改善が必要なトレーダーデータ</button>
 </div>
             </div>
             
@@ -615,13 +595,13 @@ function generateGoodPerformanceData() {
     
     for (let i = 0; i < 150; i++) {
         const openTime = new Date(baseDate.getTime() + i * 86400000 / 8 + Math.random() * 86400000);
-        const duration = 30000 + Math.random() * 14400000;
+        const duration = 30000 + Math.random() * 14400000; // 30秒〜4時間
         const closeTime = new Date(openTime.getTime() + duration);
         const type = Math.random() > 0.5 ? 'buy' : 'sell';
         const isWin = Math.random() > 0.25; // 75%勝率
         const profit = isWin ? 
-            (8000 + Math.random() * 20000) : 
-            -(2000 + Math.random() * 8000);
+            (8000 + Math.random() * 20000) : // 8000〜28000円の利益
+            -(2000 + Math.random() * 8000);   // 2000〜10000円の損失
         
         demoTrades.push({
             openTime: openTime,
@@ -651,13 +631,13 @@ function generateAveragePerformanceData() {
     
     for (let i = 0; i < 100; i++) {
         const openTime = new Date(baseDate.getTime() + i * 86400000 / 6 + Math.random() * 86400000);
-        const duration = 60000 + Math.random() * 21600000;
+        const duration = 60000 + Math.random() * 21600000; // 1分〜6時間
         const closeTime = new Date(openTime.getTime() + duration);
         const type = Math.random() > 0.5 ? 'buy' : 'sell';
         const isWin = Math.random() > 0.45; // 55%勝率
         const profit = isWin ? 
-            (5000 + Math.random() * 15000) : 
-            -(3000 + Math.random() * 12000);
+            (5000 + Math.random() * 15000) : // 5000〜20000円の利益
+            -(3000 + Math.random() * 12000);  // 3000〜15000円の損失
         
         demoTrades.push({
             openTime: openTime,
@@ -687,13 +667,13 @@ function generatePoorPerformanceData() {
     
     for (let i = 0; i < 80; i++) {
         const openTime = new Date(baseDate.getTime() + i * 86400000 / 4 + Math.random() * 86400000);
-        const duration = 120000 + Math.random() * 28800000;
+        const duration = 120000 + Math.random() * 28800000; // 2分〜8時間
         const closeTime = new Date(openTime.getTime() + duration);
         const type = Math.random() > 0.5 ? 'buy' : 'sell';
         const isWin = Math.random() > 0.65; // 35%勝率
         const profit = isWin ? 
-            (3000 + Math.random() * 10000) : 
-            -(5000 + Math.random() * 18000);
+            (3000 + Math.random() * 10000) : // 3000〜13000円の利益
+            -(5000 + Math.random() * 18000);  // 5000〜23000円の損失
         
         demoTrades.push({
             openTime: openTime,
