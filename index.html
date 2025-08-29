@@ -128,26 +128,37 @@
             left: -9999px;
         }
         
-        .demo-button {
-            background: var(--light-profit);
-            color: white;
-            padding: 12px 30px;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 1em;
-            font-weight: 500;
-            transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
-        }
-        
-        body.dark-mode .demo-button {
-            background: var(--dark-profit);
-        }
-        
-        .demo-button:hover {
-            transform: translateY(-2px);
-            opacity: 0.9;
-        }
+.demo-controls {
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    margin-top: 20px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    border-top: 1px solid #e5e7eb;
+}
+
+.demo-controls h3 {
+    color: #667eea;
+    margin-bottom: 15px;
+    font-size: 1.1em;
+}
+
+.demo-controls button {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    cursor: pointer;
+    margin: 5px;
+    transition: transform 0.2s;
+    font-size: 0.9em;
+}
+
+.demo-controls button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
         
         .filter-section {
             background: var(--light-bg-1);
@@ -458,9 +469,12 @@
                     <input type="file" id="fileInput" accept=".html,.htm" />
                     <label for="fileInput">ファイルを選択</label>
                 </div>
-                <button onclick="loadDemoData()" class="demo-button">
-                    🎮 デモデータで試す
-                </button>
+<div class="demo-controls">
+    <h3>デモデータでテスト</h3>
+    <button onclick="generateGoodPerformanceData()">優秀なトレーダーデータ</button>
+    <button onclick="generateAveragePerformanceData()">平均的なトレーダーデータ</button>
+    <button onclick="generatePoorPerformanceData()">改善が必要なトレーダーデータ</button>
+</div>
             </div>
             
             <div id="fileInfo" class="file-info">
@@ -570,41 +584,114 @@
         document.getElementById('hourFilter').addEventListener('change', applyFiltersAndRender);
         document.getElementById('resultFilter').addEventListener('change', applyFiltersAndRender);
 
-        // デモデータ生成
-        function loadDemoData() {
-            document.getElementById('loading').classList.add('active');
-            
-            const demoTrades = [];
-            const symbols = ['USDJPY', 'EURUSD', 'GBPUSD', 'AUDUSD', 'EURJPY', 'GBPJPY', 'AUDJPY'];
-            const baseDate = new Date('2024-01-01');
-            
-            for (let i = 0; i < 500; i++) {
-                const openTime = new Date(baseDate.getTime() + i * 86400000 / 10 + Math.random() * 86400000);
-                const duration = 60000 + Math.random() * 14400000; // 1分〜4時間
-                const closeTime = new Date(openTime.getTime() + duration);
-                const type = Math.random() > 0.5 ? 'buy' : 'sell';
-                const isWin = Math.random() > 0.45; // 55%勝率
-                const profit = isWin ? 
-                    (5000 + Math.random() * 25000) : 
-                    -(3000 + Math.random() * 20000);
-                
-                demoTrades.push({
-                    openTime: openTime,
-                    closeTime: closeTime,
-                    type: type,
-                    symbol: symbols[Math.floor(Math.random() * symbols.length)],
-                    profit: profit,
-                    isWin: isWin,
-                    duration: duration
-                });
-            }
-            
-            setTimeout(() => {
-                document.getElementById('loading').classList.remove('active');
-                onFileParsed(demoTrades);
-                showFileInfo('デモデータ', demoTrades.length);
-            }, 500);
-        }
+// デモデータ生成関数群
+function generateGoodPerformanceData() {
+    document.getElementById('loading').classList.add('active');
+    document.getElementById('errorMessage').style.display = 'none';
+    
+    const demoTrades = [];
+    const symbols = ['USDJPY', 'EURUSD', 'GBPUSD', 'AUDUSD', 'EURJPY', 'GBPJPY'];
+    const baseDate = new Date('2024-01-01');
+    
+    for (let i = 0; i < 150; i++) {
+        const openTime = new Date(baseDate.getTime() + i * 86400000 / 8 + Math.random() * 86400000);
+        const duration = 30000 + Math.random() * 14400000; // 30秒〜4時間
+        const closeTime = new Date(openTime.getTime() + duration);
+        const type = Math.random() > 0.5 ? 'buy' : 'sell';
+        const isWin = Math.random() > 0.25; // 75%勝率
+        const profit = isWin ? 
+            (8000 + Math.random() * 20000) : // 8000〜28000円の利益
+            -(2000 + Math.random() * 8000);   // 2000〜10000円の損失
+        
+        demoTrades.push({
+            openTime: openTime,
+            closeTime: closeTime,
+            type: type,
+            symbol: symbols[Math.floor(Math.random() * symbols.length)],
+            profit: profit,
+            isWin: isWin,
+            duration: duration
+        });
+    }
+    
+    setTimeout(() => {
+        document.getElementById('loading').classList.remove('active');
+        onFileParsed(demoTrades);
+        showFileInfo('デモデータ: 優秀なトレーダー（150取引）', demoTrades.length);
+    }, 500);
+}
+
+function generateAveragePerformanceData() {
+    document.getElementById('loading').classList.add('active');
+    document.getElementById('errorMessage').style.display = 'none';
+    
+    const demoTrades = [];
+    const symbols = ['USDJPY', 'EURUSD', 'GBPUSD', 'AUDUSD', 'EURJPY', 'GBPJPY', 'AUDJPY'];
+    const baseDate = new Date('2024-01-01');
+    
+    for (let i = 0; i < 100; i++) {
+        const openTime = new Date(baseDate.getTime() + i * 86400000 / 6 + Math.random() * 86400000);
+        const duration = 60000 + Math.random() * 21600000; // 1分〜6時間
+        const closeTime = new Date(openTime.getTime() + duration);
+        const type = Math.random() > 0.5 ? 'buy' : 'sell';
+        const isWin = Math.random() > 0.45; // 55%勝率
+        const profit = isWin ? 
+            (5000 + Math.random() * 15000) : // 5000〜20000円の利益
+            -(3000 + Math.random() * 12000);  // 3000〜15000円の損失
+        
+        demoTrades.push({
+            openTime: openTime,
+            closeTime: closeTime,
+            type: type,
+            symbol: symbols[Math.floor(Math.random() * symbols.length)],
+            profit: profit,
+            isWin: isWin,
+            duration: duration
+        });
+    }
+    
+    setTimeout(() => {
+        document.getElementById('loading').classList.remove('active');
+        onFileParsed(demoTrades);
+        showFileInfo('デモデータ: 平均的なトレーダー（100取引）', demoTrades.length);
+    }, 500);
+}
+
+function generatePoorPerformanceData() {
+    document.getElementById('loading').classList.add('active');
+    document.getElementById('errorMessage').style.display = 'none';
+    
+    const demoTrades = [];
+    const symbols = ['USDJPY', 'EURUSD', 'GBPUSD', 'AUDUSD', 'EURJPY', 'GBPJPY', 'AUDJPY', 'USDCHF'];
+    const baseDate = new Date('2024-01-01');
+    
+    for (let i = 0; i < 80; i++) {
+        const openTime = new Date(baseDate.getTime() + i * 86400000 / 4 + Math.random() * 86400000);
+        const duration = 120000 + Math.random() * 28800000; // 2分〜8時間
+        const closeTime = new Date(openTime.getTime() + duration);
+        const type = Math.random() > 0.5 ? 'buy' : 'sell';
+        const isWin = Math.random() > 0.65; // 35%勝率
+        const profit = isWin ? 
+            (3000 + Math.random() * 10000) : // 3000〜13000円の利益
+            -(5000 + Math.random() * 18000);  // 5000〜23000円の損失
+        
+        demoTrades.push({
+            openTime: openTime,
+            closeTime: closeTime,
+            type: type,
+            symbol: symbols[Math.floor(Math.random() * symbols.length)],
+            profit: profit,
+            isWin: isWin,
+            duration: duration
+        });
+    }
+    
+    setTimeout(() => {
+        document.getElementById('loading').classList.remove('active');
+        onFileParsed(demoTrades);
+        showFileInfo('デモデータ: 改善が必要なトレーダー（80取引）', demoTrades.length);
+    }, 500);
+}
 
         function handleFileUpload(event) {
             const file = event.target.files[0];
