@@ -129,7 +129,7 @@
         }
         
 .demo-controls {
-    background: white;
+    background: var(--dark-bg-2);  /* ダークグレー背景に変更 */
     border-radius: 15px;
     padding: 20px;
     margin-bottom: 20px;
@@ -137,7 +137,7 @@
 }
 
 .demo-controls h3 {
-    color: #667eea;
+    color: #ffffff;  /* 白色に変更 */
     margin-bottom: 15px;
 }
 
@@ -450,7 +450,7 @@
     </style>
 </head>
 <body class="dark-mode">
-    <button class="theme-toggle" onclick="toggleTheme()">☀️ ライトモード</button>
+<button class="theme-toggle" onclick="toggleTheme()">ライトモード</button>
     
     <div class="container">
 <header>
@@ -563,7 +563,7 @@
             isDarkMode = !isDarkMode;
             document.body.classList.toggle('dark-mode');
             const btn = document.querySelector('.theme-toggle');
-            btn.textContent = isDarkMode ? '☀️ ライトモード' : '🌙 ダークモード';
+            btn.textContent = isDarkMode ? 'ライトモード' : 'ダークモード';
             
             // チャートの再描画
             if (allTrades.length > 0) {
