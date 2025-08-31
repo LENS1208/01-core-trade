@@ -156,17 +156,9 @@ h1 {
     box-shadow: var(--button-hover-shadow);
 }
         
-        body.dark-mode .file-input-wrapper {
-            background: var(--dark-profit);
-        }
-        
         .file-input-wrapper:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(0, 126, 255, 0.4);
-        }
-        
-        body.dark-mode .file-input-wrapper:hover {
-            box-shadow: 0 5px 15px rgba(0, 200, 255, 0.4);
         }
         
         #fileInput {
@@ -228,11 +220,6 @@ h1 {
             border-bottom: 2px solid var(--light-bg-4);
         }
         
-        body.dark-mode .filter-section h2 {
-            color: #e0e0e0;
-            border-bottom-color: var(--dark-bg-4);
-        }
-        
         .filter-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -251,10 +238,6 @@ h1 {
             font-weight: 500;
         }
         
-        body.dark-mode .filter-group label {
-            color: #aaa;
-        }
-        
         .filter-group select {
             padding: 10px;
             border: 2px solid var(--light-bg-4);
@@ -265,29 +248,14 @@ h1 {
             transition: all 0.3s ease;
         }
         
-        body.dark-mode .filter-group select {
-            border-color: var(--dark-bg-4);
-            background-color: var(--dark-bg-3);
-            color: #e0e0e0;
-        }
-        
         .filter-group select:hover {
             border-color: var(--light-profit);
-        }
-        
-        body.dark-mode .filter-group select:hover {
-            border-color: var(--dark-profit);
         }
         
         .filter-group select:focus {
             outline: none;
             border-color: var(--light-profit);
             box-shadow: 0 0 0 3px rgba(0, 126, 255, 0.1);
-        }
-        
-        body.dark-mode .filter-group select:focus {
-            border-color: var(--dark-profit);
-            box-shadow: 0 0 0 3px rgba(0, 200, 255, 0.1);
         }
         
         .analysis-section {
@@ -304,28 +272,10 @@ h1 {
             transition: transform 0.2s, box-shadow 0.2s;
         }
         
-        body.dark-mode .metric-card {
-            background: var(--dark-bg-2);
-            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
-        }
-        
-        .metric-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-        }
-        
-        body.dark-mode .metric-card:hover {
-            box-shadow: 0 10px 30px rgba(0,0,0,0.7);
-        }
-        
         .metric-card h3 {
             color: #333;
             margin-bottom: 15px;
             font-size: 1.1em;
-        }
-        
-        body.dark-mode .metric-card h3 {
-            color: #e0e0e0;
         }
         
         .metric-value {
@@ -340,14 +290,8 @@ h1 {
             margin-top: 5px;
         }
         
-        body.dark-mode .metric-subtitle {
-            color: #aaa;
-        }
-        
         .positive { color: var(--light-profit); }
         .negative { color: var(--light-loss); }
-        body.dark-mode .positive { color: var(--dark-profit); }
-        body.dark-mode .negative { color: var(--dark-loss); }
         .neutral { color: #6b7280; }
         
         .chart-container {
@@ -358,11 +302,6 @@ h1 {
             box-shadow: 0 5px 20px rgba(0,0,0,0.1);
         }
         
-        body.dark-mode .chart-container {
-            background: var(--dark-bg-2);
-            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
-        }
-        
         .chart-container h3 {
             color: #333;
             margin-bottom: 20px;
@@ -371,20 +310,11 @@ h1 {
             border-bottom: 2px solid var(--light-bg-4);
         }
         
-        body.dark-mode .chart-container h3 {
-            color: #e0e0e0;
-            border-bottom-color: var(--dark-bg-4);
-        }
-        
         .loading {
             display: none;
             text-align: center;
             padding: 20px;
             color: var(--light-profit);
-        }
-        
-        body.dark-mode .loading {
-            color: var(--dark-profit);
         }
         
         .loading.active {
@@ -401,11 +331,6 @@ h1 {
             margin: 0 auto 20px;
         }
         
-        body.dark-mode .spinner {
-            border: 3px solid var(--dark-bg-3);
-            border-top: 3px solid var(--dark-profit);
-        }
-        
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
@@ -420,11 +345,6 @@ h1 {
             display: none;
         }
         
-        body.dark-mode .error-message {
-            background: rgba(255, 50, 0, 0.1);
-            color: var(--dark-loss);
-        }
-        
         .file-info {
             margin-top: 15px;
             padding: 15px;
@@ -434,19 +354,10 @@ h1 {
             display: none;
         }
         
-        body.dark-mode .file-info {
-            background: var(--dark-bg-3);
-            border-left-color: var(--dark-bg-4);
-        }
-        
         .file-info h4 {
             color: #333;
             margin-bottom: 8px;
             font-size: 1em;
-        }
-        
-        body.dark-mode .file-info h4 {
-            color: #e0e0e0;
         }
         
         .stats-box-positive {
@@ -456,21 +367,11 @@ h1 {
             border-left: 4px solid var(--light-profit);
         }
         
-        body.dark-mode .stats-box-positive {
-            background: rgba(0, 200, 255, 0.05);
-            border-left-color: var(--dark-profit);
-        }
-        
         .stats-box-negative {
             background: rgba(255, 40, 0, 0.05);
             padding: 20px;
             border-radius: 10px;
             border-left: 4px solid var(--light-loss);
-        }
-        
-        body.dark-mode .stats-box-negative {
-            background: rgba(255, 50, 0, 0.05);
-            border-left-color: var(--dark-loss);
         }
         
         @media (max-width: 768px) {
