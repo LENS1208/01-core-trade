@@ -9,35 +9,43 @@
         
         /* カラーパレット定義 */
         :root {
-            /* ダークモード色 */
-            --dark-bg-1: #000000;
-            --dark-bg-2: #181818;
-            --dark-bg-3: #232323;
-            --dark-bg-4: #373737;
-            --dark-profit: #00c8ff;
-            --dark-loss: #ff3200;
-            
-            /* ライトモード色 */
-            --light-bg-1: #ffffff;
-            --light-bg-2: #fafafa;
-            --light-bg-3: #f5f5f5;
-            --light-bg-4: #ebebeb;
-            --light-profit: #007eff;
-            --light-loss: #ff2800;
-        }
+    /* ライトモード */
+    --bg-primary: #ffffff;
+    --bg-secondary: #fafafa;
+    --bg-tertiary: #f5f5f5;
+    --border-color: #ebebeb;
+    --text-primary: #333;
+    --text-secondary: #666;
+    --text-muted: #999;
+    --positive-color: #007eff;
+    --negative-color: #ff2800;
+    --neutral-color: #6b7280;
+    
+    /* カード用 */
+    --card-bg: #ffffff;
+    --card-border: #ebebeb;
+    --card-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    --hover-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    
+    /* ボタン用 */
+    --button-bg: #007eff;
+    --button-hover-shadow: 0 4px 12px rgba(0, 126, 255, 0.3);
+    
+    /* Chart.js用のグリッド線の色 */
+    --chart-grid-color: rgba(0, 0, 0, 0.1);
+    --chart-text-color: #666;
+}
         
         /* ライトモード（デフォルト） */
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, var(--light-bg-3) 0%, var(--light-bg-4) 100%);
-            min-height: 100vh;
-            color: #333;
-        }
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans JP', sans-serif;
+    background: var(--bg-primary);
+    min-height: 100vh;
+    color: var(--text-primary);
+    line-height: 1.6;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
         
-        body.dark-mode {
-            background: linear-gradient(135deg, var(--dark-bg-1) 0%, var(--dark-bg-2) 100%);
-            color: #e0e0e0;
-        }
         
         .container {
             max-width: 1400px;
@@ -45,41 +53,66 @@
             padding: 20px;
         }
         
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        
-        h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            color: #333;
-        }
-        
-        body.dark-mode h1 {
-            color: #e0e0e0;
-        }
+header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding: 30px 20px;
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    position: relative;
+}
+
+h1 {
+    font-size: 2em;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--text-primary);
+    letter-spacing: 0.02em;
+}
         
         .subtitle {
             font-size: 1.2em;
             opacity: 0.85;
         }
         
-        .theme-toggle {
-    position: absolute;  /* fixed → absolute */
+.theme-toggle {
+    position: absolute;
     top: 20px;
     right: 20px;
-    background: transparent;  /* 背景を透明に */
-    border: none;  /* ボーダーを削除 */
-    border-radius: 25px;
-    padding: 10px 20px;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 8px 12px;
     cursor: pointer;
-    font-size: 1em;
-    transition: all 0.3s;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85em;
+    color: var(--text-secondary);
     z-index: 100;
-    color: white;  /* テキスト色を白に */
-    opacity: 0.8;  /* 透明度追加 */
-        }
+}
+
+.theme-toggle:hover {
+    background: var(--border-color);
+}
+
+.theme-toggle svg {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+}
+
+.theme-toggle-text {
+    display: none;
+}
+
+@media (min-width: 768px) {
+    .theme-toggle-text {
+        display: inline;
+    }
+}
         
         body.dark-mode .theme-toggle {
             background: var(--dark-bg-3);
@@ -87,30 +120,41 @@
             color: #e0e0e0;
         }
         
-        .upload-section {
-            background: var(--light-bg-1);
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
-        }
+.upload-section {
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--card-shadow);
+}
+
+.upload-section h2 {
+    font-size: 1.1em;
+    margin-bottom: 16px;
+    color: var(--text-primary);
+    font-weight: 600;
+}
         
-        body.dark-mode .upload-section {
-            background: var(--dark-bg-2);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-        
-        .file-input-wrapper {
-            position: relative;
-            overflow: hidden;
-            display: inline-block;
-            cursor: pointer;
-            background: var(--light-profit);
-            color: white;
-            padding: 12px 30px;
-            border-radius: 25px;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
+.file-input-wrapper {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+    cursor: pointer;
+    background: var(--button-bg);
+    color: white;
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-size: 0.9em;
+    font-weight: 500;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: none;
+}
+
+.file-input-wrapper:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--button-hover-shadow);
+}
         
         body.dark-mode .file-input-wrapper {
             background: var(--dark-profit);
@@ -452,7 +496,12 @@
     </style>
 </head>
 <body class="dark-mode">
-<button class="theme-toggle" onclick="toggleTheme()">ライトモード</button>
+<button class="theme-toggle" onclick="toggleTheme()">
+    <svg viewBox="0 0 24 24" id="theme-icon">
+        <path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+    </svg>
+    <span class="theme-toggle-text">ライトモード</span>
+</button>
     
     <div class="container">
 <header>
@@ -554,24 +603,36 @@
         let isDarkMode = true;
         
         // 初期設定でダークモードを適用
-        document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function() {
     document.body.classList.add('dark-mode');
-    const btn = document.querySelector('.theme-toggle');
-    btn.textContent = 'ライトモード';  /* 絵文字削除 */
+    const icon = document.getElementById('theme-icon');
+    const text = document.querySelector('.theme-toggle-text');
+    if (icon && text) {
+        icon.innerHTML = '<path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>';
+        text.textContent = 'ライトモード';
+    }
 });
 
         // テーマ切り替え
-        function toggleTheme() {
-            isDarkMode = !isDarkMode;
-            document.body.classList.toggle('dark-mode');
-            const btn = document.querySelector('.theme-toggle');
-            btn.textContent = isDarkMode ? 'ライトモード' : 'ダークモード';
-            
-            // チャートの再描画
-            if (allTrades.length > 0) {
-                applyFiltersAndRender();
-            }
-        }
+function toggleTheme() {
+    document.body.classList.toggle('dark-mode');
+    const isDark = document.body.classList.contains('dark-mode');
+    const icon = document.getElementById('theme-icon');
+    const text = document.querySelector('.theme-toggle-text');
+    
+    if (isDark) {
+        icon.innerHTML = '<path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>';
+        text.textContent = 'ライトモード';
+    } else {
+        icon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+        text.textContent = 'ダークモード';
+    }
+    
+    // Chart.jsのチャートを再描画
+    if (allTrades.length > 0) {
+        applyFiltersAndRender();
+    }
+}
 
         // イベントリスナー
         document.getElementById('fileInput').addEventListener('change', handleFileUpload);
