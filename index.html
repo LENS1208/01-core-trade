@@ -132,15 +132,13 @@
     background: white;
     border-radius: 15px;
     padding: 20px;
-    margin-top: 20px;
+    margin-bottom: 20px;
     box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-    border-top: 1px solid #e5e7eb;
 }
 
 .demo-controls h3 {
     color: #667eea;
     margin-bottom: 15px;
-    font-size: 1.1em;
 }
 
 .demo-controls button {
@@ -152,12 +150,10 @@
     cursor: pointer;
     margin: 5px;
     transition: transform 0.2s;
-    font-size: 0.9em;
 }
 
 .demo-controls button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
 }
         
         .filter-section {
@@ -457,37 +453,36 @@
     <button class="theme-toggle" onclick="toggleTheme()">☀️ ライトモード</button>
     
     <div class="container">
-        <header>
-            <h1>📊 FX取引分析ツール</h1>
-            <p class="subtitle">カテゴリー1: 基礎指標分析</p>
-        </header>
+<header>
+    <h1>FX取引分析ツール</h1>
+    <p>カテゴリー①基礎指標分析</p>
+</header>
 
-        <div class="upload-section">
-            <h2>取引履歴ファイルをアップロード</h2>
-            <div style="display: flex; gap: 15px; flex-wrap: wrap; align-items: center;">
-                <div class="file-input-wrapper">
-                    <input type="file" id="fileInput" accept=".html,.htm" />
-                    <label for="fileInput">ファイルを選択</label>
-                </div>
+<div class="upload-section">
+    <h2>取引履歴ファイルをアップロード</h2>
+    <div class="file-input-wrapper">
+        <input type="file" id="fileInput" accept=".html,.htm" />
+        <label for="fileInput">ファイルを選択</label>
+    </div>
+    <div id="fileName" style="margin-top: 10px; color: #666;"></div>
+    <div id="fileInfo" class="file-info" style="display: none;">
+        <h4>取引履歴情報</h4>
+        <div id="tradePeriod"></div>
+        <div id="tradeCount"></div>
+    </div>
+    <div class="loading" id="loading">
+        <div class="spinner"></div>
+        <p>分析中...</p>
+    </div>
+    <div class="error-message" id="errorMessage"></div>
+</div>
+
 <div class="demo-controls">
     <h3>デモデータでテスト</h3>
     <button onclick="generateGoodPerformanceData()">優秀なトレーダーデータ</button>
     <button onclick="generateAveragePerformanceData()">平均的なトレーダーデータ</button>
     <button onclick="generatePoorPerformanceData()">改善が必要なトレーダーデータ</button>
 </div>
-            </div>
-            
-            <div id="fileInfo" class="file-info">
-                <h4>データ情報</h4>
-                <div id="dataInfo"></div>
-            </div>
-            
-            <div class="loading" id="loading">
-                <div class="spinner"></div>
-                <p>分析中...</p>
-            </div>
-            <div class="error-message" id="errorMessage"></div>
-        </div>
         
         <div class="filter-section" id="filterSection">
             <h2>フィルター設定</h2>
@@ -766,22 +761,29 @@ function generatePoorPerformanceData() {
             return null;
         }
 
-        function showFileInfo(fileName, tradeCount) {
-            const fileInfo = document.getElementById('fileInfo');
-            const dataInfo = document.getElementById('dataInfo');
-            
-            if (allTrades.length > 0) {
-                const startDate = new Date(Math.min(...allTrades.map(t => t.openTime.getTime())));
-                const endDate = new Date(Math.max(...allTrades.map(t => t.closeTime.getTime())));
-                
-                dataInfo.innerHTML = `
-                    <div><strong>ファイル:</strong> ${fileName}</div>
-                    <div><strong>取引数:</strong> ${tradeCount}件</div>
-                    <div><strong>期間:</strong> ${formatDate(startDate)} 〜 ${formatDate(endDate)}</div>
-                `;
-                fileInfo.style.display = 'block';
-            }
-        }
+function showFileInfo(fileName, tradeCount) {
+    const fileNameEl = document.getElementById('fileName');
+    const fileInfo = document.getElementById('fileInfo');
+    const tradePeriod = document.getElementById('tradePeriod');
+    const tradeCountEl = document.getElementById('tradeCount');
+    
+    if (fileName) {
+        fileNameEl.textContent = `選択されたファイル: ${fileName}`;
+    }
+    
+    if (allTrades.length > 0) {
+        const startDate = new Date(Math.min(...allTrades.map(t => t.openTime.getTime())));
+        const endDate = new Date(Math.max(...allTrades.map(t => t.closeTime.getTime())));
+        
+        const formatDate = (date) => {
+            return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
+        };
+        
+        tradePeriod.textContent = `期間: ${formatDate(startDate)} ～ ${formatDate(endDate)}`;
+        tradeCountEl.textContent = `総取引数: ${tradeCount}回`;
+        fileInfo.style.display = 'block';
+    }
+}
 
         function formatDate(date) {
             return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
