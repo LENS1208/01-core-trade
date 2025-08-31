@@ -66,17 +66,19 @@
         }
         
         .theme-toggle {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: var(--light-bg-1);
-            border: 2px solid var(--light-bg-4);
-            border-radius: 25px;
-            padding: 10px 20px;
-            cursor: pointer;
-            font-size: 1em;
-            transition: all 0.3s;
-            z-index: 100;
+    position: absolute;  /* fixed → absolute */
+    top: 20px;
+    right: 20px;
+    background: transparent;  /* 背景を透明に */
+    border: none;  /* ボーダーを削除 */
+    border-radius: 25px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: all 0.3s;
+    z-index: 100;
+    color: white;  /* テキスト色を白に */
+    opacity: 0.8;  /* 透明度追加 */
         }
         
         body.dark-mode .theme-toggle {
@@ -129,7 +131,7 @@
         }
         
 .demo-controls {
-    background: var(--dark-bg-2);  /* ダークグレー背景に変更 */
+    background: var(--dark-bg-2);  /* 常にダークグレー */
     border-radius: 15px;
     padding: 20px;
     margin-bottom: 20px;
@@ -553,10 +555,10 @@
         
         // 初期設定でダークモードを適用
         document.addEventListener('DOMContentLoaded', function() {
-            document.body.classList.add('dark-mode');
-            const btn = document.querySelector('.theme-toggle');
-            btn.textContent = '☀️ ライトモード';
-        });
+    document.body.classList.add('dark-mode');
+    const btn = document.querySelector('.theme-toggle');
+    btn.textContent = 'ライトモード';  /* 絵文字削除 */
+});
 
         // テーマ切り替え
         function toggleTheme() {
