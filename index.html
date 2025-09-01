@@ -296,10 +296,18 @@
             box-shadow: var(--hover-shadow);
         }
         
+        /* KPI カード用ヘルプアイコン追加 */
+        .metric-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
         .metric-card h3 {
             color: var(--text-primary);
-            margin-bottom: 15px;
             font-size: 1.1em;
+            margin: 0;
         }
         
         .metric-value {
@@ -324,6 +332,120 @@
         .negative { color: var(--negative-color); }
         .neutral { color: var(--neutral-color); }
         
+        /* 直近改善度セクション用スタイル */
+        .recent-delta-section {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--card-shadow);
+        }
+
+        .delta-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 30px 25px;
+            border: 1px solid var(--card-border);
+            box-shadow: var(--card-shadow);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            min-height: 420px;
+            overflow: hidden;
+        }
+
+        .delta-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .delta-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 30px 25px;
+            border: 1px solid var(--card-border);
+            box-shadow: var(--card-shadow);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            min-height: 380px;
+            overflow: hidden;
+        }
+
+        .delta-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .delta-card h4 {
+            color: var(--text-primary);
+            font-size: 1em;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .help-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            color: var(--text-secondary);
+            font-size: 12px;
+            font-weight: bold;
+            flex-shrink: 0;
+            z-index: 10;
+            position: relative;
+        }
+
+        .help-icon:hover {
+            background: var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .delta-value {
+            font-size: 2.2em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            margin-top: 10px;
+        }
+
+        .delta-subtitle {
+            font-size: 0.85em;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        .sparkline-container {
+            height: 180px;
+            margin-top: auto;
+            overflow: hidden;
+            width: 100%;
+            background: var(--bg-tertiary);
+            border-radius: 6px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sparkline-svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        
         /* チャートコンテナ */
         .chart-container {
             background: var(--bg-secondary);
@@ -342,81 +464,6 @@
             display: flex;
             align-items: center;
             gap: 8px;
-        }
-        
-        /* パレート分析用 */
-        .pareto-section {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 24px;
-        }
-
-        .pareto-card {
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 25px;
-            border: 1px solid var(--card-border);
-            box-shadow: var(--card-shadow);
-        }
-
-        .trade-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 0;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .trade-item:last-child {
-            border-bottom: none;
-        }
-
-        .trade-rank {
-            font-weight: 600;
-            color: var(--text-secondary);
-            width: 30px;
-        }
-
-        .trade-profit {
-            font-weight: 600;
-        }
-        
-        /* 連勝・連敗セクション */
-        .streak-section {
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 25px;
-            border: 1px solid var(--card-border);
-            box-shadow: var(--card-shadow);
-            margin-bottom: 24px;
-        }
-
-        .streak-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-
-        .streak-box {
-            padding: 20px;
-            border-radius: 10px;
-        }
-
-        .streak-box-win {
-            background: rgba(0, 126, 255, 0.05);
-            border-left: 4px solid var(--positive-color);
-        }
-
-        .streak-box-loss {
-            background: rgba(255, 40, 0, 0.05);
-            border-left: 4px solid var(--negative-color);
-        }
-
-        .streak-item {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
         }
         
         /* ローディング */
@@ -468,14 +515,6 @@
             .analysis-section {
                 grid-template-columns: 1fr;
             }
-
-            .pareto-section {
-                grid-template-columns: 1fr;
-            }
-
-            .streak-grid {
-                grid-template-columns: 1fr;
-            }
             
             h1 {
                 font-size: 1.5em;
@@ -487,12 +526,7 @@
                 padding: 6px 10px;
             }
 
-            .data-controls {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .data-controls button, .demo-controls button {
+            .demo-controls button {
                 width: 100%;
                 margin: 4px 0;
             }
@@ -577,7 +611,91 @@
         let currentData = null;
         let activeCharts = [];
         
-        // 固定データセット定義（実際の運用時はdata.jsonから読み込み）
+        // 現実的な累積曲線生成関数
+        function generateRealisticCumulativeCurve(tradeCount, finalProfit, winRate) {
+            const result = [0];
+            let currentProfit = 0;
+            
+            for (let i = 1; i < tradeCount; i++) {
+                const isWin = Math.random() < winRate;
+                
+                if (isWin) {
+                    const avgWinAmount = finalProfit > 0 ? 
+                        Math.abs(finalProfit) / (tradeCount * winRate) * 1.2 : 
+                        8000 + Math.random() * 12000;
+                    currentProfit += avgWinAmount * (0.7 + Math.random() * 0.6);
+                } else {
+                    const avgLossAmount = finalProfit > 0 ? 
+                        Math.abs(finalProfit) / (tradeCount * (1 - winRate)) * 0.8 : 
+                        4000 + Math.random() * 8000;
+                    currentProfit -= avgLossAmount * (0.7 + Math.random() * 0.6);
+                }
+                
+                result.push(Math.round(currentProfit));
+            }
+            
+            const adjustment = finalProfit - result[result.length - 1];
+            const adjustmentPerTrade = adjustment / (tradeCount * 0.3);
+            
+            for (let i = Math.floor(tradeCount * 0.7); i < tradeCount; i++) {
+                result[i] += Math.round(adjustmentPerTrade * (i - Math.floor(tradeCount * 0.7)));
+            }
+            
+            return result;
+        }
+
+        // スパークライン生成関数
+        function generateSparklineData(deltaValue) {
+            const points = 12;
+            const result = [];
+            const trend = deltaValue > 0 ? 1 : deltaValue < 0 ? -1 : 0;
+            
+            for (let i = 0; i < points; i++) {
+                const x = i / (points - 1);
+                const trendComponent = trend * x * Math.abs(deltaValue) * 0.5;
+                const noise = (Math.random() - 0.5) * Math.abs(deltaValue) * 0.3;
+                result.push(trendComponent + noise);
+            }
+            
+            return result;
+        }
+
+        // スパークライン描画関数
+        function drawSparkline(containerId, data, color) {
+            const container = document.getElementById(containerId);
+            if (!container || !data || data.length === 0) return;
+            
+            const width = 240;
+            const height = 120;
+            const padding = 15;
+            
+            const minVal = Math.min(...data);
+            const maxVal = Math.max(...data);
+            const range = maxVal - minVal || 1;
+            
+            let pathData = '';
+            for (let i = 0; i < data.length; i++) {
+                const x = padding + (i / (data.length - 1)) * (width - 2 * padding);
+                const y = height - padding - ((data[i] - minVal) / range) * (height - 2 * padding);
+                pathData += i === 0 ? `M ${x} ${y}` : ` L ${x} ${y}`;
+            }
+            
+            // 最初と最後の値を表示
+            const firstValue = data[0].toFixed(2);
+            const lastValue = data[data.length - 1].toFixed(2);
+            const isImproving = data[data.length - 1] > data[0];
+            
+            container.innerHTML = `
+                <svg width="100%" height="100%" viewBox="0 0 ${width} ${height}" style="max-width: 100%; max-height: 100%;">
+                    <path d="${pathData}" stroke="${color}" stroke-width="3.5" fill="none" opacity="0.9"/>
+                    <text x="20" y="20" fill="${color}" font-size="11" opacity="0.8" font-weight="500">${firstValue}</text>
+                    <text x="${width - 50}" y="20" fill="${color}" font-size="11" opacity="0.8" font-weight="500">${lastValue}</text>
+                    <text x="${width/2}" y="${height - 10}" fill="${color}" font-size="10" opacity="0.7" text-anchor="middle" font-weight="500">${isImproving ? '改善傾向' : '悪化傾向'}</text>
+                </svg>
+            `;
+        }
+
+        // 固定データセット定義
         const dataSets = {
             excellent: {
                 name: "優秀なトレーダー",
@@ -596,16 +714,17 @@
                     ev: 1200,
                     wr: -2.1
                 },
+                performance_delta: {
+                    profitFactor: 0.25,
+                    expectedValue: 1200,
+                    winRate: -2.1
+                },
                 pareto: {
                     top: [45000, 38000, 32000, 28000, 25000],
                     bottom: [-8000, -6500, -5200, -4800, -4100]
                 },
-                streaks: {
-                    win: [8, 6, 5, 4, 3],
-                    lose: [2, 2, 1, 1, 1]
-                },
                 charts: {
-                    cumulative: generateRealisticCumulativeCurve(150, 320000, 0.752), // 150取引, 最終32万円, 勝率75.2%
+                    cumulative: [],
                     distribution: [
                         { range: "5万円以上", count: 3, color: "positive" },
                         { range: "3万～5万円", count: 8, color: "positive" },
@@ -638,16 +757,17 @@
                     ev: -800,
                     wr: 1.8
                 },
+                performance_delta: {
+                    profitFactor: -0.15,
+                    expectedValue: -800,
+                    winRate: 1.8
+                },
                 pareto: {
                     top: [25000, 18000, 15000, 12000, 10500],
                     bottom: [-15000, -12000, -9500, -8200, -7100]
                 },
-                streaks: {
-                    win: [5, 4, 3, 3, 2],
-                    lose: [4, 3, 3, 2, 2]
-                },
                 charts: {
-                    cumulative: generateRealisticCumulativeCurve(120, 45000, 0.558), // 120取引, 最終4.5万円, 勝率55.8%
+                    cumulative: [],
                     distribution: [
                         { range: "3万円以上", count: 2, color: "positive" },
                         { range: "2万～3万円", count: 5, color: "positive" },
@@ -679,16 +799,17 @@
                     ev: -2100,
                     wr: -8.3
                 },
+                performance_delta: {
+                    profitFactor: -0.45,
+                    expectedValue: -2100,
+                    winRate: -8.3
+                },
                 pareto: {
                     top: [18000, 12000, 9500, 8200, 7100],
                     bottom: [-25000, -18000, -15000, -12000, -10500]
                 },
-                streaks: {
-                    win: [3, 2, 2, 1, 1],
-                    lose: [7, 5, 4, 4, 3]
-                },
                 charts: {
-                    cumulative: generateRealisticCumulativeCurve(95, -85000, 0.389), // 95取引, 最終-8.5万円, 勝率38.9%
+                    cumulative: [],
                     distribution: [
                         { range: "2万円以上", count: 1, color: "positive" },
                         { range: "1万～2万円", count: 4, color: "positive" },
@@ -701,134 +822,14 @@
                         { range: "-3万円以下", count: 2, color: "negative" }
                     ]
                 }
-            },
-            custom: {
-                name: "カスタムデータ",
-                description: "テスト用のカスタマイズ可能なデータセット",
-                kpi: {
-                    totalTrades: 200,
-                    winRate: 62.5,
-                    totalProfit: 180000,
-                    avgProfit: 9600,
-                    avgLoss: -5800,
-                    expectedValue: 900,
-                    profitFactor: 2.15
-                },
-                delta: {
-                    pf: 0.35,
-                    ev: 600,
-                    wr: 3.2
-                },
-                pareto: {
-                    top: [35000, 28000, 22000, 18000, 15000],
-                    bottom: [-12000, -9500, -8200, -7100, -6500]
-                },
-                streaks: {
-                    win: [9, 7, 5, 4, 3],
-                    lose: [3, 3, 2, 2, 1]
-                },
-                charts: {
-                    cumulative: generateRealisticCumulativeCurve(200, 180000, 0.625), // 200取引, 最終18万円, 勝率62.5%
-                    distribution: [
-                        { range: "5万円以上", count: 2, color: "positive" },
-                        { range: "3万～5万円", count: 6, color: "positive" },
-                        { range: "2万～3万円", count: 12, color: "positive" },
-                        { range: "1万～2万円", count: 22, color: "positive" },
-                        { range: "5千～1万円", count: 33, color: "positive" },
-                        { range: "0～5千円", count: 50, color: "neutral" },
-                        { range: "-5千円～0円", count: 35, color: "neutral" },
-                        { range: "-1万～-5千円", count: 25, color: "negative" },
-                        { range: "-2万～-1万円", count: 12, color: "negative" },
-                        { range: "-3万～-2万円", count: 2, color: "negative" },
-                        { range: "-3万円以下", count: 1, color: "negative" }
-                    ]
-                }
             }
         };
 
-        // 現実的な累積曲線生成関数
-        function generateRealisticCumulativeCurve(tradeCount, finalProfit, winRate) {
-            const result = [0]; // 開始は0
-            let currentProfit = 0;
-            
-            for (let i = 1; i < tradeCount; i++) {
-                const isWin = Math.random() < winRate;
-                
-                if (isWin) {
-                    // 勝ちトレード: 期待値に基づいた利益
-                    const avgWinAmount = finalProfit > 0 ? 
-                        Math.abs(finalProfit) / (tradeCount * winRate) * 1.2 : 
-                        8000 + Math.random() * 12000;
-                    currentProfit += avgWinAmount * (0.7 + Math.random() * 0.6);
-                } else {
-                    // 負けトレード: 期待値に基づいた損失
-                    const avgLossAmount = finalProfit > 0 ? 
-                        Math.abs(finalProfit) / (tradeCount * (1 - winRate)) * 0.8 : 
-                        4000 + Math.random() * 8000;
-                    currentProfit -= avgLossAmount * (0.7 + Math.random() * 0.6);
-                }
-                
-                result.push(Math.round(currentProfit));
-            }
-            
-            // 最終値を目標に調整
-            const adjustment = finalProfit - result[result.length - 1];
-            const adjustmentPerTrade = adjustment / (tradeCount * 0.3);
-            
-            for (let i = Math.floor(tradeCount * 0.7); i < tradeCount; i++) {
-                result[i] += Math.round(adjustmentPerTrade * (i - Math.floor(tradeCount * 0.7)));
-            }
-            
-            return result;
-        }
-
-        // 複雑な累積曲線生成関数
-        function generateComplexCurve(length, finalValue) {
-            const result = [];
-            for (let i = 0; i < length; i++) {
-                const x = i / (length - 1);
-                const trend = finalValue * x;
-                const volatility = 15000 * Math.sin(x * 20) * Math.exp(-x * 2);
-                const noise = (Math.random() - 0.5) * 5000;
-                result.push(Math.round(trend + volatility + noise));
-            }
-            return result;
-        }
-
-        // 初期設定でダークモードを適用
-        document.addEventListener('DOMContentLoaded', function() {
-            document.body.classList.add('dark-mode');
-            updateThemeIcon();
-            
-            // 初期表示（1秒後に平均データを自動ロード）
-            setTimeout(() => {
-                loadDataSet('average');
-            }, 1000);
-        });
-
-        // テーマ切り替え
-        function toggleTheme() {
-            document.body.classList.toggle('dark-mode');
-            updateThemeIcon();
-            
-            // チャートを再描画
-            if (currentData) {
-                renderAnalysis();
-            }
-        }
-
-        function updateThemeIcon() {
-            const isDark = document.body.classList.contains('dark-mode');
-            const icon = document.getElementById('theme-icon');
-            const text = document.querySelector('.theme-toggle-text');
-            
-            if (isDark) {
-                icon.innerHTML = '<path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>';
-                text.textContent = 'ライトモード';
-            } else {
-                icon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
-                text.textContent = 'ダークモード';
-            }
+        // 初期化関数
+        function initializeDataSets() {
+            dataSets.excellent.charts.cumulative = generateRealisticCumulativeCurve(150, 320000, 0.752);
+            dataSets.average.charts.cumulative = generateRealisticCumulativeCurve(120, 45000, 0.558);
+            dataSets.poor.charts.cumulative = generateRealisticCumulativeCurve(95, -85000, 0.389);
         }
 
         function showLoading(show) {
@@ -843,7 +844,6 @@
         function loadDataSet(dataSetKey) {
             showLoading(true);
             
-            // 実際のデータ読み込みをシミュレート
             setTimeout(() => {
                 currentData = dataSets[dataSetKey];
                 showLoading(false);
@@ -857,17 +857,15 @@
             const infoEl = document.getElementById('dataInfo');
             
             if (currentData) {
-                infoEl.innerHTML = `
-                    <div>${currentData.name}</div>
-                    <div>${currentData.description}</div>
-                    <div>総取引数: ${currentData.kpi.totalTrades}回</div>
-                `;
+                infoEl.innerHTML = 
+                    '<div>' + currentData.name + '</div>' +
+                    '<div>' + currentData.description + '</div>' +
+                    '<div>総取引数: ' + currentData.kpi.totalTrades + '回</div>';
                 statusEl.style.display = 'block';
             }
         }
 
         function renderAnalysis() {
-            // 既存のチャートを破棄
             activeCharts.forEach(chart => {
                 if (chart && typeof chart.destroy === 'function') {
                     chart.destroy();
@@ -878,139 +876,89 @@
             const root = document.getElementById('analysisRoot');
             
             if (!currentData) {
-                root.innerHTML = `
-                    <div style="text-align: center; padding: 60px 20px; color: var(--text-secondary);">
-                        <h3 style="margin-bottom: 12px;">データを選択してください</h3>
-                        <p>上のボタンからサンプルデータを選択すると、分析結果が表示されます</p>
-                    </div>
-                `;
+                root.innerHTML = '<div style="text-align: center; padding: 60px 20px; color: var(--text-secondary);"><h3 style="margin-bottom: 12px;">データを選択してください</h3><p>上のボタンからサンプルデータを選択すると、分析結果が表示されます</p></div>';
                 return;
             }
             
             const data = currentData;
+            const winCount = Math.round(data.kpi.totalTrades * data.kpi.winRate / 100);
+            const loseCount = data.kpi.totalTrades - winCount;
             
-            root.innerHTML = `
-                <div style="margin-top: 30px;">
-                    <!-- KPIカード -->
-                    <div class="analysis-section">
-                        <div class="metric-card" onclick="showKPIDetail('totalTrades')">
-                            <h3>総取引数</h3>
-                            <div class="metric-value">${data.kpi.totalTrades}回</div>
-                            <div class="metric-subtitle">分析対象取引数</div>
-                        </div>
-                        <div class="metric-card" onclick="showKPIDetail('winRate')">
-                            <h3>勝率</h3>
-                            <div class="metric-value ${data.kpi.winRate >= 50 ? 'positive' : 'negative'}">${data.kpi.winRate.toFixed(1)}%</div>
-                            <div class="metric-subtitle">勝ち: ${Math.round(data.kpi.totalTrades * data.kpi.winRate / 100)}回 / 負け: ${Math.round(data.kpi.totalTrades * (100 - data.kpi.winRate) / 100)}回</div>
-                            <div class="metric-delta ${data.delta.wr >= 0 ? 'positive' : 'negative'}">前期比: ${data.delta.wr > 0 ? '+' : ''}${data.delta.wr.toFixed(1)}%</div>
-                        </div>
-                        <div class="metric-card" onclick="showKPIDetail('totalProfit')">
-                            <h3>総収益</h3>
-                            <div class="metric-value ${data.kpi.totalProfit >= 0 ? 'positive' : 'negative'}">¥${Math.round(data.kpi.totalProfit).toLocaleString()}</div>
-                            <div class="metric-subtitle">全取引の合計収益</div>
-                        </div>
-                        <div class="metric-card" onclick="showKPIDetail('avgProfit')">
-                            <h3>平均利益</h3>
-                            <div class="metric-value positive">¥${Math.round(data.kpi.avgProfit).toLocaleString()}</div>
-                            <div class="metric-subtitle">勝ちトレードの平均</div>
-                        </div>
-                        <div class="metric-card" onclick="showKPIDetail('avgLoss')">
-                            <h3>平均損失</h3>
-                            <div class="metric-value negative">¥${Math.round(Math.abs(data.kpi.avgLoss)).toLocaleString()}</div>
-                            <div class="metric-subtitle">負けトレードの平均</div>
-                        </div>
-                        <div class="metric-card" onclick="showKPIDetail('expectedValue')">
-                            <h3>期待値</h3>
-                            <div class="metric-value ${data.kpi.expectedValue >= 0 ? 'positive' : 'negative'}">¥${Math.round(data.kpi.expectedValue).toLocaleString()}/件</div>
-                            <div class="metric-subtitle">1取引あたりの平均期待収益</div>
-                            <div class="metric-delta ${data.delta.ev >= 0 ? 'positive' : 'negative'}">前期比: ${data.delta.ev > 0 ? '+' : ''}¥${data.delta.ev.toLocaleString()}</div>
-                        </div>
-                        <div class="metric-card" onclick="showKPIDetail('profitFactor')">
-                            <h3>プロフィットファクター</h3>
-                            <div class="metric-value ${data.kpi.profitFactor >= 1 ? 'positive' : 'negative'}">${data.kpi.profitFactor.toFixed(2)}</div>
-                            <div class="metric-subtitle">総利益 ÷ 総損失</div>
-                            <div class="metric-delta ${data.delta.pf >= 0 ? 'positive' : 'negative'}">前期比: ${data.delta.pf > 0 ? '+' : ''}${data.delta.pf.toFixed(2)}</div>
-                        </div>
-                    </div>
-                    
-                    <!-- 勝ち負け詳細分布 -->
-                    <div class="chart-container" style="margin-top: 24px;">
-                        <h3>勝ち負け詳細分布</h3>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
-                            <div class="stats-box-positive">
-                                <h4 style="margin-bottom: 15px; font-size: 1.1em;" class="positive">勝ちトレード統計</h4>
-                                <div style="line-height: 1.8;">
-                                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                                        <span style="opacity: 0.8;">取引回数:</span>
-                                        <span style="font-weight: 600;">${Math.round(data.kpi.totalTrades * data.kpi.winRate / 100)}回</span>
-                                    </div>
-                                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                                        <span style="opacity: 0.8;">総利益額:</span>
-                                        <span style="font-weight: 600;" class="positive">¥${Math.round(data.kpi.totalTrades * data.kpi.winRate / 100 * data.kpi.avgProfit).toLocaleString()}</span>
-                                    </div>
-                                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                                        <span style="opacity: 0.8;">平均利益:</span>
-                                        <span style="font-weight: 600;">¥${Math.round(data.kpi.avgProfit).toLocaleString()}</span>
-                                    </div>
-                                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                                        <span style="opacity: 0.8;">最大利益:</span>
-                                        <span style="font-weight: 600;" class="positive">¥${data.pareto.top[0].toLocaleString()}</span>
-                                    </div>
-                                    <div style="display: flex; justify-content: space-between;">
-                                        <span style="opacity: 0.8;">最小利益:</span>
-                                        <span style="font-weight: 600;">¥${data.pareto.top[data.pareto.top.length - 1].toLocaleString()}</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="stats-box-negative">
-                                <h4 style="margin-bottom: 15px; font-size: 1.1em;" class="negative">負けトレード統計</h4>
-                                <div style="line-height: 1.8;">
-                                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                                        <span style="opacity: 0.8;">取引回数:</span>
-                                        <span style="font-weight: 600;">${Math.round(data.kpi.totalTrades * (100 - data.kpi.winRate) / 100)}回</span>
-                                    </div>
-                                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                                        <span style="opacity: 0.8;">総損失額:</span>
-                                        <span style="font-weight: 600;" class="negative">¥${Math.round(Math.abs(data.kpi.totalTrades * (100 - data.kpi.winRate) / 100 * data.kpi.avgLoss)).toLocaleString()}</span>
-                                    </div>
-                                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                                        <span style="opacity: 0.8;">平均損失:</span>
-                                        <span style="font-weight: 600;">¥${Math.round(Math.abs(data.kpi.avgLoss)).toLocaleString()}</span>
-                                    </div>
-                                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                                        <span style="opacity: 0.8;">最大損失:</span>
-                                        <span style="font-weight: 600;" class="negative">¥${Math.abs(data.pareto.bottom[0]).toLocaleString()}</span>
-                                    </div>
-                                    <div style="display: flex; justify-content: space-between;">
-                                        <span style="opacity: 0.8;">最小損失:</span>
-                                        <span style="font-weight: 600;">¥${Math.abs(data.pareto.bottom[data.pareto.bottom.length - 1]).toLocaleString()}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- チャート -->
-                    <div class="chart-container">
-                        <h3>累積収益推移</h3>
-                        <div class="chart-canvas-container">
-                            <canvas id="profitChart"></canvas>
-                        </div>
-                    </div>
-                    
-                    <div class="chart-container">
-                        <h3>収益分布ヒストグラム</h3>
-                        <div class="chart-canvas-container">
-                            <canvas id="distributionChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-            `;
+            // KPIセクション
+            root.innerHTML = '<div style="margin-top: 30px;"><div class="analysis-section" id="kpiSection"></div><div id="deltaSection"></div><div id="detailsSection"></div><div id="chartsSection"></div></div>';
             
-            // チャートを描画
+            // KPIカード作成
+            const kpiSection = document.getElementById('kpiSection');
+            kpiSection.innerHTML = 
+                '<div class="metric-card"><div class="metric-card-header"><h3>総取引数</h3><div class="help-icon" onclick="showHelp(\'totalTrades\')">?</div></div><div class="metric-value">' + data.kpi.totalTrades + '回</div><div class="metric-subtitle">分析対象取引数</div></div>' +
+                '<div class="metric-card"><div class="metric-card-header"><h3>勝率</h3><div class="help-icon" onclick="showHelp(\'winRate\')">?</div></div><div class="metric-value ' + (data.kpi.winRate >= 50 ? 'positive' : 'negative') + '">' + data.kpi.winRate.toFixed(1) + '%</div><div class="metric-subtitle">勝ち: ' + winCount + '回 / 負け: ' + loseCount + '回</div></div>' +
+                '<div class="metric-card"><div class="metric-card-header"><h3>総収益</h3><div class="help-icon" onclick="showHelp(\'totalProfit\')">?</div></div><div class="metric-value ' + (data.kpi.totalProfit >= 0 ? 'positive' : 'negative') + '">¥' + Math.round(data.kpi.totalProfit).toLocaleString() + '</div><div class="metric-subtitle">全取引の合計収益</div></div>' +
+                '<div class="metric-card"><div class="metric-card-header"><h3>平均利益</h3><div class="help-icon" onclick="showHelp(\'avgProfit\')">?</div></div><div class="metric-value positive">¥' + Math.round(data.kpi.avgProfit).toLocaleString() + '</div><div class="metric-subtitle">勝ちトレードの平均</div></div>' +
+                '<div class="metric-card"><div class="metric-card-header"><h3>平均損失</h3><div class="help-icon" onclick="showHelp(\'avgLoss\')">?</div></div><div class="metric-value negative">¥' + Math.round(Math.abs(data.kpi.avgLoss)).toLocaleString() + '</div><div class="metric-subtitle">負けトレードの平均</div></div>' +
+                '<div class="metric-card"><div class="metric-card-header"><h3>期待値</h3><div class="help-icon" onclick="showHelp(\'expectedValue\')">?</div></div><div class="metric-value ' + (data.kpi.expectedValue >= 0 ? 'positive' : 'negative') + '">¥' + Math.round(data.kpi.expectedValue).toLocaleString() + '/件</div><div class="metric-subtitle">1取引あたりの平均期待収益</div></div>' +
+                '<div class="metric-card"><div class="metric-card-header"><h3>プロフィットファクター</h3><div class="help-icon" onclick="showHelp(\'profitFactor\')">?</div></div><div class="metric-value ' + (data.kpi.profitFactor >= 1 ? 'positive' : 'negative') + '">' + data.kpi.profitFactor.toFixed(2) + '</div><div class="metric-subtitle">総利益 ÷ 総損失</div></div>';
+            
+            // 勝ち負け詳細分布
+            const detailsSection = document.getElementById('detailsSection');
+            detailsSection.innerHTML = 
+                '<div class="chart-container" style="margin-top: 24px;"><h3>勝ち負け詳細分布</h3><div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;"><div class="stats-box-positive"><h4 style="margin-bottom: 15px; font-size: 1.1em;" class="positive">勝ちトレード統計</h4><div style="line-height: 1.8;"><div style="display: flex; justify-content: space-between; margin-bottom: 8px;"><span style="opacity: 0.8;">取引回数:</span><span style="font-weight: 600;">' + winCount + '回</span></div><div style="display: flex; justify-content: space-between; margin-bottom: 8px;"><span style="opacity: 0.8;">総利益額:</span><span style="font-weight: 600;" class="positive">¥' + Math.round(winCount * data.kpi.avgProfit).toLocaleString() + '</span></div><div style="display: flex; justify-content: space-between; margin-bottom: 8px;"><span style="opacity: 0.8;">平均利益:</span><span style="font-weight: 600;">¥' + Math.round(data.kpi.avgProfit).toLocaleString() + '</span></div><div style="display: flex; justify-content: space-between; margin-bottom: 8px;"><span style="opacity: 0.8;">最大利益:</span><span style="font-weight: 600;" class="positive">¥' + data.pareto.top[0].toLocaleString() + '</span></div><div style="display: flex; justify-content: space-between;"><span style="opacity: 0.8;">最小利益:</span><span style="font-weight: 600;">¥' + data.pareto.top[4].toLocaleString() + '</span></div></div></div><div class="stats-box-negative"><h4 style="margin-bottom: 15px; font-size: 1.1em;" class="negative">負けトレード統計</h4><div style="line-height: 1.8;"><div style="display: flex; justify-content: space-between; margin-bottom: 8px;"><span style="opacity: 0.8;">取引回数:</span><span style="font-weight: 600;">' + loseCount + '回</span></div><div style="display: flex; justify-content: space-between; margin-bottom: 8px;"><span style="opacity: 0.8;">総損失額:</span><span style="font-weight: 600;" class="negative">¥' + Math.round(Math.abs(loseCount * data.kpi.avgLoss)).toLocaleString() + '</span></div><div style="display: flex; justify-content: space-between; margin-bottom: 8px;"><span style="opacity: 0.8;">平均損失:</span><span style="font-weight: 600;">¥' + Math.round(Math.abs(data.kpi.avgLoss)).toLocaleString() + '</span></div><div style="display: flex; justify-content: space-between; margin-bottom: 8px;"><span style="opacity: 0.8;">最大損失:</span><span style="font-weight: 600;" class="negative">¥' + Math.abs(data.pareto.bottom[0]).toLocaleString() + '</span></div><div style="display: flex; justify-content: space-between;"><span style="opacity: 0.8;">最小損失:</span><span style="font-weight: 600;">¥' + Math.abs(data.pareto.bottom[4]).toLocaleString() + '</span></div></div></div></div></div>';
+            
+            // 直近改善度セクション
+            if (data.performance_delta) {
+                const delta = data.performance_delta;
+                const deltaSection = document.getElementById('deltaSection');
+                
+                const pfSign = delta.profitFactor >= 0 ? '+' : '';
+                const evSign = delta.expectedValue >= 0 ? '+' : '';
+                const wrSign = delta.winRate >= 0 ? '+' : '';
+                const pfClass = delta.profitFactor > 0 ? 'positive' : delta.profitFactor < 0 ? 'negative' : 'neutral';
+                const evClass = delta.expectedValue > 0 ? 'positive' : delta.expectedValue < 0 ? 'negative' : 'neutral';
+                const wrClass = delta.winRate > 0 ? 'positive' : delta.winRate < 0 ? 'negative' : 'neutral';
+                
+                deltaSection.innerHTML = 
+                    '<div class="recent-delta-section"><h3>②直近改善度</h3><div class="analysis-section">' +
+                    '<div class="delta-card" onclick="showDeltaDetail(\'profitFactor\')"><div class="delta-card-header"><h4>PF Δ</h4><div class="help-icon" onclick="showHelp(\'pf\'); event.stopPropagation(); return false;">?</div></div><div class="delta-value ' + pfClass + '">' + pfSign + delta.profitFactor.toFixed(2) + '</div><div class="delta-subtitle">プロフィットファクター変化</div><div class="sparkline-container"><div id="sparkline-pf"></div></div></div>' +
+                    '<div class="delta-card" onclick="showDeltaDetail(\'expectedValue\')"><div class="delta-card-header"><h4>EV Δ（円/件）</h4><div class="help-icon" onclick="showHelp(\'ev\'); event.stopPropagation(); return false;">?</div></div><div class="delta-value ' + evClass + '">' + evSign + '¥' + Math.round(Math.abs(delta.expectedValue)).toLocaleString() + '</div><div class="delta-subtitle">期待値変化</div><div class="sparkline-container"><div id="sparkline-ev"></div></div></div>' +
+                    '<div class="delta-card" onclick="showDeltaDetail(\'winRate\')"><div class="delta-card-header"><h4>勝率 Δ（pp）</h4><div class="help-icon" onclick="showHelp(\'wr\'); event.stopPropagation(); return false;">?</div></div><div class="delta-value ' + wrClass + '">' + wrSign + Math.abs(delta.winRate).toFixed(1) + 'pp</div><div class="delta-subtitle">勝率変化</div><div class="sparkline-container"><div id="sparkline-wr"></div></div></div>' +
+                    '</div></div>';
+            }
+            
+            // チャートセクション
+            const chartsSection = document.getElementById('chartsSection');
+            chartsSection.innerHTML = 
+                '<div class="chart-container"><h3>累積収益推移</h3><div class="chart-canvas-container"><canvas id="profitChart"></canvas></div></div>' +
+                '<div class="chart-container"><h3>収益分布ヒストグラム</h3><div class="chart-canvas-container"><canvas id="distributionChart"></canvas></div></div>';
+            
+            // チャートとスパークラインを描画
             setTimeout(() => {
                 createProfitChart();
                 createDistributionChart();
+                renderSparklines();
+            }, 100);
+        }
+
+        function renderSparklines() {
+            if (!currentData || !currentData.performance_delta) return;
+            
+            const isDark = document.body.classList.contains('dark-mode');
+            const positiveColor = isDark ? '#00c8ff' : '#007eff';
+            const negativeColor = isDark ? '#ff3200' : '#ff2800';
+            const neutralColor = '#6b7280';
+            
+            const delta = currentData.performance_delta;
+            
+            setTimeout(() => {
+                const pfColor = delta.profitFactor > 0 ? positiveColor : delta.profitFactor < 0 ? negativeColor : neutralColor;
+                const pfData = generateSparklineData(delta.profitFactor);
+                drawSparkline('sparkline-pf', pfData, pfColor);
+                
+                const evColor = delta.expectedValue > 0 ? positiveColor : delta.expectedValue < 0 ? negativeColor : neutralColor;
+                const evData = generateSparklineData(delta.expectedValue / 1000);
+                drawSparkline('sparkline-ev', evData, evColor);
+                
+                const wrColor = delta.winRate > 0 ? positiveColor : delta.winRate < 0 ? negativeColor : neutralColor;
+                const wrData = generateSparklineData(delta.winRate);
+                drawSparkline('sparkline-wr', wrData, wrColor);
             }, 100);
         }
 
@@ -1042,9 +990,7 @@
                     maintainAspectRatio: true,
                     aspectRatio: 2.5,
                     plugins: {
-                        legend: {
-                            display: false
-                        }
+                        legend: { display: false }
                     },
                     scales: {
                         x: {
@@ -1058,9 +1004,7 @@
                                 color: textColor,
                                 maxTicksLimit: 10
                             },
-                            grid: {
-                                color: gridColor
-                            }
+                            grid: { color: gridColor }
                         },
                         y: {
                             title: {
@@ -1075,9 +1019,7 @@
                                     return '¥' + value.toLocaleString();
                                 }
                             },
-                            grid: {
-                                color: gridColor
-                            }
+                            grid: { color: gridColor }
                         }
                     }
                 }
@@ -1130,19 +1072,7 @@
                     maintainAspectRatio: true,
                     aspectRatio: 2.5,
                     plugins: {
-                        legend: {
-                            display: false
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    const count = context.parsed.y;
-                                    const total = currentData.kpi.totalTrades;
-                                    const percentage = ((count / total) * 100).toFixed(1);
-                                    return `取引回数: ${count}回 (${percentage}%)`;
-                                }
-                            }
-                        }
+                        legend: { display: false }
                     },
                     scales: {
                         x: {
@@ -1159,9 +1089,7 @@
                                 color: textColor,
                                 font: { size: 10 }
                             },
-                            grid: {
-                                color: gridColor
-                            }
+                            grid: { color: gridColor }
                         },
                         y: {
                             title: {
@@ -1175,9 +1103,7 @@
                                 stepSize: 1,
                                 color: textColor
                             },
-                            grid: {
-                                color: gridColor
-                            }
+                            grid: { color: gridColor }
                         }
                     }
                 }
@@ -1187,80 +1113,54 @@
         }
 
         function showKPIDetail(kpiType) {
-            // 将来的なモーダル表示やドリルダウン機能の土台
-            console.log(`KPI詳細表示: ${kpiType}`, currentData);
-            
-            // 現在は簡単なアラートで代用（後でモーダルに置き換え予定）
-            const messages = {
-                totalTrades: `総取引数: ${currentData.kpi.totalTrades}回\n\n詳細分析機能は今後実装予定です。`,
-                winRate: `勝率: ${currentData.kpi.winRate.toFixed(1)}%\n前期比: ${currentData.delta.wr > 0 ? '+' : ''}${currentData.delta.wr.toFixed(1)}%\n\n時間別・曜日別の勝率分析機能は今後実装予定です。`,
-                totalProfit: `総収益: ¥${currentData.kpi.totalProfit.toLocaleString()}\n\n月別・週別の収益推移分析機能は今後実装予定です。`,
-                avgProfit: `平均利益: ¥${currentData.kpi.avgProfit.toLocaleString()}\n\n利益分布の詳細分析機能は今後実装予定です。`,
-                avgLoss: `平均損失: ¥${Math.abs(currentData.kpi.avgLoss).toLocaleString()}\n\n損失要因の詳細分析機能は今後実装予定です。`,
-                expectedValue: `期待値: ¥${currentData.kpi.expectedValue.toLocaleString()}/件\n前期比: ${currentData.delta.ev > 0 ? '+' : ''}¥${currentData.delta.ev.toLocaleString()}\n\n期待値の詳細計算とシミュレーション機能は今後実装予定です。`,
-                profitFactor: `プロフィットファクター: ${currentData.kpi.profitFactor.toFixed(2)}\n前期比: ${currentData.delta.pf > 0 ? '+' : ''}${currentData.delta.pf.toFixed(2)}\n\nリスクリワード分析機能は今後実装予定です。`
+            alert('KPI詳細機能は今後実装予定です');
+        }
+
+        function showDeltaDetail(deltaType) {
+            if (!currentData || !currentData.performance_delta) return;
+            alert('Delta詳細機能は今後実装予定です');
+        }
+
+        // ヘルプポップアップ表示関数
+        function showHelp(helpType) {
+            const helpMessages = {
+                pf: 'プロフィットファクター（PF）\n\n総利益 ÷ 総損失で計算される指標です。\n\n• 1.0以上：利益が損失を上回る\n• 1.0未満：損失が利益を上回る\n• 2.0以上：優秀なトレーダー\n\nΔ（デルタ）は前期からの変化量を表します。',
+                ev: '期待値（EV）\n\n1取引あたりの平均収益を表します。\n\n計算式：\n（勝率 × 平均利益）- （負率 × 平均損失）\n\n• 正の値：長期的に利益が期待できる\n• 負の値：長期的に損失が予想される\n\nΔ（デルタ）は前期からの変化量を表します。',
+                wr: '勝率変化（pp）\n\n勝率の変化をパーセントポイント（pp）で表示します。\n\n例：\n• +5pp：勝率が5%向上（50%→55%）\n• -3pp：勝率が3%悪化（60%→57%）\n\n通常の%とは異なり、絶対的な変化量を示します。'
             };
             
-            alert(messages[kpiType] || 'この指標の詳細分析機能は今後実装予定です。');
+            alert(helpMessages[helpType] || 'ヘルプ情報が見つかりません');
         }
 
-        // データセット切り替え用のショートカット関数群
-        function loadExcellentData() { loadDataSet('excellent'); }
-        function loadAverageData() { loadDataSet('average'); }
-        function loadPoorData() { loadDataSet('poor'); }
-        function loadCustomData() { loadDataSet('custom'); }
-
-        // 将来のJSONファイル読み込み用の関数（現在は未使用）
-        async function loadDataFromJSON(filename) {
-            try {
-                const response = await fetch(filename);
-                const data = await response.json();
-                return data;
-            } catch (error) {
-                console.error('JSONデータの読み込みに失敗:', error);
-                return null;
-            }
-        }
-
-        // 将来のカスタムデータ編集用の関数（現在は未使用）
-        function editCustomData() {
-            console.log('カスタムデータ編集機能は今後実装予定');
-            alert('カスタムデータの編集機能は今後実装予定です。\n現在はコード内の dataSets.custom を直接編集してください。');
-        }
-
-        // デバッグ用：現在のデータをコンソールに出力
-        function debugCurrentData() {
-            console.log('Current Data:', currentData);
-            console.log('Active Charts:', activeCharts);
-        }
-
-        // キーボードショートカット（開発用）
-        document.addEventListener('keydown', function(e) {
-            if (e.ctrlKey || e.metaKey) {
-                switch(e.key) {
-                    case '1':
-                        e.preventDefault();
-                        loadDataSet('excellent');
-                        break;
-                    case '2':
-                        e.preventDefault();
-                        loadDataSet('average');
-                        break;
-                    case '3':
-                        e.preventDefault();
-                        loadDataSet('poor');
-                        break;
-                    case '4':
-                        e.preventDefault();
-                        loadDataSet('custom');
-                        break;
-                    case 'd':
-                        e.preventDefault();
-                        debugCurrentData();
-                        break;
-                }
-            }
+        // 初期設定
+        document.addEventListener('DOMContentLoaded', function() {
+            document.body.classList.add('dark-mode');
+            updateThemeIcon();
+            initializeDataSets();
         });
+
+        // テーマ切り替え
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            updateThemeIcon();
+            if (currentData) {
+                renderAnalysis();
+            }
+        }
+
+        function updateThemeIcon() {
+            const isDark = document.body.classList.contains('dark-mode');
+            const icon = document.getElementById('theme-icon');
+            const text = document.querySelector('.theme-toggle-text');
+            
+            if (isDark) {
+                icon.innerHTML = '<path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>';
+                text.textContent = 'ライトモード';
+            } else {
+                icon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+                text.textContent = 'ダークモード';
+            }
+        }
     </script>
 </body>
 </html>
