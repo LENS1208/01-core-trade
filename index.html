@@ -338,6 +338,7 @@
             border-radius: 12px;
             padding: 24px;
             margin-bottom: 24px;
+            margin-top: 32px;
             border: 1px solid var(--border-color);
             box-shadow: var(--card-shadow);
         }
@@ -352,27 +353,13 @@
             cursor: pointer;
             display: flex;
             flex-direction: column;
-            min-height: 420px;
+            min-height: 380px;
             overflow: hidden;
         }
 
         .delta-card:hover {
             transform: translateY(-2px);
             box-shadow: var(--hover-shadow);
-        }
-
-        .delta-card {
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 30px 25px;
-            border: 1px solid var(--card-border);
-            box-shadow: var(--card-shadow);
-            transition: transform 0.2s, box-shadow 0.2s;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            min-height: 380px;
-            overflow: hidden;
         }
 
         .delta-card-header {
@@ -706,6 +693,7 @@
                     totalProfit: 320000,
                     avgProfit: 12800,
                     avgLoss: -4200,
+                    avgHoldingTime: "2時間15分",
                     expectedValue: 2133,
                     profitFactor: 3.05
                 },
@@ -749,6 +737,7 @@
                     totalProfit: 45000,
                     avgProfit: 8500,
                     avgLoss: -6200,
+                    avgHoldingTime: "3時間45分",
                     expectedValue: 375,
                     profitFactor: 1.18
                 },
@@ -791,6 +780,7 @@
                     totalProfit: -85000,
                     avgProfit: 6200,
                     avgLoss: -8900,
+                    avgHoldingTime: "5時間20分",
                     expectedValue: -895,
                     profitFactor: 0.65
                 },
@@ -887,16 +877,37 @@
             // KPIセクション
             root.innerHTML = '<div style="margin-top: 30px;"><div class="analysis-section" id="kpiSection"></div><div id="deltaSection"></div><div id="detailsSection"></div><div id="chartsSection"></div></div>';
             
-            // KPIカード作成
+            // KPIカード作成 - 平均保有時間を明示的に平均損失と期待値の間に配置
             const kpiSection = document.getElementById('kpiSection');
-            kpiSection.innerHTML = 
-                '<div class="metric-card"><div class="metric-card-header"><h3>総取引数</h3><div class="help-icon" onclick="showHelp(\'totalTrades\')">?</div></div><div class="metric-value">' + data.kpi.totalTrades + '回</div><div class="metric-subtitle">分析対象取引数</div></div>' +
-                '<div class="metric-card"><div class="metric-card-header"><h3>勝率</h3><div class="help-icon" onclick="showHelp(\'winRate\')">?</div></div><div class="metric-value ' + (data.kpi.winRate >= 50 ? 'positive' : 'negative') + '">' + data.kpi.winRate.toFixed(1) + '%</div><div class="metric-subtitle">勝ち: ' + winCount + '回 / 負け: ' + loseCount + '回</div></div>' +
-                '<div class="metric-card"><div class="metric-card-header"><h3>総収益</h3><div class="help-icon" onclick="showHelp(\'totalProfit\')">?</div></div><div class="metric-value ' + (data.kpi.totalProfit >= 0 ? 'positive' : 'negative') + '">¥' + Math.round(data.kpi.totalProfit).toLocaleString() + '</div><div class="metric-subtitle">全取引の合計収益</div></div>' +
-                '<div class="metric-card"><div class="metric-card-header"><h3>平均利益</h3><div class="help-icon" onclick="showHelp(\'avgProfit\')">?</div></div><div class="metric-value positive">¥' + Math.round(data.kpi.avgProfit).toLocaleString() + '</div><div class="metric-subtitle">勝ちトレードの平均</div></div>' +
-                '<div class="metric-card"><div class="metric-card-header"><h3>平均損失</h3><div class="help-icon" onclick="showHelp(\'avgLoss\')">?</div></div><div class="metric-value negative">¥' + Math.round(Math.abs(data.kpi.avgLoss)).toLocaleString() + '</div><div class="metric-subtitle">負けトレードの平均</div></div>' +
-                '<div class="metric-card"><div class="metric-card-header"><h3>期待値</h3><div class="help-icon" onclick="showHelp(\'expectedValue\')">?</div></div><div class="metric-value ' + (data.kpi.expectedValue >= 0 ? 'positive' : 'negative') + '">¥' + Math.round(data.kpi.expectedValue).toLocaleString() + '/件</div><div class="metric-subtitle">1取引あたりの平均期待収益</div></div>' +
-                '<div class="metric-card"><div class="metric-card-header"><h3>プロフィットファクター</h3><div class="help-icon" onclick="showHelp(\'profitFactor\')">?</div></div><div class="metric-value ' + (data.kpi.profitFactor >= 1 ? 'positive' : 'negative') + '">' + data.kpi.profitFactor.toFixed(2) + '</div><div class="metric-subtitle">総利益 ÷ 総損失</div></div>';
+            
+            // 各カードを個別に定義して確実に表示
+            let kpiCardsHTML = '';
+            
+            // 1. 総取引数
+            kpiCardsHTML += '<div class="metric-card"><div class="metric-card-header"><h3>総取引数</h3><div class="help-icon" onclick="showHelp(\'totalTrades\')">?</div></div><div class="metric-value">' + data.kpi.totalTrades + '回</div><div class="metric-subtitle">分析対象取引数</div></div>';
+            
+            // 2. 勝率
+            kpiCardsHTML += '<div class="metric-card"><div class="metric-card-header"><h3>勝率</h3><div class="help-icon" onclick="showHelp(\'winRate\')">?</div></div><div class="metric-value ' + (data.kpi.winRate >= 50 ? 'positive' : 'negative') + '">' + data.kpi.winRate.toFixed(1) + '%</div><div class="metric-subtitle">勝ち: ' + winCount + '回 / 負け: ' + loseCount + '回</div></div>';
+            
+            // 3. 総収益
+            kpiCardsHTML += '<div class="metric-card"><div class="metric-card-header"><h3>総収益</h3><div class="help-icon" onclick="showHelp(\'totalProfit\')">?</div></div><div class="metric-value ' + (data.kpi.totalProfit >= 0 ? 'positive' : 'negative') + '">¥' + Math.round(data.kpi.totalProfit).toLocaleString() + '</div><div class="metric-subtitle">全取引の合計収益</div></div>';
+            
+            // 4. 平均利益
+            kpiCardsHTML += '<div class="metric-card"><div class="metric-card-header"><h3>平均利益</h3><div class="help-icon" onclick="showHelp(\'avgProfit\')">?</div></div><div class="metric-value positive">¥' + Math.round(data.kpi.avgProfit).toLocaleString() + '</div><div class="metric-subtitle">勝ちトレードの平均</div></div>';
+            
+            // 5. 平均損失
+            kpiCardsHTML += '<div class="metric-card"><div class="metric-card-header"><h3>平均損失</h3><div class="help-icon" onclick="showHelp(\'avgLoss\')">?</div></div><div class="metric-value negative">¥' + Math.round(Math.abs(data.kpi.avgLoss)).toLocaleString() + '</div><div class="metric-subtitle">負けトレードの平均</div></div>';
+            
+            // 6. 平均保有時間 ← ここに追加！
+            kpiCardsHTML += '<div class="metric-card"><div class="metric-card-header"><h3>平均保有時間</h3><div class="help-icon" onclick="showHelp(\'avgHoldingTime\')">?</div></div><div class="metric-value neutral">' + data.kpi.avgHoldingTime + '</div><div class="metric-subtitle">ポジション保有時間</div></div>';
+            
+            // 7. 期待値
+            kpiCardsHTML += '<div class="metric-card"><div class="metric-card-header"><h3>期待値</h3><div class="help-icon" onclick="showHelp(\'expectedValue\')">?</div></div><div class="metric-value ' + (data.kpi.expectedValue >= 0 ? 'positive' : 'negative') + '">¥' + Math.round(data.kpi.expectedValue).toLocaleString() + '/件</div><div class="metric-subtitle">1取引あたりの平均期待収益</div></div>';
+            
+            // 8. プロフィットファクター
+            kpiCardsHTML += '<div class="metric-card"><div class="metric-card-header"><h3>プロフィットファクター</h3><div class="help-icon" onclick="showHelp(\'profitFactor\')">?</div></div><div class="metric-value ' + (data.kpi.profitFactor >= 1 ? 'positive' : 'negative') + '">' + data.kpi.profitFactor.toFixed(2) + '</div><div class="metric-subtitle">総利益 ÷ 総損失</div></div>';
+            
+            kpiSection.innerHTML = kpiCardsHTML;
             
             // 勝ち負け詳細分布
             const detailsSection = document.getElementById('detailsSection');
@@ -916,7 +927,7 @@
                 const wrClass = delta.winRate > 0 ? 'positive' : delta.winRate < 0 ? 'negative' : 'neutral';
                 
                 deltaSection.innerHTML = 
-                    '<div class="recent-delta-section"><h3>②直近改善度</h3><div class="analysis-section">' +
+                    '<div class="recent-delta-section"><h3>直近改善度</h3><div class="analysis-section">' +
                     '<div class="delta-card" onclick="showDeltaDetail(\'profitFactor\')"><div class="delta-card-header"><h4>PF Δ</h4><div class="help-icon" onclick="showHelp(\'pf\'); event.stopPropagation(); return false;">?</div></div><div class="delta-value ' + pfClass + '">' + pfSign + delta.profitFactor.toFixed(2) + '</div><div class="delta-subtitle">プロフィットファクター変化</div><div class="sparkline-container"><div id="sparkline-pf"></div></div></div>' +
                     '<div class="delta-card" onclick="showDeltaDetail(\'expectedValue\')"><div class="delta-card-header"><h4>EV Δ（円/件）</h4><div class="help-icon" onclick="showHelp(\'ev\'); event.stopPropagation(); return false;">?</div></div><div class="delta-value ' + evClass + '">' + evSign + '¥' + Math.round(Math.abs(delta.expectedValue)).toLocaleString() + '</div><div class="delta-subtitle">期待値変化</div><div class="sparkline-container"><div id="sparkline-ev"></div></div></div>' +
                     '<div class="delta-card" onclick="showDeltaDetail(\'winRate\')"><div class="delta-card-header"><h4>勝率 Δ（pp）</h4><div class="help-icon" onclick="showHelp(\'wr\'); event.stopPropagation(); return false;">?</div></div><div class="delta-value ' + wrClass + '">' + wrSign + Math.abs(delta.winRate).toFixed(1) + 'pp</div><div class="delta-subtitle">勝率変化</div><div class="sparkline-container"><div id="sparkline-wr"></div></div></div>' +
@@ -1124,6 +1135,14 @@
         // ヘルプポップアップ表示関数
         function showHelp(helpType) {
             const helpMessages = {
+                totalTrades: '総取引数\n\n分析対象となる取引の総数です。\n\n統計的信頼性のためには最低でも30回以上の取引が推奨されます。',
+                winRate: '勝率\n\n全取引のうち利益を上げた取引の割合です。\n\n• 50%以上：標準的\n• 60%以上：優良\n• 70%以上：優秀',
+                totalProfit: '総収益\n\nすべての取引の損益を合計した金額です。\n\n取引戦略の最終的な成果を示します。',
+                avgProfit: '平均利益\n\n勝ちトレードの平均利益額です。\n\n損切りラインとの比較で\nリスクリワード比を評価できます。',
+                avgLoss: '平均損失\n\n負けトレードの平均損失額です。\n\nリスク管理の指標として重要です。',
+                avgHoldingTime: '平均保有時間\n\nポジション開始から決済までの平均時間です。\n\n• 短時間：スキャルピング\n• 数時間：デイトレード\n• 数日～：スイングトレード\n\n取引スタイルの把握やリスク管理に重要な指標です。',
+                expectedValue: '期待値\n\n1取引あたりの理論的期待収益です。\n\n正の値は長期的な利益を示唆します。',
+                profitFactor: 'プロフィットファクター\n\n総利益÷総損失の比率です。\n\n1.0以上で利益が損失を上回ります。',
                 pf: 'プロフィットファクター（PF）\n\n総利益 ÷ 総損失で計算される指標です。\n\n• 1.0以上：利益が損失を上回る\n• 1.0未満：損失が利益を上回る\n• 2.0以上：優秀なトレーダー\n\nΔ（デルタ）は前期からの変化量を表します。',
                 ev: '期待値（EV）\n\n1取引あたりの平均収益を表します。\n\n計算式：\n（勝率 × 平均利益）- （負率 × 平均損失）\n\n• 正の値：長期的に利益が期待できる\n• 負の値：長期的に損失が予想される\n\nΔ（デルタ）は前期からの変化量を表します。',
                 wr: '勝率変化（pp）\n\n勝率の変化をパーセントポイント（pp）で表示します。\n\n例：\n• +5pp：勝率が5%向上（50%→55%）\n• -3pp：勝率が3%悪化（60%→57%）\n\n通常の%とは異なり、絶対的な変化量を示します。'
