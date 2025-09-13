@@ -330,6 +330,39 @@ html, body{ background:var(--bg-primary) !important; color:var(--text-main) !imp
   background:var(--card-bg); border:1px solid var(--card-border); box-shadow:var(--card-shadow);
 }
 /* Accent colors inside charts/sparklines will pull from tokens */
+
+/* === Numeric hierarchy & tabular lining === */
+.trade-app .metric-value,
+.trade-app .delta-value{
+  display:flex; align-items:baseline; gap:6px;
+  /* 桁揃え（Tabular Lining） */
+  font-variant-numeric: tabular-nums lining-nums;
+  font-feature-settings: 'tnum' 1,'lnum' 1;
+}
+
+/* 値を最上位（24–32px/700） */
+.trade-app .metric-value .num,
+.trade-app .delta-value .num{
+  font-size: clamp(24px, 3vw, 32px);
+  font-weight: 700;
+  letter-spacing: .02em;
+}
+
+/* 単位は小さく／補足として */
+.trade-app .metric-value .unit,
+.trade-app .delta-value .unit{
+  font-size: 12px;
+  color: var(--text-sub, #aaa);
+  font-weight: 600;
+}
+
+/* 数字を含む行のヘッダも桁揃え（念のため） */
+.metric-card-header{
+  font-variant-numeric: tabular-nums lining-nums;
+  font-feature-settings: 'tnum' 1,'lnum' 1;
+}
+
+
 </style>
 
 
@@ -579,6 +612,7 @@ html, body{ background:var(--bg-primary) !important; color:var(--text-main) !imp
     dispatch('filtersChanged', getFilterValues());
   });
 </script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
 
 <script>
@@ -793,7 +827,10 @@ k.innerHTML = [
     <div class="chart-container"><h3 class="section-title">累積収益推移</h3><div class="chart-canvas-container"><canvas id="profitChart"></canvas></div></div>
     <div class="chart-container"><h3 class="section-title">収益分布ヒストグラム</h3><div class="chart-canvas-container"><canvas id="distributionChart"></canvas></div></div>`;
 
-  createProfitChart(d); createDistributionChart(d);
+createProfitChart(d);
+createDistributionChart(d);
+// 数字と単位の見た目を整える
+if (window.enhanceNumericTypography) enhanceNumericTypography();
 }
 
 function createProfitChart(d){
@@ -830,7 +867,35 @@ function createDistributionChart(d){
   });
   activeCharts.push(chart);
 }
+function enhanceNumericTypography(){
+  const targets = document.querySelectorAll('.metric-value, .delta-value, #detailsSection b');
 
+  targets.forEach(el=>{
+    if(el.querySelector('.num')) return; // 二重適用防止
+    const t = (el.textContent || '').trim();
+    if(!t) return;
+
+    // ① 時間表記（例: 2時間15分）を優先
+    const time = t.match(/^\s*(\d+)\s*時間\s*(\d+)\s*分\s*$/);
+    if(time){
+      el.innerHTML =
+        `<span class="num">${time[1]}</span><span class="unit">時間</span>`+
+        `<span class="num">${time[2]}</span><span class="unit">分</span>`;
+      return;
+    }
+
+    // ② 一般数値（通貨記号/符号/全角マイナスも許容）
+    const m = t.match(/^\s*(?:[¥$€]\s*)?([+\-−]?\d{1,3}(?:,\d{3})*(?:\.\d+)?|[+\-−]?\d+(?:\.\d+)?)(.*)$/);
+    if(!m) return;
+
+    const value = (m[1] || '').replace('−','-'); // 全角マイナスを半角へ
+    const unit  = (m[2] || '').trim();
+
+    el.innerHTML =
+      `<span class="num">${value}</span>` +
+      (unit ? `<span class="unit">${unit}</span>` : '');
+  });
+}
 /* ===== 起動 & ヘッダー連携 ===== */
 window.addEventListener('DOMContentLoaded', ()=>{
   // ダミーの累積生成
@@ -861,8 +926,8 @@ document.addEventListener('tabChanged', (e)=>{
 document.addEventListener('themeChanged', ()=>{ if(currentData) renderAnalysis(); });
 new MutationObserver(()=>{ if(currentData) renderAnalysis(); })
   .observe(document.documentElement, { attributes:true, attributeFilter:['class'] });
-</script>
 
+</script>
 
 
 <script>
