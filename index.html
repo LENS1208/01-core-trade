@@ -28,7 +28,7 @@
     --bg-tertiary:#0c1a2b;     /* ← 直近改善度など外枠パネルの“濃いグレー” */
 
     /* Borders / elevation */
-    --border-color:#2A2F36;    /* ← 汎用の境界線 */
+    --border-color:#3A4450;    /* ← 汎用の境界線 */
     --card-border:#2A2F36;     /* ← カードの境界線（1px） */
     --card-shadow:0 2px 8px rgba(0,0,0,.45);
     --hover-shadow:0 8px 24px rgba(0,200,255,.15);
@@ -313,7 +313,23 @@
 /* 正負の数値は既存の色を維持 */
 .trade-app .metric-value.positive .num{ color: var(--positive-color) !important; }
 .trade-app .metric-value.negative .num{ color: var(--negative-color) !important; }
-  </style>
+
+/* 左カラムのメニュー囲み線を削除（外枠＆区切り線） */
+.sidebar{
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent;
+}
+
+/* メニュー内の水平区切り線も不要ならオフ */
+.menu-separator{
+  border-top: none !important;
+}
+.tl-num{
+  font-variant-numeric: tabular-nums lining-nums;
+  font-feature-settings: 'tnum' 1,'lnum' 1;
+}
+</style>
 </head>
 
 <body>
