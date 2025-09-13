@@ -49,6 +49,8 @@
     /* Charts */
     --chart-grid-color:rgba(255,255,255,.2);
     --chart-text-color:#A7AFB7;
+    --section-title-gap:16px;    /* default (mobile) */
+    --section-title-gap-lg:18px; /* >=768px */
   }
 
   /* ライトテーマ時の上書き（必要最低限。詳細はプロダクトに合わせて調整） */
@@ -134,6 +136,12 @@
     border:1px solid var(--border-color);
     display:flex;align-items:center;cursor:pointer;padding:0 2px;box-sizing:border-box;
   }
+/* widen title/content spacing on larger screens */
+@media (min-width:768px){
+  .trade-app .section-title{
+    margin-bottom: var(--section-title-gap-lg,18px);
+  }
+}
   .theme-toggle .toggle-thumb{
     width:28px;height:28px;border-radius:50%;
     background:#fff;color:#111;display:flex;align-items:center;justify-content:center;
@@ -204,7 +212,12 @@
    * TRADE APP（カードやパネル）
    * =======================================================*/
   .trade-app{ padding:20px; color:var(--text-main); width:100%; }
-  .trade-app .section-title,
+  .trade-app .section-title{
+    font-size:1rem;
+    font-weight:700;
+    margin:0 0 var(--section-title-gap,16px);
+    color:var(--text-main, #e0e0e0);
+  }
   .trade-app h1,.trade-app h2,.trade-app h3,.trade-app h4{ color:var(--text-heading); }
 
   .trade-app .analysis-section{ display:grid; gap:20px; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); }
