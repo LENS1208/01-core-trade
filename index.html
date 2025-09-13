@@ -7,26 +7,57 @@
   <title>FX取引分析ツール - 安定版</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    :root{
-      --bg-primary:#121212;
-      --bg-secondary:#181818;
-      --bg-tertiary:#232323;
-      --border-color:#373737;
-      --positive-color:#00c8ff;
-      --negative-color:#F2994A;
-      --text-main:#e0e0e0;
-      --text-sub:#aaa;
-    }
-    html.light{
-      --bg-primary:#121212;
-      --bg-secondary:#ffffff;
-      --bg-tertiary:#f1f1f1;
-      --border-color:#d0d0d0;
-      --positive-color:#006ad4;
-      --negative-color:#F2994A;
-      --text-main:#202124;
-      --text-sub:#5f6368;
-    }
+/* === Unified Theme Tokens (dark-first) === */
+:root{
+  --bg-primary:#121212;
+  --bg-secondary:#181a1b;
+  --bg-tertiary:#232627;
+  --border-color:#303335;
+  --text-main:#e5e7eb;
+  --text-sub:#a0a7af;
+
+  --positive-color:#00c8ff;
+  --negative-color:#F2994A;
+  --neutral-color:#6b7280;
+
+  --card-bg:#181a1b;
+  --card-border:#303335;
+  --card-shadow:0 2px 8px rgba(0,0,0,.45);
+  --hover-shadow:0 8px 24px rgba(0,200,255,.15);
+
+  --chart-grid-color:rgba(255,255,255,.2);
+  --chart-text-color:#a0a7af;
+}
+html.light{
+  --bg-primary:#f6f7fb;
+  --bg-secondary:#ffffff;
+  --bg-tertiary:#f1f3f5;
+  --border-color:#dfe3e8;
+  --text-main:#1f2937;
+  --text-sub:#606b77;
+
+  --positive-color:#0a6cff;
+  --negative-color:#e53935;
+  --neutral-color:#6b7280;
+
+  --card-bg:#ffffff;
+  --card-border:#e6ebf0;
+  --card-shadow:0 2px 8px rgba(0,0,0,.06);
+  --hover-shadow:0 8px 24px rgba(0,0,0,.1);
+
+  --chart-grid-color:rgba(0,0,0,.1);
+  --chart-text-color:#4b5563;
+}
+/* Header / content alias variables */
+:root, html.light{
+  --bg: var(--bg-primary);
+  --panel: var(--bg-secondary);
+  --surface: var(--bg-tertiary);
+  --fg: var(--text-main);
+  --fg-muted: var(--text-sub);
+  --text-primary: var(--text-main);
+  --text-secondary: var(--text-sub);
+}
 
     *{margin:0;padding:0;box-sizing:border-box;}
     body{font-family:'Segoe UI','Hiragino Sans','Yu Gothic UI',system-ui,sans-serif;background:var(--bg-primary);color:var(--text-main);min-height:100vh;transition:background .3s,color .3s;}
