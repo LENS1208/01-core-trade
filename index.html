@@ -133,6 +133,25 @@
     .trade-app ::-webkit-scrollbar-track{ background:var(--bg-tertiary, #232323) }
     .trade-app ::-webkit-scrollbar-thumb{ background:var(--border-color, #373737); border-radius:4px }
     .trade-app ::-webkit-scrollbar-thumb:hover{ background:var(--text-sub, #aaa) }
+/* ★ 追加: 勝ち負け詳細分布を100%幅のセクションに */
+.trade-app .stats-section{
+  background:var(--bg-tertiary, #232323);
+  border:1px solid var(--border-color, #373737);
+  border-radius:12px;
+  box-shadow:var(--card-shadow, 0 2px 8px rgba(0,0,0,.4));
+  padding:20px;
+  margin:24px 0;
+}
+
+/* 中の2枚カードを横並び→狭い画面では縦並び */
+.trade-app .stats-grid{
+  display:grid;
+  grid-template-columns:repeat(2, minmax(0, 1fr));
+  gap:24px;
+}
+@media (max-width: 860px){
+  .trade-app .stats-grid{ grid-template-columns:1fr; }
+}
   </style>
 
 
@@ -724,17 +743,17 @@ k.innerHTML = [
    </div>`,
   `<div class="metric-card">
      <div class="metric-card-header"><h3>総収益</h3><div class="help-icon" onclick="showHelp('totalProfit')">?</div></div>
-     <div class="metric-value `+(d.kpi.totalProfit>=0?'positive':'negative')+`">¥`+Math.round(d.kpi.totalProfit).toLocaleString()+`</div>
+     <div class="metric-value `+(d.kpi.totalProfit>=0?'positive':'negative')+`">`+Math.round(d.kpi.totalProfit).toLocaleString()+`円</div>
      <div class="metric-subtitle">全取引の合計収益</div>
    </div>`,
   `<div class="metric-card">
      <div class="metric-card-header"><h3>平均利益</h3><div class="help-icon" onclick="showHelp('avgProfit')">?</div></div>
-     <div class="metric-value positive">¥`+Math.round(d.kpi.avgProfit).toLocaleString()+`</div>
+     <div class="metric-value positive">`+Math.round(d.kpi.avgProfit).toLocaleString()+`円</div>
      <div class="metric-subtitle">勝ちトレード平均</div>
    </div>`,
   `<div class="metric-card">
      <div class="metric-card-header"><h3>平均損失</h3><div class="help-icon" onclick="showHelp('avgLoss')">?</div></div>
-     <div class="metric-value negative">¥`+Math.round(Math.abs(d.kpi.avgLoss)).toLocaleString()+`</div>
+     <div class="metric-value negative">`+Math.round(Math.abs(d.kpi.avgLoss)).toLocaleString()+`円</div>
      <div class="metric-subtitle">負けトレード平均</div>
    </div>`,
   `<div class="metric-card">
@@ -744,7 +763,7 @@ k.innerHTML = [
    </div>`,
   `<div class="metric-card">
      <div class="metric-card-header"><h3>期待値</h3><div class="help-icon" onclick="showHelp('expectedValue')">?</div></div>
-     <div class="metric-value `+(d.kpi.expectedValue>=0?'positive':'negative')+`">¥`+Math.round(d.kpi.expectedValue).toLocaleString()+`/件</div>
+     <div class="metric-value `+(d.kpi.expectedValue>=0?'positive':'negative')+`">`+Math.round(d.kpi.expectedValue).toLocaleString()+`円/件</div>
      <div class="metric-subtitle">1取引あたりの平均期待収益</div>
    </div>`,
   `<div class="metric-card">
@@ -774,7 +793,7 @@ k.innerHTML = [
               <h4>EV Δ（円/件）</h4>
               <div class="help-icon" onclick="showHelp('ev'); event.stopPropagation(); return false;">?</div>
             </div>
-            <div class="delta-value ${cls(x.expectedValue)}">${sign(x.expectedValue)}¥${Math.round(Math.abs(x.expectedValue)).toLocaleString()}</div>
+            <div class="delta-value ${cls(x.expectedValue)}">${sign(x.expectedValue)}${Math.round(Math.abs(x.expectedValue)).toLocaleString()}円</div>
             <div class="sparkline-container"><div id="sparkline-ev"></div></div>
           </div>
           <div class="delta-card" onclick="showDeltaDetail('winRate')">
@@ -796,32 +815,63 @@ k.innerHTML = [
     drawSparkline('sparkline-wr', generateSparklineData(x.winRate),           x.winRate>0?POS:x.winRate<0?NEG:NEU);
   }
 
-  document.getElementById('detailsSection').innerHTML = `
-    <div class="chart-container">
-      <h3 class="section-title">勝ち負け詳細分布</h3>
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px">
-        <div>
-          <h4 class="positive" style="margin-bottom:10px">勝ちトレード統計</h4>
-          <div style="line-height:1.8">
-            <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span>取引回数</span><b>${win}回</b></div>
-            <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span>総利益額</span><b class="positive">¥${Math.round(win*d.kpi.avgProfit).toLocaleString()}</b></div>
-            <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span>平均利益</span><b>¥${Math.round(d.kpi.avgProfit).toLocaleString()}</b></div>
-            <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span>最大利益</span><b class="positive">¥${d.pareto.top[0].toLocaleString()}</b></div>
-            <div style="display:flex; justify-content:space-between;"><span>最小利益</span><b>¥${d.pareto.top[4].toLocaleString()}</b></div>
-          </div>
+document.getElementById('detailsSection').innerHTML = `
+  <div class="stats-section">
+    <h3 class="section-title">勝ち負け詳細分布</h3>
+
+    <div class="stats-grid">
+      <!-- 勝ち -->
+      <div class="metric-card">
+        <div class="metric-card-header">
+          <h3 class="positive">勝ちトレード統計</h3>
         </div>
-        <div>
-          <h4 class="negative" style="margin-bottom:10px">負けトレード統計</h4>
-          <div style="line-height:1.8">
-            <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span>取引回数</span><b>${lose}回</b></div>
-            <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span>総損失額</span><b class="negative">¥${Math.round(Math.abs(lose*d.kpi.avgLoss)).toLocaleString()}</b></div>
-            <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span>平均損失</span><b>¥${Math.round(Math.abs(d.kpi.avgLoss)).toLocaleString()}</b></div>
-            <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span>最大損失</span><b class="negative">¥${Math.abs(d.pareto.bottom[0]).toLocaleString()}</b></div>
-            <div style="display:flex; justify-content:space-between;"><span>最小損失</span><b>¥${Math.abs(d.pareto.bottom[4]).toLocaleString()}</b></div>
+        <div style="line-height:1.8">
+          <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+            <span>取引回数</span><b>${win}回</b>
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+            <span>総利益額</span><b class="positive">${Math.round(win*d.kpi.avgProfit).toLocaleString()}円</b>
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+            <span>平均利益</span><b>${Math.round(d.kpi.avgProfit).toLocaleString()}円</b>
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+            <span>最大利益</span><b class="positive">${d.pareto.top[0].toLocaleString()}円</b>
+          </div>
+          <div style="display:flex;justify-content:space-between;">
+            <span>最小利益</span><b>${d.pareto.top[4].toLocaleString()}円</b>
           </div>
         </div>
       </div>
-    </div>`;
+
+      <!-- 負け -->
+      <div class="metric-card">
+        <div class="metric-card-header">
+          <h3 class="negative">負けトレード統計</h3>
+        </div>
+        <div style="line-height:1.8">
+          <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+            <span>取引回数</span><b>${lose}回</b>
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+            <span>総損失額</span><b class="negative">${Math.round(Math.abs(lose*d.kpi.avgLoss)).toLocaleString()}円</b>
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+            <span>平均損失</span><b>${Math.round(Math.abs(d.kpi.avgLoss)).toLocaleString()}円</b>
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+            <span>最大損失</span><b class="negative">${Math.abs(d.pareto.bottom[0]).toLocaleString()}円</b>
+          </div>
+          <div style="display:flex;justify-content:space-between;">
+            <span>最小損失</span><b>${Math.abs(d.pareto.bottom[4]).toLocaleString()}円</b>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>`;
+
+
+
 
   document.getElementById('chartsSection').innerHTML = `
     <div class="chart-container"><h3 class="section-title">累積収益推移</h3><div class="chart-canvas-container"><canvas id="profitChart"></canvas></div></div>
@@ -843,7 +893,7 @@ function createProfitChart(d){
           datasets:[{label:'累積収益',data:d.charts.cumulative,borderColor:POS,backgroundColor:POS+'20',tension:.1,pointRadius:0,borderWidth:2}]},
     options:{responsive:true,maintainAspectRatio:true,aspectRatio:2.5,plugins:{legend:{display:false}},
       scales:{x:{title:{display:true,text:'取引番号',color:TXT},ticks:{color:TXT,maxTicksLimit:10},grid:{color:GRID}},
-              y:{title:{display:true,text:'累積収益 (¥)',color:TXT},ticks:{color:TXT,callback:v=>'¥'+v.toLocaleString()},grid:{color:GRID}}}}
+              y:{title:{display:true,text:'累積収益（円）',color:TXT},ticks:{color:TXT,callback:v=>v.toLocaleString()+'円'},grid:{color:GRID}}}}
   });
   activeCharts.push(chart);
 }
