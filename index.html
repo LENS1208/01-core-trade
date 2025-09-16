@@ -56,26 +56,43 @@
   }
 
   /* ライトテーマ時の上書き（必要最低限。詳細はプロダクトに合わせて調整） */
-  html.light{
-    --bg-primary:#f6f7fb;
-    --bg-secondary:#ffffff;
-    --bg-tertiary:#f1f3f5;
+html.light{
+  /* 背景 */
+  --bg-primary:#f6f7fb;
+  --bg-secondary:#ffffff;
+  --bg-tertiary:#f3f4f6;
 
-    --border-color:#dfe3e8;
-    --card-border:#e6ebf0;
+  /* 枠線（フラットで明るめ） */
+  --border-color:#E5E7EB;
+  --card-border:#E5E7EB;
 
-    --text-main:#1f2937;
-    --text-heading:#111827;
-    --text-sub:#606b77;
+/* 影を使わない（全テーマ共通） */
+--card-shadow: none;
+--hover-shadow: none;
 
-    --positive-color:#0a6cff;
-    --negative-color:#E35B5B;
+  /* 文字（見出し > 本文 > 補助） */
+  --text-heading:#0F172A;  /* 見出し・中核数値 */
+  --text-main:#111827;     /* 本文 */
+  --text-sub:#475569;      /* 補助（従来より少し濃く） */
 
-    --card-bg:#ffffff;
+  /* 評価色 */
+  --positive-color:#0A6CFF;
+  --negative-color:#E35B5B;
+  --neutral-color:#334155; /* ニュートラル数値の基準色 */
 
-    --chart-grid-color:rgba(0,0,0,.1);
-    --chart-text-color:#4b5563;
-  }
+  /* カード地 */
+  --card-bg:#ffffff;
+
+  /* グラフ軸/グリッド */
+  --chart-text-color:#334155;
+  --chart-grid-color:#E5E7EB;
+}
+
+/* Light / Dark でロゴを出し分け */
+.logo .logo-dark{ display:block; }
+.logo .logo-light{ display:none; }
+html.light .logo .logo-dark{ display:none; }
+html.light .logo .logo-light{ display:block; }
 
   /* =========================================================
    * RESET / BASE
@@ -195,6 +212,12 @@
   .menu-item.active{color:#fff;font-weight:700;}
   .menu-separator{border-top:1px solid var(--border-color);margin:8px 0;width:100%;}
 
+/* Light：選択中は黒＆太字 */
+html.light .menu-item.active{
+  color: var(--text-heading); /* = #111827 */
+  font-weight: 700;
+}
+
   /* メイン面（地の色を統一。枠線は不要なら外す） */
   .main-area{
     flex:1;min-height:400px;display:flex;align-items:flex-start;justify-content:flex-start;
@@ -268,6 +291,29 @@
     font-variant-numeric: tabular-nums lining-nums;
     font-feature-settings: 'tnum' 1,'lnum' 1;
   }
+
+/* Light：ニュートラル評価の数値は濃色＆少し強めに */
+html.light .trade-app .metric-value.neutral .num,
+html.light .trade-app .delta-value.neutral .num{
+  color: var(--text-heading); /* = #111827 */
+  font-weight: 700;
+}
+
+/* ニュートラル（良し悪しでない）数値の可読性を上げる */
+.trade-app .metric-card .metric-value:not(.positive):not(.negative) .num,
+.trade-app .delta-card  .delta-value:not(.positive):not(.negative) .num,
+.trade-app .metric-value.neutral .num,
+.trade-app .delta-value.neutral .num {
+  color: var(--text-main) !important;  /* ライト=濃い文字色 / ダーク=本文色 */
+  font-weight: 700;
+}
+
+/* 単位は控えめの色で */
+.trade-app .metric-card .metric-value .unit,
+.trade-app .delta-card  .delta-value .unit {
+  color: var(--text-sub);
+}
+
   .trade-app .metric-value .num,
   .trade-app .delta-value .num{
     font-size: clamp(24px, 3vw, 32px);
@@ -277,6 +323,27 @@
   .trade-app .delta-value .unit{
     font-size: 12px; color: var(--text-sub); font-weight: 600;
   }
+
+/* 見出しは一段強い色で */
+.trade-app .section-title,
+.trade-app .metric-card h3{
+  color: var(--text-heading, var(--text-main));
+}
+
+/* 数値の色ロジック（ニュートラル強化） */
+.trade-app .metric-value .num,
+.trade-app .delta-value .num{
+  color: var(--text-heading); /* デフォは読みやすい濃さ */
+}
+.trade-app .metric-value.positive .num,
+.trade-app .delta-value.positive .num{ color: var(--positive-color); }
+
+.trade-app .metric-value.negative .num,
+.trade-app .delta-value.negative .num{ color: var(--negative-color); }
+
+.trade-app .metric-value.neutral .num,
+.trade-app .delta-value.neutral .num{ color: var(--neutral-color); }
+}
 
   /* ヘルプアイコン */
   .trade-app .help-icon{
@@ -304,18 +371,6 @@
   box-shadow: var(--card-shadow);
 }
 
-/* --- “3時間45分” などの数値を少し明るく --- */
-/* 数値用のやや明るい色（必要ならここで調整） */
-:root{ --numeric-emphasis:#E6EEF6; }  /* ほんのり明度UP */
-
-.trade-app .metric-value.neutral .num,
-.trade-app .delta-value .num{
-  color: var(--numeric-emphasis) !important;
-}
-/* 正負の数値は既存の色を維持 */
-.trade-app .metric-value.positive .num{ color: var(--positive-color) !important; }
-.trade-app .metric-value.negative .num{ color: var(--negative-color) !important; }
-
 /* 左カラムのメニュー囲み線を削除（外枠＆区切り線） */
 .sidebar{
   border: none !important;
@@ -331,6 +386,41 @@
   font-variant-numeric: tabular-nums lining-nums;
   font-feature-settings: 'tnum' 1,'lnum' 1;
 }
+
+/* === FIX: カードの影とホバー効果をオフ（Light/Dark共通） === */
+.trade-app .metric-card,
+.trade-app .metric-card:hover,
+.trade-app .delta-card,
+.trade-app .recent-delta-section,
+.trade-app .chart-container{
+  box-shadow: none !important;
+  transform: none !important;
+}
+/* === FIX: ニュートラル数値の可読性（Lightは黒系、Darkはやや濃いグレー） === */
+:root{        --neutral-number-color: var(--neutral-color); }   /* Dark基準 */
+html.light{   --neutral-number-color: var(--text-heading); }    /* Lightは最も読みやすい濃さ */
+
+.trade-app .metric-value .num,
+.trade-app .delta-value .num{ color: var(--text-heading); }     /* デフォは濃色 */
+
+.trade-app .metric-value.neutral .num,
+.trade-app .delta-value.neutral .num{
+  color: var(--neutral-number-color);
+  font-weight: 700;  /* 数値らしくやや強め */
+}
+
+.trade-app .metric-value.positive .num,
+.trade-app .delta-value.positive .num{ color: var(--positive-color); }
+
+.trade-app .metric-value.negative .num,
+.trade-app .delta-value.negative .num{ color: var(--negative-color); }
+
+/* 勝ち/負けトレード統計の数値（<b>）も読みやすく */
+#detailsSection b {
+  color: var(--text-main);
+  font-weight: 700;
+}
+
 </style>
 </head>
 
@@ -344,7 +434,10 @@
 
   <!-- ▼ ロゴ＋フィルター -->
   <div class="filters-header">
-    <div class="logo"><img src="https://lens1208.github.io/assets-logo-/algo-logo-web-b.png" alt="AlgoStream Logo" /></div>
+    <div class="logo">
+  <img class="logo-dark"  src="https://lens1208.github.io/assets-logo-/algo-logo-web-b.png" alt="AlgoStream Logo" />
+  <img class="logo-light" src="https://lens1208.github.io/assets-logo-/algo-logo-web-w.png" alt="AlgoStream Logo" />
+</div>
     <div class="filters-grid">
       <select class="filter-select" id="currencyFilter">
         <option value="all">通貨ペア</option>
