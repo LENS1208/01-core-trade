@@ -6,422 +6,329 @@
   <title>FX取引分析ツール - 安定版</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <style>
-  /* =========================================================
-   * THEME TOKENS（色はここだけ触れば全体に反映されます）
-   * ---------------------------------------------------------
-   * ■ダーク基調（既定）
-   *   - ページ地：--bg-primary …… #010e21
-   *   - パネル地：--bg-tertiary …… 直近改善度や外枠の“濃いグレー”
-   *   - 小カード：--card-bg …… 直近改善度の内側やミニカードの“黒”
-   *   - 枠線色：--card-border / --border-color …… 1px #2A2F36
-   *   - 文字色：--text-main（本文 #C9D0D6）/ --text-heading（見出し #DCE2E7）
-   *   - 強調色：--positive-color（青）/ --negative-color（オレンジ）
-   * 
-   * ■ライト基調（html.light が付与された時のみ有効）
-   *   - プロダクト要件次第で細かく調整してください
-   * =======================================================*/
-  :root{
-    /* Base backgrounds */
-    --bg-primary:#010e21;      /* ← ページ/ヘッダー/左カラム/メインの“地” */
-    --bg-secondary:#010e21;    /* ← サーフェス（主に面）も同色で統一 */
-    --bg-tertiary:#0c1a2b;     /* ← 直近改善度など外枠パネルの“濃いグレー” */
+<style>
+/* =========================
+ * THEME TOKENS（全体の色/余白）
+ * ========================= */
+:root{
+  /* surfaces */
+  --bg-primary:#010e21;   /* ページ地/ヘッダー/メイン */
+  --bg-panel:#0c1a2b;     /* セクション容器（外枠） */
+  --bg-card:#010e21;      /* 小カード（直近改善度の内側など） */
 
+  /* borders / radius / space */
+  --border-color:#525960;
+  --card-border:#393c3f;
+  --radius-lg:12px;
+  --space:20px;
+  --title-gap:16px;
 
+  /* text */
+  --text-main:#C9D0D6;
+  --text-heading:#DCE2E7;
+  --text-sub:#A7AFB7;
 
-    /* Borders / elevation */
-    --border-color:#3A4450;    /* ← 汎用の境界線 */
-    --card-border:#2A2F36;     /* ← カードの境界線（1px） */
-    --card-shadow:0 2px 8px rgba(0,0,0,.45);
-    --hover-shadow:0 8px 24px rgba(0,200,255,.15);
+  /* accents */
+  --positive-color:#00c8ff;
+  --negative-color:#E35B5B;
+  --neutral-color:#6b7280;
 
-    /* Texts */
-    --text-main:#C9D0D6;       /* ← 本文の既定色（以前の #A7AFB7 から引き上げ） */
-    --text-heading:#DCE2E7;    /* ← 見出し用の明るい色 */
-    --text-sub:#A7AFB7;        /* ← 補助テキスト。薄めのまま維持 */
+  /* charts */
+  --chart-grid-color:rgba(255,255,255,.2);
+  --chart-text-color:#A7AFB7;
+}
 
-    /* Accents */
-    --positive-color:#00c8ff;
-    --negative-color:#E35B5B;
-    --neutral-color:#6b7280;
-
-    /* Inner-card background（直近改善度の小カード等の黒） */
-    --card-bg:#010e21;
-
-    /* Charts */
-    --chart-grid-color:rgba(255,255,255,.2);
-    --chart-text-color:#A7AFB7;
-    --section-title-gap:16px;    /* default (mobile) */
-    --section-title-gap-lg:18px; /* >=768px */
-  }
-
-  /* ライトテーマ時の上書き（必要最低限。詳細はプロダクトに合わせて調整） */
+/* Light theme overrides */
 html.light{
-  /* 背景 */
   --bg-primary:#f6f7fb;
-  --bg-secondary:#ffffff;
-  --bg-tertiary:#f3f4f6;
+  --bg-panel:#f3f4f6;
+  --bg-card:#ffffff;
 
-  /* 枠線（フラットで明るめ） */
-  --border-color:#E5E7EB;
-  --card-border:#E5E7EB;
+  --border-color:#afafaf;
+  --card-border:#c4c4c4;
 
-/* 影を使わない（全テーマ共通） */
---card-shadow: none;
---hover-shadow: none;
+  --text-main:#111827;
+  --text-heading:#0F172A;
+  --text-sub:#475569;
 
-  /* 文字（見出し > 本文 > 補助） */
-  --text-heading:#0F172A;  /* 見出し・中核数値 */
-  --text-main:#111827;     /* 本文 */
-  --text-sub:#475569;      /* 補助（従来より少し濃く） */
-
-  /* 評価色 */
   --positive-color:#0A6CFF;
   --negative-color:#E35B5B;
-  --neutral-color:#334155; /* ニュートラル数値の基準色 */
+  --neutral-color:#334155;
 
-  /* カード地 */
-  --card-bg:#ffffff;
-
-  /* グラフ軸/グリッド */
-  --chart-text-color:#334155;
   --chart-grid-color:#E5E7EB;
+  --chart-text-color:#334155;
 }
 
-/* Light / Dark でロゴを出し分け */
-.logo .logo-dark{ display:block; }
-.logo .logo-light{ display:none; }
-html.light .logo .logo-dark{ display:none; }
-html.light .logo .logo-light{ display:block; }
+/* ロゴの出し分け */
+.logo .logo-dark{display:block;}
+.logo .logo-light{display:none;}
+html.light .logo .logo-dark{display:none;}
+html.light .logo .logo-light{display:block;}
 
-  /* =========================================================
-   * RESET / BASE
-   * =======================================================*/
-  *{margin:0;padding:0;box-sizing:border-box;}
-  body{
-    font-family:'Segoe UI','Hiragino Sans','Yu Gothic UI',system-ui,sans-serif;
-    background:var(--bg-primary);
-    color:var(--text-main);
-    min-height:100vh;
-    transition:background .3s,color .3s;
-  }
-
-  /* =========================================================
-   * HEADER（フィルター行）
-   * =======================================================*/
-  .filters-header{
-    padding:12px 20px;
-    background:var(--bg-primary);
-    border-bottom:1px solid var(--border-color);
-    display:flex;align-items:center;gap:16px;justify-content:flex-start;
-  }
-  .logo{cursor:pointer;}
-  .logo img{display:block;width:100px;height:auto;}
-
-  .filters-grid{flex:1;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
-  .filter-select{
-    background:var(--bg-tertiary);
-    border:1px solid var(--border-color);
-    border-radius:4px;
-    color:var(--text-main);
-    font-size:12px;
-    padding:6px 10px;
-    height:32px;
-    transition:.2s;
-    width:160px;max-width:160px;
-  }
-  .filter-select:focus{outline:none;border-color:var(--positive-color);}
-  .filter-select:hover{border-color:var(--text-sub);}
-  .filter-select option{background:var(--bg-tertiary);color:var(--text-main);}
-
-  .filter-actions{display:flex;gap:8px;justify-content:flex-end;align-items:center;}
-  .filter-btn{
-    display:inline-flex;align-items:center;justify-content:center;
-    min-height:32px;padding:6px 12px;border:none;border-radius:4px;
-    background:linear-gradient(90deg,#0099dd,#0a6cff);color:#fff;
-    font-size:12px;font-weight:600;cursor:pointer;transition:.2s;
-  }
-  .filter-btn:hover{opacity:.9;transform:translateY(-1px);}
-  .filter-btn.secondary{
-    background:transparent;color:var(--text-sub);
-    border:1px dashed var(--border-color);font-weight:500;
-  }
-  .filter-btn.secondary:hover{color:var(--text-main);border-style:solid;}
-
-  .header-right{margin-left:auto;display:flex;align-items:center;}
-  .theme-toggle{
-    width:54px;height:32px;border-radius:16px;
-    background:var(--bg-tertiary);
-    border:1px solid var(--border-color);
-    display:flex;align-items:center;cursor:pointer;padding:0 2px;box-sizing:border-box;
-  }
-/* widen title/content spacing on larger screens */
-@media (min-width:768px){
-  .trade-app .section-title{
-    margin-bottom: var(--section-title-gap-lg,18px);
-  }
+/* =========================
+ * RESET / BASE
+ * ========================= */
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  font-family:'Segoe UI','Hiragino Sans','Yu Gothic UI',system-ui,sans-serif;
+  background:var(--bg-primary);
+  color:var(--text-main);
+  min-height:100vh;
+  transition:background .3s,color .3s;
 }
-  .theme-toggle .toggle-thumb{
-    width:28px;height:28px;border-radius:50%;
-    background:#fff;color:#111;display:flex;align-items:center;justify-content:center;
-    transition:transform .25s ease;
-  }
-  html.light .theme-toggle{background:#d9d9d9;}
-  html.light .theme-toggle .toggle-thumb{transform:translateX(22px);}
 
-  /* =========================================================
-   * LAYOUT（左カラム／メイン面）
-   * =======================================================*/
-  .app-layout{display:flex;align-items:flex-start;gap:16px;margin:16px;}
-  .sidebar{
-    width:220px;flex:0 0 220px;display:flex;flex-direction:column;gap:16px;
-    background:var(--bg-primary);         /* ← 地の色 #010e21 */
-    border:1px solid var(--border-color); /* ← 1px #2A2F36 */
-    border-radius:12px;
-  }
-  .sidebar-top{display:flex;flex-direction:column;gap:12px;}
-  .upload-wrapper{position:relative;}
-  .upload-btn{
-    display:inline-flex;align-items:center;justify-content:center;min-height:32px;
-    background:linear-gradient(90deg,#0099dd,#0a6cff);color:#fff;border:none;border-radius:4px;
-    font-size:13px;font-weight:600;padding:6px 12px;cursor:pointer;transition:.2s;
-  }
-  .upload-btn:hover{opacity:.9;transform:translateY(-1px);}
-  .file-input{display:none;}
-  .file-info{
-    position:absolute;top:100%;left:0;
-    background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:4px;
-    padding:6px 10px;font-size:11px;color:var(--text-sub);margin-top:5px;white-space:nowrap;z-index:10;
-  }
+/* =========================
+ * HEADER（フィルター行）
+ * ========================= */
+.filters-header{
+  padding:12px 20px;
+  background:var(--bg-primary);
+  border-bottom:1px solid var(--border-color);
+  display:flex;align-items:center;gap:16px;justify-content:flex-start;
+}
+.logo{cursor:pointer;}
+.logo img{display:block;width:100px;height:auto;}
 
-  .demo-section{display:flex;align-items:center;gap:6px;}
-  .demo-label{font-size:12px;color:var(--text-sub);}
-  .demo-buttons{display:flex;gap:6px;}
-  .demo-btn{
-    background:var(--bg-tertiary);color:var(--text-main);
-    border:1px solid var(--border-color);border-radius:4px;
-    font-size:12px;font-weight:600;width:26px;height:26px;
-    display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.2s;
-  }
-  .demo-btn:hover{background:var(--bg-secondary);border-color:var(--text-sub);}
-  .demo-btn.active{background:var(--positive-color);border-color:var(--positive-color);color:#fff;}
+.filters-grid{flex:1;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.filter-select{
+  background:var(--bg-panel);
+  border:1px solid var(--border-color);
+  border-radius:4px;
+  color:var(--text-main);
+  font-size:12px;
+  padding:6px 10px;
+  height:32px;
+  width:160px;max-width:160px;
+  transition:.2s;
+}
+.filter-select:focus{outline:none;border-color:var(--positive-color);}
+.filter-select:hover{border-color:var(--text-sub);}
+.filter-select option{background:var(--bg-panel);color:var(--text-main);}
 
-  .menu{display:flex;flex-direction:column;align-items:flex-start;}
-  .menu-item{padding:10px 0;font-size:14px;color:var(--text-sub);cursor:pointer;transition:.15s;}
-  .menu-item:hover{color:var(--text-main);}
-  .menu-item.active{color:#fff;font-weight:700;}
-  .menu-separator{border-top:1px solid var(--border-color);margin:8px 0;width:100%;}
+.filter-actions{display:flex;gap:8px;justify-content:flex-end;align-items:center;}
+.filter-btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-height:32px;padding:6px 12px;border:none;border-radius:4px;
+  background:linear-gradient(90deg,#0099dd,#0a6cff);color:#fff;
+  font-size:12px;font-weight:600;cursor:pointer;transition:.2s;
+}
+.filter-btn:hover{opacity:.9;transform:translateY(-1px);}
+.filter-btn.secondary{
+  background:transparent;color:var(--text-sub);
+  border:1px dashed var(--border-color);font-weight:500;
+}
+.filter-btn.secondary:hover{color:var(--text-main);border-style:solid;}
 
+.header-right{margin-left:auto;display:flex;align-items:center;}
+.theme-toggle{
+  width:54px;height:32px;border-radius:16px;
+  background:var(--bg-panel);
+  border:1px solid var(--border-color);
+  display:flex;align-items:center;cursor:pointer;padding:0 2px;
+}
+.theme-toggle .toggle-thumb{
+  width:28px;height:28px;border-radius:50%;
+  background:#fff;color:#111;display:flex;align-items:center;justify-content:center;
+  transition:transform .25s ease;
+}
+html.light .theme-toggle{background:#d9d9d9;}
+html.light .theme-toggle .toggle-thumb{transform:translateX(22px);}
+
+/* =========================
+ * LAYOUT（左カラム／メイン面）
+ * ========================= */
+.app-layout{display:flex;align-items:flex-start;gap:16px;margin:16px;}
+.sidebar{
+  width:220px;flex:0 0 220px;display:flex;flex-direction:column;gap:16px;
+  background:transparent;
+  border:none;  
+  border-radius:12px;
+}
+.sidebar-top{display:flex;flex-direction:column;gap:12px;}
+.upload-wrapper{position:relative;}
+.upload-btn{
+  display:inline-flex;align-items:center;justify-content:center;min-height:32px;
+  background:linear-gradient(90deg,#0099dd,#0a6cff);color:#fff;border:none;border-radius:4px;
+  font-size:13px;font-weight:600;padding:6px 12px;cursor:pointer;transition:.2s;
+}
+.upload-btn:hover{opacity:.9;transform:translateY(-1px);}
+.file-input{display:none;}
+.file-info{
+  position:absolute;top:100%;left:0;
+  background:var(--bg-panel);border:1px solid var(--border-color);border-radius:4px;
+  padding:6px 10px;font-size:11px;color:var(--text-sub);margin-top:5px;white-space:nowrap;z-index:10;
+}
+
+.demo-section{display:flex;align-items:center;gap:6px;}
+.demo-label{font-size:12px;color:var(--text-sub);}
+.demo-buttons{display:flex;gap:6px;}
+.demo-btn{
+  background:var(--bg-panel);color:var(--text-main);
+  border:1px solid var(--border-color);border-radius:4px;
+  font-size:12px;font-weight:600;width:26px;height:26px;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.2s;
+}
+.demo-btn:hover{background:var(--bg-primary);border-color:var(--text-sub);}
+.demo-btn.active{background:var(--positive-color);border-color:var(--positive-color);color:#fff;}
+
+.menu{display:flex;flex-direction:column;align-items:flex-start;}
+.menu-item{padding:10px 0;font-size:14px;color:var(--text-sub);cursor:pointer;transition:.15s;}
+.menu-item:hover{color:var(--text-main);}
+.menu-item.active{color:#fff;font-weight:700;}
+.menu-separator{border-top:1px solid var(--border-color);margin:8px 0;width:100%;}
 /* Light：選択中は黒＆太字 */
-html.light .menu-item.active{
-  color: var(--text-heading); /* = #111827 */
-  font-weight: 700;
+html.light .menu-item.active{color:var(--text-heading);font-weight:700;}
+
+.main-area{
+  flex:1;min-height:400px;display:flex;align-items:flex-start;justify-content:flex-start;
+  padding:20px;color:var(--text-sub);
+  background:var(--bg-primary);
+  border:none;border-radius:8px;
 }
 
-  /* メイン面（地の色を統一。枠線は不要なら外す） */
-  .main-area{
-    flex:1;min-height:400px;display:flex;align-items:flex-start;justify-content:flex-start;
-    padding:20px;color:var(--text-sub);
-    background:var(--bg-primary);
-    border:none;border-radius:8px;
-  }
-
-  @media (max-width:960px){
-    .app-layout{flex-direction:column;}
-    .sidebar{width:100%;flex-direction:row;overflow:auto;}
-    .sidebar-top{flex-direction:row;}
-    .menu{flex-direction:row;flex-wrap:wrap;}
-  }
-
-  /* =========================================================
-   * TRADE APP（カードやパネル）
-   * =======================================================*/
-  .trade-app{ padding:20px; color:var(--text-main); width:100%; }
-  .trade-app .section-title{
-    font-size:1rem;
-    font-weight:700;
-    margin:0 0 var(--section-title-gap,16px);
-    color:var(--text-main, #e0e0e0);
-  }
-  .trade-app h1,.trade-app h2,.trade-app h3,.trade-app h4{ color:var(--text-heading); }
-
-  .trade-app .analysis-section{ display:grid; gap:20px; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); }
-
-  /* 小カードは“黒”、外側パネルは“濃いグレー” */
-  .trade-app .metric-card,
-  .trade-app .delta-card,
-  .trade-app .stats-card{
-    background:var(--card-bg);
-    border:1px solid var(--card-border);
-    border-radius:12px; box-shadow:var(--card-shadow); padding:22px;
-  }
-  .trade-app .metric-card-header{ display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; }
-
-  .trade-app .recent-delta-section,
-  .trade-app .stats-section,
-  .trade-app .chart-container{
-    background:var(--bg-tertiary);
-    border:1px solid var(--border-color);
-    border-radius:12px; box-shadow:var(--card-shadow); padding:20px; margin:24px 0;
-  }
-
-  .trade-app .delta-card{ min-height:320px; display:flex; flex-direction:column; }
-  .trade-app .delta-card-header{ display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
-  .trade-app .delta-value{ font-size:2.1em; font-weight:800; margin:10px 0 14px; }
-
-  .trade-app .sparkline-container{
-    height:150px; background:var(--bg-tertiary); border-radius:8px; padding:14px;
-    display:flex; align-items:center; justify-content:center;
-  }
-
-  .trade-app .metric-subtitle{ font-size:.9em; color:var(--text-sub); margin-top:6px; }
-  .trade-app .positive{ color:var(--positive-color); }
-  .trade-app .negative{ color:var(--negative-color); }
-  .trade-app .neutral{ color:var(--neutral-color); }
-
-  /* 統計2カラム */
-  .trade-app .stats-grid{ display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:24px; }
-  @media (max-width:860px){ .trade-app .stats-grid{ grid-template-columns:1fr; } }
-  .trade-app .stats-row{ display:flex; justify-content:space-between; margin-bottom:8px; }
-
-  /* 数字の桁揃え（Tabular Lining） */
-  .trade-app .metric-value,
-  .trade-app .delta-value{
-    display:flex; align-items:baseline; gap:6px;
-    font-variant-numeric: tabular-nums lining-nums;
-    font-feature-settings: 'tnum' 1,'lnum' 1;
-  }
-
-/* Light：ニュートラル評価の数値は濃色＆少し強めに */
-html.light .trade-app .metric-value.neutral .num,
-html.light .trade-app .delta-value.neutral .num{
-  color: var(--text-heading); /* = #111827 */
-  font-weight: 700;
+@media (max-width:960px){
+  .app-layout{flex-direction:column;}
+  .sidebar{width:100%;flex-direction:row;overflow:auto;}
+  .sidebar-top{flex-direction:row;}
+  .menu{flex-direction:row;flex-wrap:wrap;}
 }
 
-/* ニュートラル（良し悪しでない）数値の可読性を上げる */
-.trade-app .metric-card .metric-value:not(.positive):not(.negative) .num,
-.trade-app .delta-card  .delta-value:not(.positive):not(.negative) .num,
-.trade-app .metric-value.neutral .num,
-.trade-app .delta-value.neutral .num {
-  color: var(--text-main) !important;  /* ライト=濃い文字色 / ダーク=本文色 */
-  font-weight: 700;
+/* =========================
+ * TRADE APP（カード/パネル/タイポ）
+ * ========================= */
+.trade-app{padding:20px;color:var(--text-main);width:100%;}
+
+/* 見出し（KPI/直近改善度/詳細分布 すべて統一） */
+.trade-app .section-title{
+  font-size:1rem;
+  font-weight:700;
+  margin:0 0 var(--title-gap);
+  color:var(--text-heading);
 }
 
-/* 単位は控えめの色で */
-.trade-app .metric-card .metric-value .unit,
-.trade-app .delta-card  .delta-value .unit {
-  color: var(--text-sub);
+/* KPIカード＝パネル色で統一（影なし） */
+.trade-app .metric-card{
+  background:var(--bg-panel);
+  border:1px solid var(--border-color);
+  border-radius:var(--radius-lg);
+  box-shadow:none;
+  padding:var(--space);
+}
+.trade-app .metric-card-header{
+  display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;
 }
 
-  .trade-app .metric-value .num,
-  .trade-app .delta-value .num{
-    font-size: clamp(24px, 3vw, 32px);
-    font-weight: 700; letter-spacing: .02em;
-  }
-  .trade-app .metric-value .unit,
-  .trade-app .delta-value .unit{
-    font-size: 12px; color: var(--text-sub); font-weight: 600;
-  }
-
-/* 見出しは一段強い色で */
-.trade-app .section-title,
-.trade-app .metric-card h3{
-  color: var(--text-heading, var(--text-main));
+/* 直近改善度/統計/チャートの容器（外枠） */
+.trade-app .recent-delta-section,
+.trade-app .stats-section,
+.trade-app .chart-container{
+  background:var(--bg-panel);
+  border:1px solid var(--border-color);
+  border-radius:var(--radius-lg);
+  box-shadow:none;
+  padding:var(--space);
+  margin:24px 0;
 }
 
-/* 数値の色ロジック（ニュートラル強化） */
+/* 直近改善度の内側カード（小カード＝濃いめ） */
+.trade-app .delta-card,
+.trade-app .stats-card{
+  background:var(--bg-card);
+  border:1px solid var(--card-border);
+  border-radius:var(--radius-lg);
+  box-shadow:none;
+  padding:var(--space);
+  min-height:320px;
+  display:flex;flex-direction:column;
+}
+.trade-app .delta-card-header{
+  display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;
+}
+.trade-app .delta-value{font-size:2.1em;font-weight:800;margin:10px 0 14px;}
+
+.trade-app .sparkline-container{
+  height:150px;background:var(--bg-panel);border-radius:8px;padding:14px;
+  display:flex;align-items:center;justify-content:center;
+}
+
+/* テキスト色のルール */
+.trade-app .metric-subtitle{font-size:.9em;color:var(--text-sub);margin-top:6px;}
+.trade-app .positive{color:var(--positive-color);}
+.trade-app .negative{color:var(--negative-color);}
+.trade-app .neutral{color:var(--neutral-color);}
+
+/* 数字の見た目（桁揃え & 強調） */
+.trade-app .metric-value,
+.trade-app .delta-value{
+  display:flex;align-items:baseline;gap:6px;
+  font-variant-numeric:tabular-nums lining-nums;
+  font-feature-settings:'tnum' 1,'lnum' 1;
+}
 .trade-app .metric-value .num,
 .trade-app .delta-value .num{
-  color: var(--text-heading); /* デフォは読みやすい濃さ */
+  font-size:clamp(24px,3vw,32px);
+  font-weight:700;letter-spacing:.02em;color:var(--text-heading);
 }
+.trade-app .metric-value .unit,
+.trade-app .delta-value .unit{font-size:12px;color:var(--text-sub);font-weight:600;}
+
+/* 正負/ニュートラルの色 */
 .trade-app .metric-value.positive .num,
-.trade-app .delta-value.positive .num{ color: var(--positive-color); }
-
+.trade-app .delta-value.positive .num{color:var(--positive-color);}
 .trade-app .metric-value.negative .num,
-.trade-app .delta-value.negative .num{ color: var(--negative-color); }
-
+.trade-app .delta-value.negative .num{color:var(--negative-color);}
 .trade-app .metric-value.neutral .num,
-.trade-app .delta-value.neutral .num{ color: var(--neutral-color); }
-}
+.trade-app .delta-value.neutral .num{color:var(--neutral-color);}
+html.light .trade-app .metric-value.neutral .num,
+html.light .trade-app .delta-value.neutral .num{color:var(--text-heading);}
 
-  /* ヘルプアイコン */
-  .trade-app .help-icon{
-    width:20px;height:20px;border-radius:50%;
-    background:var(--bg-tertiary);border:1px solid var(--border-color);
-    display:flex;align-items:center;justify-content:center;
-    cursor:pointer;color:var(--text-sub);font-size:12px;font-weight:700;
-    transition:background-color .2s,color .2s;
-  }
-  .trade-app .help-icon:hover{ background:var(--border-color); color:var(--text-main); }
+/* 勝ち負け統計 2カラム */
+.trade-app .stats-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;}
+@media (max-width:860px){.trade-app .stats-grid{grid-template-columns:1fr;}}
+.trade-app .stats-row{display:flex;justify-content:space-between;margin-bottom:8px;}
 
-  /* Chart area */
-  .trade-app .chart-canvas-container{ position:relative; height:400px; width:100%; overflow:hidden; }
-  .trade-app canvas{ max-width:100%; max-height:400px !important; }
-
-  /* スクロールバー（.trade-app 内のみ） */
-  .trade-app ::-webkit-scrollbar{ width:8px; height:8px }
-  .trade-app ::-webkit-scrollbar-track{ background:var(--bg-tertiary) }
-  .trade-app ::-webkit-scrollbar-thumb{ background:var(--border-color); border-radius:4px }
-  .trade-app ::-webkit-scrollbar-thumb:hover{ background:var(--text-sub) }
-/* --- KPIカードも外枠パネル色に統一（直近改善度／分布／チャート容器と同じ） --- */
-.trade-app .metric-card{
-  background: var(--bg-tertiary) !important;  /* 外枠パネルの濃いグレー */
-  border: 1px solid var(--border-color) !important;
-  box-shadow: var(--card-shadow);
-}
-
-/* 左カラムのメニュー囲み線を削除（外枠＆区切り線） */
-.sidebar{
-  border: none !important;
-  box-shadow: none !important;
-  background: transparent;
-}
-
-/* メニュー内の水平区切り線も不要ならオフ */
-.menu-separator{
-  border-top: none !important;
-}
-.tl-num{
-  font-variant-numeric: tabular-nums lining-nums;
-  font-feature-settings: 'tnum' 1,'lnum' 1;
-}
-
-/* === FIX: カードの影とホバー効果をオフ（Light/Dark共通） === */
+/* カードの影・変形は完全OFF（ブラー保険） */
 .trade-app .metric-card,
-.trade-app .metric-card:hover,
 .trade-app .delta-card,
+.trade-app .stats-card,
 .trade-app .recent-delta-section,
-.trade-app .chart-container{
-  box-shadow: none !important;
-  transform: none !important;
-}
-/* === FIX: ニュートラル数値の可読性（Lightは黒系、Darkはやや濃いグレー） === */
-:root{        --neutral-number-color: var(--neutral-color); }   /* Dark基準 */
-html.light{   --neutral-number-color: var(--text-heading); }    /* Lightは最も読みやすい濃さ */
+.trade-app .chart-container{box-shadow:none !important;transform:none !important;}
 
-.trade-app .metric-value .num,
-.trade-app .delta-value .num{ color: var(--text-heading); }     /* デフォは濃色 */
-
-.trade-app .metric-value.neutral .num,
-.trade-app .delta-value.neutral .num{
-  color: var(--neutral-number-color);
-  font-weight: 700;  /* 数値らしくやや強め */
+/* =========================
+ * GRID（KPIや小カードの並び）
+ * ========================= */
+.trade-app .analysis-section{
+  display:grid;gap:20px;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
 }
 
-.trade-app .metric-value.positive .num,
-.trade-app .delta-value.positive .num{ color: var(--positive-color); }
-
-.trade-app .metric-value.negative .num,
-.trade-app .delta-value.negative .num{ color: var(--negative-color); }
-
-/* 勝ち/負けトレード統計の数値（<b>）も読みやすく */
-#detailsSection b {
-  color: var(--text-main);
-  font-weight: 700;
+/* =========================
+ * HELP アイコン
+ * ========================= */
+.trade-app .help-icon{
+  width:20px;height:20px;border-radius:50%;
+  background:var(--bg-panel);border:1px solid var(--border-color);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:var(--text-sub);font-size:12px;font-weight:700;
+  transition:background-color .2s,color .2s;
 }
+.trade-app .help-icon:hover{background:var(--border-color);color:var(--text-main);}
 
+/* =========================
+ * CHART area
+ * ========================= */
+.trade-app .chart-canvas-container{position:relative;height:400px;width:100%;overflow:hidden;}
+.trade-app canvas{max-width:100%;max-height:400px !important;}
+
+/* =========================
+ * SCROLLBAR (.trade-app 内のみ)
+ * ========================= */
+.trade-app ::-webkit-scrollbar{width:8px;height:8px}
+.trade-app ::-webkit-scrollbar-track{background:var(--bg-panel)}
+.trade-app ::-webkit-scrollbar-thumb{background:var(--border-color);border-radius:4px}
+.trade-app ::-webkit-scrollbar-thumb:hover{background:var(--text-sub)}
 </style>
+
 </head>
 
 <body>
