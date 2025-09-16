@@ -15,6 +15,7 @@
   --bg-primary:#010e21;   /* ページ地/ヘッダー/メイン */
   --bg-panel:#0c1a2b;     /* セクション容器（外枠） */
   --bg-card:#010e21;      /* 小カード（直近改善度の内側など） */
+  --panel-title-size: .99rem;  /* KPIカード見出しとセクション見出しを統一 */
 
   /* borders / radius / space */
   --border-color:#525960;
@@ -199,11 +200,20 @@ html.light .menu-item.active{color:var(--text-heading);font-weight:700;}
 .trade-app{padding:20px;color:var(--text-main);width:100%;}
 
 /* 見出し（KPI/直近改善度/詳細分布 すべて統一） */
-.trade-app .section-title{
-  font-size:1rem;
-  font-weight:700;
-  margin:0 0 var(--title-gap);
-  color:var(--text-heading);
+.trade-app .section-title {
+  font-size: var(--panel-title-size);
+  line-height: 1.25;
+  font-weight: 700;
+  margin: 0 0 var(--title-gap);
+  color: var(--text-heading);
+}
+
+/* KPIカード見出し（h3）とセクション見出しを同サイズに統一 */
+.trade-app .metric-card h3 {
+  font-size: var(--panel-title-size);
+  line-height: 1.25;
+  font-weight: 700;
+  color: var(--text-heading);
 }
 
 /* KPIカード＝パネル色で統一（影なし） */
